@@ -12,7 +12,7 @@ import Collapse from '@/app/components/header/account-setting/collapse'
 import type { IItem } from '@/app/components/header/account-setting/collapse'
 import Modal from '@/app/components/base/modal'
 import Button from '@/app/components/base/button'
-import { updateUserProfile } from '@/service/common'
+import { updateUserProfile, encryptPassword } from '@/service/common'
 import { useAppContext } from '@/context/app-context'
 import { useProviderContext } from '@/context/provider-context'
 import { ToastContext } from '@/app/components/base/toast'
@@ -103,9 +103,9 @@ export default function AccountPage() {
       await updateUserProfile({
         url: 'account/password',
         body: {
-          password: currentPassword,
-          new_password: password,
-          repeat_new_password: confirmPassword,
+          password: encryptPassword(currentPassword),
+          new_password: encryptPassword(password),
+          repeat_new_password: encryptPassword(confirmPassword),
         },
       })
       notify({ type: 'success', message: t('common.actionMsg.modifiedSuccessfully') })

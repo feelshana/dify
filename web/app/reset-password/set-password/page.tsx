@@ -6,7 +6,7 @@ import cn from 'classnames'
 import { RiCheckboxCircleFill } from '@remixicon/react'
 import { useCountDown } from 'ahooks'
 import Button from '@/app/components/base/button'
-import { changePasswordWithToken } from '@/service/common'
+import { changePasswordWithToken, encryptPassword } from '@/service/common'
 import Toast from '@/app/components/base/toast'
 import Input from '@/app/components/base/input'
 
@@ -73,8 +73,8 @@ const ChangePasswordForm = () => {
         url: '/forgot-password/resets',
         body: {
           token,
-          new_password: password,
-          password_confirm: confirmPassword,
+          new_password: encryptPassword(password),
+          password_confirm: encryptPassword(confirmPassword),
         },
       })
       setShowSuccess(true)
