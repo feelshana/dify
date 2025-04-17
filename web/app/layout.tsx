@@ -5,6 +5,7 @@ import SentryInitor from './components/sentry-initor'
 import { getLocaleOnServer } from '@/i18n/server'
 import { TanstackQueryIniter } from '@/context/query-client'
 import { ThemeProvider } from 'next-themes'
+import { BASE_PATH } from '@/config'
 import './styles/globals.css'
 import './styles/markdown.scss'
 
@@ -34,6 +35,7 @@ const LocaleLayout = async ({
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <link rel="icon" type="image/x-icon" href={`${BASE_PATH}/favicon.ico`} />
       </head>
       <body
         className="color-scheme h-full select-auto"

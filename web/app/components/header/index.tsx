@@ -21,6 +21,7 @@ import { useModalContext } from '@/context/modal-context'
 import PlanBadge from './plan-badge'
 import LicenseNav from './license-env'
 import { Plan } from '../billing/type'
+import { BASE_PATH } from '@/config'
 
 const navClassName = `
   flex items-center relative mr-0 sm:mr-3 px-3 h-8 rounded-xl
@@ -60,7 +61,7 @@ const Header = () => {
         {
           !isMobile
           && <div className='flex w-64 shrink-0 items-center gap-1.5 self-stretch p-2 pl-3'>
-            <Link href="/apps" className='flex h-8 w-8 shrink-0 items-center justify-center gap-2'>
+            <Link href={`${BASE_PATH}/apps`} className='flex h-8 w-8 shrink-0 items-center justify-center gap-2'>
               <LogoSite className='object-contain' />
             </Link>
             <div className='font-light text-divider-deep'>/</div>
@@ -75,7 +76,7 @@ const Header = () => {
       </div >
       {isMobile && (
         <div className='flex'>
-          <Link href="/apps" className='mr-4 flex items-center'>
+          <Link href={`${BASE_PATH}/apps`} className='mr-4 flex items-center'>
             <LogoSite />
           </Link>
           <div className='font-light text-divider-deep'>/</div>

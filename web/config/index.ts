@@ -302,3 +302,5 @@ else if (globalThis.document?.body?.getAttribute('data-public-max-iterations-num
   maxIterationsNum = Number.parseInt(globalThis.document.body.getAttribute('data-public-max-iterations-num') as string)
 
 export const MAX_ITERATIONS_NUM = maxIterationsNum
+
+export const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH || ''

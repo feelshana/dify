@@ -31,7 +31,7 @@ import { useGetLanguage } from '@/context/i18n'
 import { CodeBrowser } from '@/app/components/base/icons/src/vender/line/development'
 import WorkflowToolConfigureButton from '@/app/components/tools/workflow-tool/configure-button'
 import type { InputVar } from '@/app/components/workflow/types'
-import { appDefaultIconBackground } from '@/config'
+import { appDefaultIconBackground, BASE_PATH } from '@/config'
 import type { PublishWorkflowParams } from '@/types/workflow'
 
 export type AppPublisherProps = {
@@ -120,7 +120,7 @@ const AppPublisher = ({
     try {
       const { installed_apps }: any = await fetchInstalledAppList(appDetail?.id) || {}
       if (installed_apps?.length > 0)
-        window.open(`/explore/installed/${installed_apps[0].id}`, '_blank')
+        window.open(`${BASE_PATH}/explore/installed/${installed_apps[0].id}`, '_blank')
       else
         throw new Error('No app found in Explore')
     }

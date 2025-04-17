@@ -16,6 +16,7 @@ import Button from '@/app/components/base/button'
 
 import { fetchInitValidateStatus, fetchSetupStatus, setup, encryptPassword } from '@/service/common'
 import type { InitValidateStatusResponse, SetupStatusResponse } from '@/models/common'
+import { BASE_PATH } from '@/config'
 
 const validPassword = /^(?=.*[a-zA-Z])(?=.*\d).{8,}$/
 
@@ -82,12 +83,12 @@ const InstallForm = () => {
     fetchSetupStatus().then((res: SetupStatusResponse) => {
       if (res.step === 'finished') {
         localStorage.setItem('setup_status', 'finished')
-        window.location.href = '/signin'
+        window.location.href = `${BASE_PATH}/signin`
       }
       else {
         fetchInitValidateStatus().then((res: InitValidateStatusResponse) => {
           if (res.status === 'not_started')
-            window.location.href = '/init'
+            window.location.href = `${BASE_PATH}/init`
         })
       }
       setLoading(false)

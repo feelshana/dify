@@ -9,6 +9,7 @@ import { switchWorkspace } from '@/service/common'
 import { useWorkspacesContext } from '@/context/workspace-context'
 import { ToastContext } from '@/app/components/base/toast'
 import type { Plan } from '@/app/components/billing/type'
+import { BASE_PATH } from '@/config'
 
 const WorkplaceSelector = () => {
   const { t } = useTranslation()
@@ -22,7 +23,7 @@ const WorkplaceSelector = () => {
         return
       await switchWorkspace({ url: '/workspaces/switch', body: { tenant_id } })
       notify({ type: 'success', message: t('common.actionMsg.modifiedSuccessfully') })
-      location.assign(`${location.origin}`)
+      location.assign(`${location.origin}${BASE_PATH}`)
     }
     catch (e) {
       notify({ type: 'error', message: t('common.provider.saveFailed') })

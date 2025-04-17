@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import Loading from '@/app/components/base/loading'
+import { BASE_PATH } from '@/config'
 
 const Home = async () => {
   return (
@@ -8,7 +9,7 @@ const Home = async () => {
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <Loading type='area' />
         <div className="mt-10 text-center">
-          <Link href='/apps'>🚀</Link>
+          <Link href={`${BASE_PATH}/apps`}>🚀</Link>
         </div>
       </div>
     </div>

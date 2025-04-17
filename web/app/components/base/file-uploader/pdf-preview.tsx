@@ -10,6 +10,7 @@ import Loading from '@/app/components/base/loading'
 import useBreakpoints, { MediaType } from '@/hooks/use-breakpoints'
 import Tooltip from '@/app/components/base/tooltip'
 import { noop } from 'lodash-es'
+import { BASE_PATH } from '@/config'
 
 type PdfPreviewProps = {
   url: string
@@ -57,7 +58,7 @@ const PdfPreview: FC<PdfPreviewProps> = ({
         style={{ transform: `scale(${scale})`, transformOrigin: 'center', scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
         <PdfLoader
-          workerSrc='/pdf.worker.min.mjs'
+          workerSrc={`${BASE_PATH}/pdf.worker.min.mjs`}
           url={url}
           beforeLoad={<div className='flex h-64 items-center justify-center'><Loading type='app' /></div>}
         >

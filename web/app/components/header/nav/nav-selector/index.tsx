@@ -82,7 +82,7 @@ const NavSelector = ({ curNav, navs, createText, isApp, onCreate, onLoadmore }: 
                         if (curNav?.id === nav.id)
                           return
                         setAppDetail()
-                        router.push(nav.link)
+                        router.push(`${nav.link}`)
                       }} title={nav.name}>
                         <div className='relative mr-2 h-6 w-6 rounded-md'>
                           <AppIcon size='tiny' iconType={nav.icon_type} icon={nav.icon} background={nav.icon_background} imageUrl={nav.icon_url} />

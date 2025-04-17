@@ -10,9 +10,10 @@ import {
 } from '@/app/components/base/file-uploader/utils'
 import './style.css'
 import { noop } from 'lodash-es'
+import { BASE_PATH } from '@/config'
 
 // load file from local instead of cdn https://github.com/suren-atoyan/monaco-react/issues/482
-loader.config({ paths: { vs: '/vs' } })
+loader.config({ paths: { vs: `${BASE_PATH}/vs` } })
 
 const CODE_EDITOR_LINE_HEIGHT = 18
 

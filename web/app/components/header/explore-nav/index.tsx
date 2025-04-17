@@ -8,6 +8,7 @@ import {
   RiPlanetLine,
 } from '@remixicon/react'
 import classNames from '@/utils/classnames'
+import { BASE_PATH } from '@/config'
 type ExploreNavProps = {
   className?: string
 }
@@ -20,7 +21,7 @@ const ExploreNav = ({
   const activated = selectedSegment === 'explore'
 
   return (
-    <Link href="/explore/apps" className={classNames(
+    <Link href={`${BASE_PATH}/explore/apps`} className={classNames(
       className, 'group',
       activated && 'bg-components-main-nav-nav-button-bg-active shadow-md',
       activated ? 'text-components-main-nav-nav-button-text-active' : 'text-components-main-nav-nav-button-text hover:bg-components-main-nav-nav-button-bg-hover',

@@ -31,6 +31,7 @@ COPY --from=packages /app/web/ .
 COPY . .
 
 ENV NODE_OPTIONS="--max-old-space-size=4096"
+ENV NEXT_PUBLIC_BASE_PATH=/dify
 RUN pnpm build
 
 
