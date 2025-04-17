@@ -6,7 +6,7 @@ import { useContext } from 'use-context-selector'
 import Button from '@/app/components/base/button'
 import Toast from '@/app/components/base/toast'
 import { emailRegex } from '@/config'
-import { login } from '@/service/common'
+import { login, encryptPassword } from '@/service/common'
 import Input from '@/app/components/base/input'
 import I18NContext from '@/context/i18n'
 import { noop } from 'lodash-es'
@@ -57,7 +57,7 @@ export default function MailAndPasswordAuth({ isInvite, isEmailSetup, allowRegis
       setIsLoading(true)
       const loginData: Record<string, any> = {
         email,
-        password,
+        password: encryptPassword(password),
         language: locale,
         remember_me: true,
       }

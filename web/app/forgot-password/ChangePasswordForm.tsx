@@ -8,7 +8,7 @@ import cn from 'classnames'
 import { CheckCircleIcon } from '@heroicons/react/24/solid'
 import Input from '../components/base/input'
 import Button from '@/app/components/base/button'
-import { changePasswordWithToken, verifyForgotPasswordToken } from '@/service/common'
+import { changePasswordWithToken, verifyForgotPasswordToken, encryptPassword } from '@/service/common'
 import Toast from '@/app/components/base/toast'
 import Loading from '@/app/components/base/loading'
 
@@ -64,8 +64,8 @@ const ChangePasswordForm = () => {
         url: '/forgot-password/resets',
         body: {
           token,
-          new_password: password,
-          password_confirm: confirmPassword,
+          new_password: encryptPassword(password),
+          password_confirm: encryptPassword(confirmPassword),
         },
       })
       setShowSuccess(true)
