@@ -14,7 +14,7 @@ import Loading from '../components/base/loading'
 import classNames from '@/utils/classnames'
 import Button from '@/app/components/base/button'
 
-import { fetchInitValidateStatus, fetchSetupStatus, setup } from '@/service/common'
+import { fetchInitValidateStatus, fetchSetupStatus, setup, encryptPassword } from '@/service/common'
 import type { InitValidateStatusResponse, SetupStatusResponse } from '@/models/common'
 import useDocumentTitle from '@/hooks/use-document-title'
 
@@ -55,7 +55,9 @@ const InstallForm = () => {
   const onSubmit: SubmitHandler<AccountFormValues> = async (data) => {
     await setup({
       body: {
-        ...data,
+        name: data.name,
+        password: encryptPassword(data.password),
+        email: data.email,
       },
     })
     router.push('/signin')

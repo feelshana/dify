@@ -37,6 +37,7 @@ import type {
 } from '@/app/components/header/account-setting/model-provider-page/declarations'
 import type { RETRIEVE_METHOD } from '@/types/app'
 import type { SystemFeatures } from '@/types/feature'
+import CryptoJS from 'crypto-js'
 
 type LoginSuccess = {
   result: 'success'
@@ -376,3 +377,12 @@ export const submitDeleteAccountFeedback = (body: { feedback: string; email: str
 
 export const getDocDownloadUrl = (doc_name: string) =>
   get<{ url: string }>('/compliance/download', { params: { doc_name } }, { silent: true })
+
+export const encryptPassword = (password: string) => {
+  if (!password) {
+    return password;
+  }
+  const srcs = CryptoJS.enc.Utf8.parse(password)
+  const encrypted = CryptoJS.SHA256(srcs)
+  return encrypted.toString(CryptoJS.enc.Hex)
+};
