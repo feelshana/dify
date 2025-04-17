@@ -13,7 +13,6 @@ import ExploreContext from '@/context/explore-context'
 import Confirm from '@/app/components/base/confirm'
 import Divider from '@/app/components/base/divider'
 import useBreakpoints, { MediaType } from '@/hooks/use-breakpoints'
-import { BASE_PATH } from '@/config'
 
 const SelectedDiscoveryIcon = () => (
   <svg width="16" height="16" viewBox="0 0 16 16" fill="current" xmlns="http://www.w3.org/2000/svg">
@@ -96,7 +95,7 @@ const SideBar: FC<IExploreSideBarProps> = ({
     <div className='w-fit shrink-0 cursor-pointer border-r border-divider-burn px-4 pt-6 sm:w-[216px]'>
       <div className={cn(isDiscoverySelected ? 'text-text-accent' : 'text-text-tertiary')}>
         <Link
-          href={`${BASE_PATH}/explore/apps`}
+          href='/explore/apps'
           className={cn(isDiscoverySelected ? ' bg-components-main-nav-nav-button-bg-active' : 'font-medium hover:bg-state-base-hover',
             'flex h-9 items-center gap-2 rounded-lg px-3 mobile:w-fit mobile:justify-center mobile:px-2 pc:w-full pc:justify-start')}
           style={isDiscoverySelected ? { boxShadow: '0px 1px 2px rgba(16, 24, 40, 0.05)' } : {}}

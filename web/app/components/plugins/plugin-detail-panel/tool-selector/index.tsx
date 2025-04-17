@@ -46,7 +46,6 @@ import { MARKETPLACE_API_PREFIX } from '@/config'
 import type { Node } from 'reactflow'
 import type { NodeOutPutVar } from '@/app/components/workflow/types'
 import cn from '@/utils/classnames'
-import { BASE_PATH } from '@/config'
 
 type Props = {
   disabled?: boolean
@@ -266,7 +265,7 @@ const ToolSelector: FC<Props> = ({
                   <h3 className='font-semibold text-text-primary'>{currentTool ? t('plugin.detailPanel.toolSelector.uninstalledTitle') : t('plugin.detailPanel.toolSelector.unsupportedTitle')}</h3>
                   <p className='tracking-tight text-text-secondary'>{currentTool ? t('plugin.detailPanel.toolSelector.uninstalledContent') : t('plugin.detailPanel.toolSelector.unsupportedContent')}</p>
                   <p>
-                    <Link href={`${BASE_PATH}/plugins`} className='tracking-tight text-text-accent'>{t('plugin.detailPanel.toolSelector.uninstalledLink')}</Link>
+                    <Link href={'/plugins'} className='tracking-tight text-text-accent'>{t('plugin.detailPanel.toolSelector.uninstalledLink')}</Link>
                   </p>
                 </div>
               }

@@ -8,7 +8,6 @@ import { useSelectedLayoutSegment } from 'next/navigation'
 import DownloadingIcon from './downloading-icon'
 import { usePluginTaskStatus } from '@/app/components/plugins/plugin-page/plugin-tasks/hooks'
 import Indicator from '@/app/components/header/indicator'
-import { BASE_PATH } from '@/config'
 
 type PluginsNavProps = {
   className?: string
@@ -27,7 +26,7 @@ const PluginsNav = ({
   } = usePluginTaskStatus()
 
   return (
-    <Link href={`${BASE_PATH}/plugins`} className={classNames(
+    <Link href="/plugins" className={classNames(
       className, 'group', 'plugins-nav-button', // used for use-fold-anim-into.ts
     )}>
       <div

@@ -8,7 +8,6 @@ import {
   RiHammerLine,
 } from '@remixicon/react'
 import classNames from '@/utils/classnames'
-import { BASE_PATH } from '@/config'
 type ToolsNavProps = {
   className?: string
 }
@@ -21,7 +20,7 @@ const ToolsNav = ({
   const activated = selectedSegment === 'tools'
 
   return (
-    <Link href={`${BASE_PATH}/tools`} className={classNames(
+    <Link href="/tools" className={classNames(
       'group text-sm font-medium',
       activated && 'font-semibold bg-components-main-nav-nav-button-bg-active hover:bg-components-main-nav-nav-button-bg-active-hover shadow-md',
       activated ? 'text-components-main-nav-nav-button-text-active' : 'text-components-main-nav-nav-button-text hover:bg-components-main-nav-nav-button-bg-hover',

@@ -33,7 +33,6 @@ import { LanguagesSupported } from '@/i18n/language'
 import { LicenseStatus } from '@/types/feature'
 import { IS_CLOUD_EDITION } from '@/config'
 import cn from '@/utils/classnames'
-import { BASE_PATH } from '@/config'
 
 export default function AppSelector() {
   const itemClassName = `
@@ -111,7 +110,7 @@ export default function AppSelector() {
                         className={cn(itemClassName, 'group',
                           'data-[active]:bg-state-base-hover',
                         )}
-                        href={`${BASE_PATH}/account`}
+                        href='/account'
                         target='_self' rel='noopener noreferrer'>
                         <RiAccountCircleLine className='size-4 shrink-0 text-text-tertiary' />
                         <div className='system-md-regular grow px-1 text-text-secondary'>{t('common.account.account')}</div>
