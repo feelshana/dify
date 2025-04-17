@@ -1,4 +1,4 @@
-import { API_PREFIX, IS_CE_EDITION, PUBLIC_API_PREFIX } from '@/config'
+import { API_PREFIX, IS_CE_EDITION, PUBLIC_API_PREFIX, BASE_PATH } from '@/config'
 import { refreshAccessTokenOrRelogin } from './refresh-token'
 import Toast from '@/app/components/base/toast'
 import type { AnnotationReply, MessageEnd, MessageReplace, ThoughtItem } from '@/app/components/base/chat/chat/type'
@@ -498,11 +498,11 @@ export const request = async<T>(url: string, options = {}, otherOptions?: IOther
         return Promise.reject(err)
       }
       if (code === 'not_init_validated' && IS_CE_EDITION) {
-        globalThis.location.href = `${globalThis.location.origin}/init`
+        globalThis.location.href = `${globalThis.location.origin}${BASE_PATH}/init`
         return Promise.reject(err)
       }
       if (code === 'not_setup' && IS_CE_EDITION) {
-        globalThis.location.href = `${globalThis.location.origin}/install`
+        globalThis.location.href = `${globalThis.location.origin}${BASE_PATH}/install`
         return Promise.reject(err)
       }
 

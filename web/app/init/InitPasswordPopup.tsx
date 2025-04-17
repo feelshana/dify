@@ -7,6 +7,7 @@ import Loading from '../components/base/loading'
 import Button from '@/app/components/base/button'
 import { fetchInitValidateStatus, initValidate } from '@/service/common'
 import type { InitValidateStatusResponse } from '@/models/common'
+import { BASE_PATH } from '@/config'
 
 const InitPasswordPopup = () => {
   const [password, setPassword] = useState('')
@@ -41,7 +42,7 @@ const InitPasswordPopup = () => {
   useEffect(() => {
     fetchInitValidateStatus().then((res: InitValidateStatusResponse) => {
       if (res.status === 'finished')
-        window.location.href = '/install'
+        window.location.href = `${BASE_PATH}/install`
       else
         setLoading(false)
     })

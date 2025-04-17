@@ -12,7 +12,7 @@ import cn from '@/utils/classnames'
 import { getSystemFeatures, invitationCheck } from '@/service/common'
 import { LicenseStatus, defaultSystemFeatures } from '@/types/feature'
 import Toast from '@/app/components/base/toast'
-import { IS_CE_EDITION } from '@/config'
+import { IS_CE_EDITION, BASE_PATH } from '@/config'
 
 const NormalForm = () => {
   const { t } = useTranslation()
@@ -204,7 +204,7 @@ const NormalForm = () => {
             &nbsp;
             <Link
               className='system-xs-medium text-text-secondary hover:underline'
-              href='/install'
+              href={`${BASE_PATH}/install`}
             >{t('login.setAdminAccount')}</Link>
           </div>}
 
