@@ -7,6 +7,7 @@ import { renderI18nObject } from '@/hooks/use-i18n'
 import { Theme } from '@/types/app'
 import cn from '@/utils/classnames'
 import useTheme from '@/hooks/use-theme'
+import { BASE_PATH } from '@/config'
 
 type ProviderIconProps = {
   provider: ModelProvider
@@ -40,7 +41,7 @@ const ProviderIcon: FC<ProviderIconProps> = ({
     <div className={cn('inline-flex items-center gap-2', className)}>
       <img
         alt='provider-icon'
-        src={renderI18nObject(provider.icon_small, language)}
+        src={`${BASE_PATH}${renderI18nObject(provider.icon_small, language)}`}
         className='h-6 w-6'
       />
       <div className='system-md-semibold text-text-primary'>

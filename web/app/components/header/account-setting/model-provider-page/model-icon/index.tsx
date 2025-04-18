@@ -8,6 +8,7 @@ import { Group } from '@/app/components/base/icons/src/vender/other'
 import { OpenaiBlue, OpenaiViolet } from '@/app/components/base/icons/src/public/llm'
 import cn from '@/utils/classnames'
 import { renderI18nObject } from '@/hooks/use-i18n'
+import { BASE_PATH } from '@/config'
 
 type ModelIconProps = {
   provider?: Model | ModelProvider
@@ -30,7 +31,7 @@ const ModelIcon: FC<ModelIconProps> = ({
   if (provider?.icon_small) {
     return (
       <div className={cn('flex h-5 w-5 items-center justify-center', isDeprecated && 'opacity-50', className)}>
-        <img alt='model-icon' src={renderI18nObject(provider.icon_small, language)}/>
+        <img alt='model-icon' src={`${BASE_PATH}${renderI18nObject(provider.icon_small, language)}`}/>
       </div>
     )
   }
