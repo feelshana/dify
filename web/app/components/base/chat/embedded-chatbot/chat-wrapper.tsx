@@ -188,7 +188,7 @@ const ChatWrapper = () => {
       return null
     if (welcomeMessage.suggestedQuestions && welcomeMessage.suggestedQuestions?.length > 0) {
       return (
-        <div className='flex h-[50vh] items-center justify-center px-4 py-12'>
+        <div className='flex h-[50vh] items-center px-4 py-12'>
           <div className='flex max-w-[720px] grow gap-4'>
             <AppIcon
               size='xl'
