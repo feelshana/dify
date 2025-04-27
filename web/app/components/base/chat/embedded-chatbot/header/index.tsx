@@ -78,10 +78,12 @@ const Header: FC<IHeaderProps> = ({
 
   if (!isMobile) {
     return (
-      <div className='flex h-14 shrink-0 items-center justify-end p-3'>
+      <div
+        className='absolute bottom-[65px] z-10 flex h-7 w-[calc(100%-20px)] shrink-0 items-center bg-[#f5f8f9] p-3'
+      >
         <div className='flex items-center gap-1'>
           {/* powered by */}
-          <div className='shrink-0'>
+          {/* <div className='shrink-0'>
             {!appData?.custom_config?.remove_webapp_brand && (
               <div className={cn(
                 'flex shrink-0 items-center gap-1.5 px-2',
@@ -96,7 +98,7 @@ const Header: FC<IHeaderProps> = ({
                 }
               </div>
             )}
-          </div>
+          </div> */}
           {currentConversationId && (
             <Divider type='vertical' className='h-3.5' />
           )}
@@ -122,6 +124,7 @@ const Header: FC<IHeaderProps> = ({
               <ActionButton size='l' onClick={onCreateNewChat}>
                 <RiResetLeftLine className='h-[18px] w-[18px]' />
               </ActionButton>
+              <span className="inline-block -translate-y-1 cursor-pointer text-gray-500" onClick={onCreateNewChat}>新对话</span>
             </Tooltip>
           )}
           {currentConversationId && inputsForms.length > 0 && (
