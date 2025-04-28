@@ -102,19 +102,20 @@ const Operation: FC<OperationProps> = ({
       <div
         className={cn(
           'absolute flex justify-end gap-1',
-          hasWorkflowProcess && '-bottom-4 right-2',
-          !positionRight && '-bottom-4 right-2',
-          !hasWorkflowProcess && positionRight && '!top-[9px]',
+          // hasWorkflowProcess && '-bottom-4 right-2',
+          // !positionRight && '-bottom-4 right-2',
+          // !hasWorkflowProcess && positionRight && '!top-[9px]',
+          '-bottom-4 right-2',
         )}
-        style={(!hasWorkflowProcess && positionRight) ? { left: contentWidth + 8 } : {}}
+        // style={(!hasWorkflowProcess && positionRight) ? { left: contentWidth + 8 } : {}}
       >
         {showPromptLog && !isOpeningStatement && (
-          <div className='hidden group-hover:block'>
+          <div className='group-hover:block'>
             <Log logItem={item} />
           </div>
         )}
         {!isOpeningStatement && (
-          <div className='ml-1 hidden items-center gap-0.5 rounded-[10px] border-[0.5px] border-components-actionbar-border bg-components-actionbar-bg p-0.5 shadow-md backdrop-blur-sm group-hover:flex'>
+          <div className='ml-1 items-center gap-0.5 rounded-[10px] border-[0.5px] border-components-actionbar-border bg-components-actionbar-bg p-0.5 shadow-md backdrop-blur-sm group-hover:flex'>
             {(config?.text_to_speech?.enabled) && (
               <NewAudioButton
                 id={id}
@@ -141,7 +142,7 @@ const Operation: FC<OperationProps> = ({
           </div>
         )}
         {!isOpeningStatement && config?.supportFeedback && !localFeedback?.rating && onFeedback && (
-          <div className='ml-1 hidden items-center gap-0.5 rounded-[10px] border-[0.5px] border-components-actionbar-border bg-components-actionbar-bg p-0.5 shadow-md backdrop-blur-sm group-hover:flex'>
+          <div className='ml-1 items-center gap-0.5 rounded-[10px] border-[0.5px] border-components-actionbar-border bg-components-actionbar-bg p-0.5 shadow-md backdrop-blur-sm group-hover:flex'>
             {!localFeedback?.rating && (
               <>
                 <ActionButton onClick={() => handleFeedback('like')}>
