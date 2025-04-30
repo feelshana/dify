@@ -41,8 +41,8 @@ export default function CheckCode() {
       setIsLoading(true)
       const ret = await emailLoginWithCode({ email, code, token })
       if (ret.result === 'success') {
-        localStorage.setItem('console_token', ret.data.access_token)
-        localStorage.setItem('refresh_token', ret.data.refresh_token)
+        localStorage.setItem('dify_console_token', ret.data.access_token)
+        localStorage.setItem('dify_refresh_token', ret.data.refresh_token)
         router.replace(invite_token ? `/signin/invite-settings?${searchParams.toString()}` : '/apps')
       }
     }

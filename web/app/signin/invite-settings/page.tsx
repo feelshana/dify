@@ -52,8 +52,8 @@ export default function InviteSettingsPage() {
         },
       })
       if (res.result === 'success') {
-        localStorage.setItem('console_token', res.data.access_token)
-        localStorage.setItem('refresh_token', res.data.refresh_token)
+        localStorage.setItem('dify_console_token', res.data.access_token)
+        localStorage.setItem('dify_refresh_token', res.data.refresh_token)
         setLocaleOnClient(language, false)
         router.replace('/apps')
       }
