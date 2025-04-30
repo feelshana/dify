@@ -70,7 +70,7 @@ const beforeErrorToast = (otherOptions: IOtherOptions): BeforeErrorHook => {
 export const getPublicToken = () => {
   let token = ''
   const sharedToken = globalThis.location.pathname.split('/').slice(-1)[0]
-  const accessToken = localStorage.getItem('token') || JSON.stringify({ [sharedToken]: '' })
+  const accessToken = localStorage.getItem('dify_token') || JSON.stringify({ [sharedToken]: '' })
   let accessTokenJson = { [sharedToken]: '' }
   try {
     accessTokenJson = JSON.parse(accessToken)
@@ -83,7 +83,7 @@ export const getPublicToken = () => {
 export function getAccessToken(isPublicAPI?: boolean) {
   if (isPublicAPI) {
     const sharedToken = globalThis.location.pathname.split('/').slice(-1)[0]
-    const accessToken = localStorage.getItem('token') || JSON.stringify({ [sharedToken]: '' })
+    const accessToken = localStorage.getItem('dify_token') || JSON.stringify({ [sharedToken]: '' })
     let accessTokenJson = { [sharedToken]: '' }
     try {
       accessTokenJson = JSON.parse(accessToken)
@@ -94,7 +94,7 @@ export function getAccessToken(isPublicAPI?: boolean) {
     return accessTokenJson[sharedToken]
   }
   else {
-    return localStorage.getItem('console_token') || ''
+    return localStorage.getItem('dify_console_token') || ''
   }
 }
 

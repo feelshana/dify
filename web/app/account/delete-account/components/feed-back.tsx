@@ -29,8 +29,8 @@ export default function FeedBack(props: DeleteAccountProps) {
         url: `${BASE_PATH}/logout`,
         params: {},
       })
-      localStorage.removeItem('refresh_token')
-      localStorage.removeItem('console_token')
+      localStorage.removeItem('dify_refresh_token')
+      localStorage.removeItem('dify_console_token')
       router.push('/signin')
       Toast.notify({ type: 'info', message: t('common.account.deleteSuccessTip') })
     }

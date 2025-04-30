@@ -1,4 +1,4 @@
-import { API_PREFIX, IS_CE_EDITION, PUBLIC_API_PREFIX, BASE_PATH } from '@/config'
+import { API_PREFIX, BASE_PATH, IS_CE_EDITION, PUBLIC_API_PREFIX } from '@/config'
 import { refreshAccessTokenOrRelogin } from './refresh-token'
 import Toast from '@/app/components/base/toast'
 import type { AnnotationReply, MessageEnd, MessageReplace, ThoughtItem } from '@/app/components/base/chat/chat/type'
@@ -359,7 +359,7 @@ export const ssePost = (
   } = otherOptions
   const abortController = new AbortController()
 
-  const token = localStorage.getItem('console_token')
+  const token = localStorage.getItem('dify_console_token')
 
   const options = Object.assign({}, baseOptions, {
     method: 'POST',
@@ -479,8 +479,8 @@ export const request = async<T>(url: string, options = {}, otherOptions?: IOther
         return Promise.reject(err)
       }
       if (code === 'unauthorized_and_force_logout') {
-        localStorage.removeItem('console_token')
-        localStorage.removeItem('refresh_token')
+        localStorage.removeItem('dify_console_token')
+        localStorage.removeItem('dify_refresh_token')
         globalThis.location.reload()
         return Promise.reject(err)
       }
