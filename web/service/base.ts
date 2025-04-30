@@ -366,7 +366,7 @@ export const ssePost = async (
   } = otherOptions
   const abortController = new AbortController()
 
-  const token = localStorage.getItem('console_token')
+  const token = localStorage.getItem('dify_console_token')
 
   const options = Object.assign({}, baseOptions, {
     method: 'POST',
@@ -496,8 +496,8 @@ export const request = async<T>(url: string, options = {}, otherOptions?: IOther
         return Promise.reject(err)
       }
       if (code === 'unauthorized_and_force_logout') {
-        localStorage.removeItem('console_token')
-        localStorage.removeItem('refresh_token')
+        localStorage.removeItem('dify_console_token')
+        localStorage.removeItem('dify_refresh_token')
         globalThis.location.reload()
         return Promise.reject(err)
       }

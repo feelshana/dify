@@ -49,7 +49,7 @@ const MenuDropdown: FC<Props> = ({
 
   const handleLogout = useCallback(() => {
     localStorage.removeItem('token')
-    localStorage.removeItem('webapp_access_token')
+    localStorage.removeItem('dify_webapp_access_token')
     router.replace(`/webapp-signin?redirect_url=${pathname}`)
   }, [router, pathname])
 

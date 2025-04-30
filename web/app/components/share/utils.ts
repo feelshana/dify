@@ -13,7 +13,7 @@ export const getInitialTokenV2 = (): Record<string, any> => ({
 export const checkOrSetAccessToken = async (appCode?: string) => {
   const sharedToken = appCode || globalThis.location.pathname.split('/').slice(-1)[0]
   const userId = (await getProcessedSystemVariablesFromUrlParams()).user_id
-  const accessToken = localStorage.getItem('token') || JSON.stringify(getInitialTokenV2())
+  const accessToken = localStorage.getItem('dify_token') || JSON.stringify(getInitialTokenV2())
   let accessTokenJson = getInitialTokenV2()
   try {
     accessTokenJson = JSON.parse(accessToken)
@@ -25,18 +25,18 @@ export const checkOrSetAccessToken = async (appCode?: string) => {
   }
 
   if (!accessTokenJson[sharedToken]?.[userId || 'DEFAULT']) {
-    const webAppAccessToken = localStorage.getItem('webapp_access_token')
+    const webAppAccessToken = localStorage.getItem('dify_webapp_access_token')
     const res = await fetchAccessToken({ appCode: sharedToken, userId, webAppAccessToken })
     accessTokenJson[sharedToken] = {
       ...accessTokenJson[sharedToken],
       [userId || 'DEFAULT']: res.access_token,
     }
-    localStorage.setItem('token', JSON.stringify(accessTokenJson))
+    localStorage.setItem('dify_token', JSON.stringify(accessTokenJson))
   }
 }
 
 export const setAccessToken = (sharedToken: string, token: string, user_id?: string) => {
-  const accessToken = localStorage.getItem('token') || JSON.stringify(getInitialTokenV2())
+  const accessToken = localStorage.getItem('dify_token') || JSON.stringify(getInitialTokenV2())
   let accessTokenJson = getInitialTokenV2()
   try {
     accessTokenJson = JSON.parse(accessToken)
@@ -53,10 +53,10 @@ export const setAccessToken = (sharedToken: string, token: string, user_id?: str
     ...accessTokenJson[sharedToken],
     [user_id || 'DEFAULT']: token,
   }
-  localStorage.setItem('token', JSON.stringify(accessTokenJson))
+  localStorage.setItem('dify_token', JSON.stringify(accessTokenJson))
 }
 
 export const removeAccessToken = () => {
-  localStorage.removeItem('token')
-  localStorage.removeItem('webapp_access_token')
+  localStorage.removeItem('dify_token')
+  localStorage.removeItem('dify_webapp_access_token')
 }

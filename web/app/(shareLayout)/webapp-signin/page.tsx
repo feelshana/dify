@@ -60,14 +60,14 @@ const WebSSOForm: FC = () => {
 
       const appCode = getAppCodeFromRedirectUrl()
       if (appCode && tokenFromUrl && redirectUrl) {
-        localStorage.setItem('webapp_access_token', tokenFromUrl)
+        localStorage.setItem('dify_webapp_access_token', tokenFromUrl)
         const tokenResp = await fetchAccessToken({ appCode, webAppAccessToken: tokenFromUrl })
         await setAccessToken(appCode, tokenResp.access_token)
         router.replace(redirectUrl)
         return
       }
-      if (appCode && redirectUrl && localStorage.getItem('webapp_access_token')) {
-        const tokenResp = await fetchAccessToken({ appCode, webAppAccessToken: localStorage.getItem('webapp_access_token') })
+      if (appCode && redirectUrl && localStorage.getItem('dify_webapp_access_token')) {
+        const tokenResp = await fetchAccessToken({ appCode, webAppAccessToken: localStorage.getItem('dify_webapp_access_token') })
         await setAccessToken(appCode, tokenResp.access_token)
         router.replace(redirectUrl)
       }

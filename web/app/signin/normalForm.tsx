@@ -35,8 +35,8 @@ const NormalForm = () => {
   const init = useCallback(async () => {
     try {
       if (consoleToken && refreshToken) {
-        localStorage.setItem('console_token', consoleToken)
-        localStorage.setItem('refresh_token', refreshToken)
+        localStorage.setItem('dify_console_token', consoleToken)
+        localStorage.setItem('dify_refresh_token', refreshToken)
         router.replace('/apps')
         return
       }

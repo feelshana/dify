@@ -30,8 +30,8 @@ export default function AppSelector() {
     })
 
     localStorage.removeItem('setup_status')
-    localStorage.removeItem('console_token')
-    localStorage.removeItem('refresh_token')
+    localStorage.removeItem('dify_console_token')
+    localStorage.removeItem('dify_refresh_token')
 
     router.push('/signin')
   }

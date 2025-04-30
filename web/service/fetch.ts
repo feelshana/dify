@@ -73,7 +73,7 @@ export async function getAccessToken(isPublicAPI?: boolean) {
   if (isPublicAPI) {
     const sharedToken = globalThis.location.pathname.split('/').slice(-1)[0]
     const userId = (await getProcessedSystemVariablesFromUrlParams()).user_id
-    const accessToken = localStorage.getItem('token') || JSON.stringify({ version: 2 })
+    const accessToken = localStorage.getItem('dify_token') || JSON.stringify({ version: 2 })
     let accessTokenJson: Record<string, any> = { version: 2 }
     try {
       accessTokenJson = JSON.parse(accessToken)
@@ -86,7 +86,7 @@ export async function getAccessToken(isPublicAPI?: boolean) {
     return accessTokenJson[sharedToken]?.[userId || 'DEFAULT']
   }
   else {
-    return localStorage.getItem('console_token') || ''
+    return localStorage.getItem('dify_console_token') || ''
   }
 }
 

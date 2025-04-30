@@ -6,7 +6,7 @@ import { useContext } from 'use-context-selector'
 import Button from '@/app/components/base/button'
 import Toast from '@/app/components/base/toast'
 import { emailRegex } from '@/config'
-import { login, encryptPassword } from '@/service/common'
+import { encryptPassword, login } from '@/service/common'
 import Input from '@/app/components/base/input'
 import I18NContext from '@/context/i18n'
 import { noop } from 'lodash-es'
@@ -72,8 +72,8 @@ export default function MailAndPasswordAuth({ isInvite, isEmailSetup, allowRegis
           router.replace(`/signin/invite-settings?${searchParams.toString()}`)
         }
         else {
-          localStorage.setItem('console_token', res.data.access_token)
-          localStorage.setItem('refresh_token', res.data.refresh_token)
+          localStorage.setItem('dify_console_token', res.data.access_token)
+          localStorage.setItem('dify_refresh_token', res.data.refresh_token)
           router.replace('/apps')
         }
       }
