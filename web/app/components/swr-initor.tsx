@@ -20,8 +20,8 @@ const SwrInitor = ({
   const searchParams = useSearchParams()
   const consoleToken = decodeURIComponent(searchParams.get('access_token') || '')
   const refreshToken = decodeURIComponent(searchParams.get('refresh_token') || '')
-  const consoleTokenFromLocalStorage = localStorage?.getItem('console_token')
-  const refreshTokenFromLocalStorage = localStorage?.getItem('refresh_token')
+  const consoleTokenFromLocalStorage = localStorage?.getItem('dify_console_token')
+  const refreshTokenFromLocalStorage = localStorage?.getItem('dify_refresh_token')
   const pathname = usePathname()
   const [init, setInit] = useState(false)
 
@@ -61,8 +61,8 @@ const SwrInitor = ({
           return
         }
         if (searchParams.has('access_token') || searchParams.has('refresh_token')) {
-          consoleToken && localStorage.setItem('console_token', consoleToken)
-          refreshToken && localStorage.setItem('refresh_token', refreshToken)
+          consoleToken && localStorage.setItem('dify_console_token', consoleToken)
+          refreshToken && localStorage.setItem('dify_refresh_token', refreshToken)
           router.replace(pathname)
         }
 

@@ -13,7 +13,7 @@ export const getInitialTokenV2 = (): Record<string, any> => ({
 export const checkOrSetAccessToken = async () => {
   const sharedToken = globalThis.location.pathname.split('/').slice(-1)[0]
   const userId = (await getProcessedSystemVariablesFromUrlParams()).user_id
-  const accessToken = localStorage.getItem('token') || JSON.stringify(getInitialTokenV2())
+  const accessToken = localStorage.getItem('dify_token') || JSON.stringify(getInitialTokenV2())
   let accessTokenJson = getInitialTokenV2()
   try {
     accessTokenJson = JSON.parse(accessToken)
@@ -29,12 +29,12 @@ export const checkOrSetAccessToken = async () => {
       ...accessTokenJson[sharedToken],
       [userId || 'DEFAULT']: res.access_token,
     }
-    localStorage.setItem('token', JSON.stringify(accessTokenJson))
+    localStorage.setItem('dify_token', JSON.stringify(accessTokenJson))
   }
 }
 
 export const setAccessToken = async (sharedToken: string, token: string, user_id?: string) => {
-  const accessToken = localStorage.getItem('token') || JSON.stringify(getInitialTokenV2())
+  const accessToken = localStorage.getItem('dify_token') || JSON.stringify(getInitialTokenV2())
   let accessTokenJson = getInitialTokenV2()
   try {
     accessTokenJson = JSON.parse(accessToken)
@@ -51,7 +51,7 @@ export const setAccessToken = async (sharedToken: string, token: string, user_id
     ...accessTokenJson[sharedToken],
     [user_id || 'DEFAULT']: token,
   }
-  localStorage.setItem('token', JSON.stringify(accessTokenJson))
+  localStorage.setItem('dify_token', JSON.stringify(accessTokenJson))
 }
 
 export const removeAccessToken = () => {
@@ -71,5 +71,5 @@ export const removeAccessToken = () => {
   localStorage.removeItem(CONVERSATION_ID_INFO)
 
   delete accessTokenJson[sharedToken]
-  localStorage.setItem('token', JSON.stringify(accessTokenJson))
+  localStorage.setItem('dify_token', JSON.stringify(accessTokenJson))
 }
