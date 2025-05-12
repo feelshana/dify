@@ -488,6 +488,12 @@ export const request = async<T>(url: string, options = {}, otherOptions?: IOther
         isPublicAPI = false,
         silent,
       } = otherOptionsForBaseFetch
+      if (code === 'invalid_supersonic_token') {
+        if (!isPublicAPI) {
+          globalThis.location.href = '/'
+        }
+        return Promise.reject(err)
+      }
       if (isPublicAPI && code === 'unauthorized') {
         removeAccessToken()
         globalThis.location.reload()
@@ -510,7 +516,7 @@ export const request = async<T>(url: string, options = {}, otherOptions?: IOther
       const [refreshErr] = await asyncRunSafe(refreshAccessTokenOrRelogin(TIME_OUT))
       if (refreshErr === null)
         return baseFetch<T>(url, options, otherOptionsForBaseFetch)
-      if (location.pathname !== '/signin' || !IS_CE_EDITION) {
+      if (location.pathname !== `${BASE_PATH}/signin` || !IS_CE_EDITION) {
         globalThis.location.href = loginUrl
         return Promise.reject(err)
       }

@@ -2,7 +2,7 @@ import type { AfterResponseHook, BeforeErrorHook, BeforeRequestHook, Hooks } fro
 import ky from 'ky'
 import type { IOtherOptions } from './base'
 import Toast from '@/app/components/base/toast'
-import { API_PREFIX, MARKETPLACE_API_PREFIX, PUBLIC_API_PREFIX } from '@/config'
+import { API_PREFIX, MARKETPLACE_API_PREFIX, PUBLIC_API_PREFIX, BASE_PATH } from '@/config'
 
 const TIME_OUT = 100000
 
@@ -42,7 +42,7 @@ const afterResponseErrorCode = (otherOptions: IOtherOptions): AfterResponseHook 
             if (!otherOptions.silent)
               Toast.notify({ type: 'error', message: data.message })
             if (data.code === 'already_setup')
-              globalThis.location.href = `${globalThis.location.origin}/signin`
+              globalThis.location.href = `${globalThis.location.origin}${BASE_PATH}/signin`
           })
           break
         case 401:
@@ -98,14 +98,22 @@ export function getAccessToken(isPublicAPI?: boolean) {
   }
 }
 
+export function getSupersonicToken() {
+  return localStorage.getItem('SUPERSONIC_TOKEN') || ''; 
+}
+
 const beforeRequestPublicAuthorization: BeforeRequestHook = (request) => {
   const token = getAccessToken(true)
   request.headers.set('Authorization', `Bearer ${token}`)
+  const supersonicToken = getSupersonicToken()
+  request.headers.set('X-SUPERSONIC-TOKEN', supersonicToken)
 }
 
 const beforeRequestAuthorization: BeforeRequestHook = (request) => {
   const accessToken = getAccessToken()
   request.headers.set('Authorization', `Bearer ${accessToken}`)
+  const supersonicToken = getSupersonicToken()
+  request.headers.set('X-SUPERSONIC-TOKEN', supersonicToken)
 }
 
 const baseHooks: Hooks = {
