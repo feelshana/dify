@@ -1,4 +1,6 @@
-from flask import Blueprint
+from flask import Blueprint, request
+
+from controllers.console.error import InvalidSupersonicTokenError
 
 from libs.external_api import ExternalApi
 
@@ -27,6 +29,13 @@ from .remote_files import RemoteFileInfoApi, RemoteFileUploadApi
 
 bp = Blueprint("console", __name__, url_prefix="/console/api")
 api = ExternalApi(bp)
+
+@bp.before_request
+def check_token():
+    # 检查是否存在X-SUPERSONIC-TOKEN请求头
+    token = request.headers.get("X-SUPERSONIC-TOKEN")
+    if not token:
+        raise InvalidSupersonicTokenError()
 
 # File
 api.add_resource(FileApi, "/files/upload")

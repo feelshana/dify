@@ -466,7 +466,7 @@ export const request = async<T>(url: string, options = {}, otherOptions?: IOther
     const errResp: Response = err as any
     if (errResp.status === 401) {
       const [parseErr, errRespData] = await asyncRunSafe<ResponseError>(errResp.json())
-      const loginUrl = `${globalThis.location.origin}/signin`
+      const loginUrl = `${globalThis.location.origin}${BASE_PATH}/signin`
       if (parseErr) {
         globalThis.location.href = loginUrl
         return Promise.reject(err)
