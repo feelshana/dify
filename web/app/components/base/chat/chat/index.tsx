@@ -169,8 +169,10 @@ const Chat: FC<ChatProps> = ({
       // container padding bottom
       const resizeContainerObserver = new ResizeObserver((entries) => {
         for (const entry of entries) {
+          const toolButtonsAreaHeight = 26
+          const extraHeight = 10
           const { blockSize } = entry.borderBoxSize[0]
-          chatContainerRef.current!.style.paddingBottom = `${blockSize}px`
+          chatContainerRef.current!.style.paddingBottom = `${toolButtonsAreaHeight + extraHeight + blockSize}px`
           handleScrollToBottom()
         }
       })
@@ -273,7 +275,7 @@ const Chat: FC<ChatProps> = ({
           </div>
         </div>
         <div
-          className={`absolute bottom-0 flex justify-center bg-chat-input-mask ${(hasTryToAsk || !noChatInput || !noStopResponding) && chatFooterClassName}`}
+          className={`absolute bottom-0 z-20 flex justify-center bg-chat-input-mask ${(hasTryToAsk || !noChatInput || !noStopResponding) && chatFooterClassName}`}
           ref={chatFooterRef}
         >
           <div
