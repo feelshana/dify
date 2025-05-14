@@ -1,6 +1,10 @@
+import requests
+import json
+
 from functools import wraps
 from typing import Any
 
+from controllers.console.error import InvalidSupersonicTokenError
 from flask import current_app, g, has_request_context, request
 from flask_login import user_logged_in  # type: ignore
 from flask_login.config import EXEMPT_METHODS  # type: ignore
@@ -53,6 +57,26 @@ def login_required(func):
 
     @wraps(func)
     def decorated_view(*args, **kwargs):
+        # 检查是否存在X-SUPERSONIC-TOKEN请求头
+        supersonic_token = request.headers.get("X-SUPERSONIC-TOKEN")
+        if not supersonic_token:
+            raise InvalidSupersonicTokenError()
+        # 配置认证头和API端点
+        auth_header = {"Authorization": f"Bearer {supersonic_token}"}
+        api_url = f"{dify_config.SUPERSONIC_URL}/api/auth/user/getCurrentUser"
+        try:
+            response = requests.get(api_url, headers=auth_header)
+            response.raise_for_status()
+            result = json.loads(response.content)
+            user = result["data"]
+            userName = user["name"]
+            if not userName:
+                raise InvalidSupersonicTokenError()
+            # 将用户名存入请求上下文
+            g.supersonic_user = userName
+        except (requests.exceptions.RequestException, ValueError, KeyError):
+            raise InvalidSupersonicTokenError()
+
         auth_header = request.headers.get("Authorization")
         if dify_config.ADMIN_API_KEY_ENABLE:
             if auth_header:

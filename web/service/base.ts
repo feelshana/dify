@@ -23,7 +23,7 @@ import type {
 } from '@/types/workflow'
 import { removeAccessToken } from '@/app/components/share/utils'
 import type { FetchOptionType, ResponseError } from './fetch'
-import { ContentType, base, baseOptions, getAccessToken } from './fetch'
+import { ContentType, base, baseOptions, getAccessToken, getSupersonicToken } from './fetch'
 import { asyncRunSafe } from '@/utils'
 const TIME_OUT = 100000
 
@@ -290,11 +290,13 @@ const baseFetch = base
 export const upload = async (options: any, isPublicAPI?: boolean, url?: string, searchParams?: string): Promise<any> => {
   const urlPrefix = isPublicAPI ? PUBLIC_API_PREFIX : API_PREFIX
   const token = await getAccessToken(isPublicAPI)
+  const supersonicToken = getSupersonicToken()
   const defaultOptions = {
     method: 'POST',
     url: (url ? `${urlPrefix}${url}` : `${urlPrefix}/files/upload`) + (searchParams || ''),
     headers: {
       Authorization: `Bearer ${token}`,
+      ...(supersonicToken && { 'X-SUPERSONIC-TOKEN': supersonicToken })
     },
     data: {},
   }
@@ -387,26 +389,40 @@ export const ssePost = async (
 
   const accessToken = await getAccessToken(isPublicAPI)
     ; (options.headers as Headers).set('Authorization', `Bearer ${accessToken}`)
+  const supersonicToken = getSupersonicToken()
+  if (supersonicToken)
+    (options.headers as Headers).set('X-SUPERSONIC-TOKEN', supersonicToken)
 
   globalThis.fetch(urlWithPrefix, options as RequestInit)
     .then((res) => {
       if (!/^[23]\d{2}$/.test(String(res.status))) {
         if (res.status === 401) {
-          refreshAccessTokenOrRelogin(TIME_OUT).then(() => {
-            ssePost(url, fetchOptions, otherOptions)
-          }).catch(() => {
-            res.json().then((data: any) => {
-              if (isPublicAPI) {
-                if (data.code === 'web_sso_auth_required')
-                  requiredWebSSOLogin()
-
-                if (data.code === 'unauthorized') {
-                  removeAccessToken()
-                  globalThis.location.reload()
-                }
+          (async () => {
+            const data = await res.json()
+            if (data && data.code === 'invalid_supersonic_token')  {
+              if (globalThis.top) {
+                  globalThis.top.location.href = '/'
+              } else {
+                  globalThis.location.href = '/'
               }
+              return
+            }
+            refreshAccessTokenOrRelogin(TIME_OUT).then(() => {
+              ssePost(url, fetchOptions, otherOptions)
+            }).catch(() => {
+              res.json().then((data: any) => {
+                if (isPublicAPI) {
+                  if (data.code === 'web_sso_auth_required')
+                    requiredWebSSOLogin()
+
+                  if (data.code === 'unauthorized') {
+                    removeAccessToken()
+                    globalThis.location.reload()
+                  }
+                }
+              })
             })
-          })
+          })()
         }
         else {
           res.json().then((data) => {
@@ -489,6 +505,14 @@ export const request = async<T>(url: string, options = {}, otherOptions?: IOther
         isPublicAPI = false,
         silent,
       } = otherOptionsForBaseFetch
+      if (code === 'invalid_supersonic_token') {
+        if (globalThis.top) {
+            globalThis.top.location.href = '/'
+        } else {
+            globalThis.location.href = '/'
+        }
+        return Promise.reject(err)
+      }
       if (isPublicAPI && code === 'unauthorized') {
         removeAccessToken()
         globalThis.location.reload()

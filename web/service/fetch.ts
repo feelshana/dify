@@ -90,14 +90,26 @@ export async function getAccessToken(isPublicAPI?: boolean) {
   }
 }
 
+export function getSupersonicToken() {
+  return localStorage.getItem('SUPERSONIC_TOKEN'); 
+}
+
 const beforeRequestPublicAuthorization: BeforeRequestHook = async (request) => {
   const token = await getAccessToken(true)
   request.headers.set('Authorization', `Bearer ${token}`)
+  const supersonicToken = getSupersonicToken()
+  if (supersonicToken) {
+    request.headers.set('X-SUPERSONIC-TOKEN', supersonicToken)
+  }
 }
 
 const beforeRequestAuthorization: BeforeRequestHook = async (request) => {
   const accessToken = await getAccessToken()
   request.headers.set('Authorization', `Bearer ${accessToken}`)
+  const supersonicToken = getSupersonicToken()
+  if (supersonicToken) {
+    request.headers.set('X-SUPERSONIC-TOKEN', supersonicToken)
+  }
 }
 
 const baseHooks: Hooks = {

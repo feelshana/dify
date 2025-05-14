@@ -575,6 +575,11 @@ class AuthConfig(BaseSettings):
         default=86400,
     )
 
+    SUPERSONIC_URL: Optional[str] = Field(
+        description="Supersonic URL for authentication",
+        default=None,
+    )
+
 
 class ModerationConfig(BaseSettings):
     """

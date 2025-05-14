@@ -1,5 +1,6 @@
 import { apiPrefix } from '@/config'
 import { fetchWithRetry } from '@/utils'
+import { getSupersonicToken } from '@/service/fetch'
 
 const LOCAL_STORAGE_KEY = 'is_other_tab_refreshing'
 
@@ -46,10 +47,12 @@ async function getNewAccessToken(timeout: number): Promise<void> {
       // it can lead to an infinite loop if the refresh attempt also returns 401.
       // To avoid this, handle token refresh separately in a dedicated function
       // that does not call baseFetch and uses a single retry mechanism.
+      const supersonicToken = getSupersonicToken()
       const [error, ret] = await fetchWithRetry(globalThis.fetch(`${apiPrefix}/refresh-token`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json;utf-8',
+          ...(supersonicToken && { 'X-SUPERSONIC-TOKEN': supersonicToken })
         },
         body: JSON.stringify({ refresh_token }),
       }))
