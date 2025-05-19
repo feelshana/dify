@@ -12,6 +12,10 @@ from extensions.ext_database import db
 from models.account import Account, Tenant, TenantAccountJoin
 from models.model import EndUser
 
+import requests
+import json
+from controllers.console.error import InvalidSupersonicTokenError
+
 #: A proxy for the current user. If no user is logged in, this will be an
 #: anonymous user
 current_user: Any = LocalProxy(lambda: _get_user())
@@ -53,6 +57,25 @@ def login_required(func):
 
     @wraps(func)
     def decorated_view(*args, **kwargs):
+        # 检查是否存在X-SUPERSONIC-TOKEN请求头
+        supersonic_token = request.headers.get("X-SUPERSONIC-TOKEN")
+        if not supersonic_token:
+            raise InvalidSupersonicTokenError()
+        # 配置认证头和API端点
+        auth_header = {"Authorization": f"Bearer {supersonic_token}"}
+        api_url = f"{dify_config.SUPERSONIC_URL}/api/auth/user/getCurrentUser"
+        try:
+            response = requests.get(api_url, headers=auth_header)
+            response.raise_for_status()
+            result = json.loads(response.content)
+            user = result["data"]
+            userName = user["name"]
+            if not userName:
+                raise InvalidSupersonicTokenError()
+            # 将用户名存入请求上下文
+            g.supersonic_user = userName
+        except (requests.exceptions.RequestException, ValueError, KeyError):
+            raise InvalidSupersonicTokenError()
         auth_header = request.headers.get("Authorization")
         if dify_config.ADMIN_API_KEY_ENABLE:
             if auth_header:

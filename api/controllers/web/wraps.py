@@ -1,6 +1,6 @@
 from functools import wraps
 
-from flask import request
+from flask import request, g
 from flask_restful import Resource
 from werkzeug.exceptions import BadRequest, NotFound, Unauthorized
 
@@ -10,6 +10,11 @@ from libs.passport import PassportService
 from models.model import App, EndUser, Site
 from services.enterprise.enterprise_service import EnterpriseService
 from services.feature_service import FeatureService
+
+import requests
+import json
+from configs import dify_config
+from controllers.console.error import InvalidSupersonicTokenError
 
 
 def validate_jwt_token(view=None):
@@ -28,6 +33,25 @@ def validate_jwt_token(view=None):
 
 
 def decode_jwt_token():
+	# 检查是否存在X-SUPERSONIC-TOKEN请求头
+    supersonic_token = request.headers.get("X-SUPERSONIC-TOKEN")
+    if not supersonic_token:
+        raise InvalidSupersonicTokenError()
+    # 配置认证头和API端点
+    auth_header = {"Authorization": f"Bearer {supersonic_token}"}
+    api_url = f"{dify_config.SUPERSONIC_URL}/api/auth/user/getCurrentUser"
+    try:
+        response = requests.get(api_url, headers=auth_header)
+        response.raise_for_status()
+        result = json.loads(response.content)
+        user = result["data"]
+        userName = user["name"]
+        if not userName:
+            raise InvalidSupersonicTokenError()
+        # 将用户名存入请求上下文
+        g.supersonic_user = userName
+    except (requests.exceptions.RequestException, ValueError, KeyError):
+        raise InvalidSupersonicTokenError()
     system_features = FeatureService.get_system_features()
     app_code = request.headers.get("X-App-Code")
     try:

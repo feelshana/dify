@@ -69,6 +69,10 @@ const beforeErrorToast = (otherOptions: IOtherOptions): BeforeErrorHook => {
   }
 }
 
+export function getSupersonicToken() {
+  return localStorage.getItem('SUPERSONIC_TOKEN')
+}
+
 export async function getAccessToken(isPublicAPI?: boolean) {
   if (isPublicAPI) {
     const sharedToken = globalThis.location.pathname.split('/').slice(-1)[0]
@@ -93,11 +97,19 @@ export async function getAccessToken(isPublicAPI?: boolean) {
 const beforeRequestPublicAuthorization: BeforeRequestHook = async (request) => {
   const token = await getAccessToken(true)
   request.headers.set('Authorization', `Bearer ${token}`)
+  const supersonicToken = getSupersonicToken()
+  if (supersonicToken) {
+    request.headers.set('X-SUPERSONIC-TOKEN', supersonicToken)
+  }
 }
 
 const beforeRequestAuthorization: BeforeRequestHook = async (request) => {
   const accessToken = await getAccessToken()
   request.headers.set('Authorization', `Bearer ${accessToken}`)
+  const supersonicToken = getSupersonicToken()
+  if (supersonicToken) {
+    request.headers.set('X-SUPERSONIC-TOKEN', supersonicToken)
+  }
 }
 
 const baseHooks: Hooks = {

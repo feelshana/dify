@@ -579,6 +579,11 @@ class AuthConfig(BaseSettings):
         description="Time (in seconds) a user must wait before retrying password reset after exceeding the rate limit.",
         default=86400,
     )
+    
+    SUPERSONIC_URL: Optional[str] = Field(
+        description="Supersonic URL for authentication",
+        default=None,
+    )
 
 
 class ModerationConfig(BaseSettings):
