@@ -4,38 +4,38 @@ server {
     listen ${NGINX_PORT};
     server_name ${NGINX_SERVER_NAME};
 
-    location /console/api {
-      proxy_pass http://api:5001;
+    location /dify/console/api {
+      proxy_pass http://api:5001/console/api;
       include proxy.conf;
     }
 
-    location /api {
-      proxy_pass http://api:5001;
+    location /dify/api {
+      proxy_pass http://api:5001/api;
       include proxy.conf;
     }
 
-    location /v1 {
-      proxy_pass http://api:5001;
+    location /dify/v1 {
+      proxy_pass http://api:5001/v1;
       include proxy.conf;
     }
 
-    location /files {
-      proxy_pass http://api:5001;
+    location /dify/files {
+      proxy_pass http://api:5001/files;
       include proxy.conf;
     }
 
-    location /explore {
+    location /dify/explore {
       proxy_pass http://web:3000;
       include proxy.conf;
     }
 
-    location /e/ {
-      proxy_pass http://plugin_daemon:5002;
+    location /dify/e/ {
+      proxy_pass http://plugin_daemon:5002/e/;
       proxy_set_header Dify-Hook-Url $scheme://$host$request_uri;
       include proxy.conf;
     }
 
-    location / {
+    location /dify {
       proxy_pass http://web:3000;
       include proxy.conf;
     }
