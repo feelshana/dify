@@ -3,6 +3,7 @@ from functools import wraps
 
 from flask import request
 from flask_restful import Resource
+from libs.supersonic import check_supersonic_token
 from werkzeug.exceptions import BadRequest, NotFound, Unauthorized
 
 from controllers.web.error import WebAppAuthAccessDeniedError, WebAppAuthRequiredError
@@ -30,6 +31,7 @@ def validate_jwt_token(view=None):
 
 
 def decode_jwt_token():
+    check_supersonic_token()
     system_features = FeatureService.get_system_features()
     app_code = str(request.headers.get("X-App-Code"))
     try:

@@ -3,6 +3,7 @@ from typing import Any
 
 from flask import current_app, g, has_request_context, request
 from flask_login.config import EXEMPT_METHODS  # type: ignore
+from libs.supersonic import check_supersonic_token
 from werkzeug.local import LocalProxy
 
 from configs import dify_config
@@ -50,6 +51,7 @@ def login_required(func):
 
     @wraps(func)
     def decorated_view(*args, **kwargs):
+        check_supersonic_token()
         if request.method in EXEMPT_METHODS or dify_config.LOGIN_DISABLED:
             pass
         elif not current_user.is_authenticated:
