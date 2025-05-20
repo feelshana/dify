@@ -36,7 +36,7 @@ const Header: FC<IHeaderProps> = ({
   if (!isMobile) {
     return (
       <div
-        className='absolute bottom-[65px] z-10 flex h-7 w-[calc(100%-20px)] shrink-0 items-center bg-[Canvas] p-3'
+        className='absolute bottom-[65px] z-10 flex h-7 w-[calc(100%-20px)] shrink-0 items-center bg-[#f5f8f9] p-3'
       >
         <div className='flex items-center gap-1'>
           {/* powered by */}
