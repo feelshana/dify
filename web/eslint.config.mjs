@@ -85,7 +85,7 @@ export default combine(
   {
     // orignal config
     rules: {
-      'complexity': ['warn', { max: 10 }],
+      // 'complexity': ['warn', { max: 10 }],
       // orignal ts/no-var-requires
       'ts/no-require-imports': 'off',
       'no-console': 'off',
