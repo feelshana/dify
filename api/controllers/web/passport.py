@@ -1,7 +1,8 @@
 import uuid
 
-from flask import request
+from flask import request, session
 from flask_restful import Resource
+from libs.supersonic import check_supersonic_token
 from werkzeug.exceptions import NotFound, Unauthorized
 
 from controllers.web import api
@@ -17,6 +18,8 @@ class PassportResource(Resource):
     """Base resource for passport."""
 
     def get(self):
+        check_supersonic_token()
+
         system_features = FeatureService.get_system_features()
         app_code = request.headers.get("X-App-Code")
         user_id = request.args.get("user_id")
@@ -56,15 +59,23 @@ class PassportResource(Resource):
                 db.session.add(end_user)
                 db.session.commit()
         else:
-            end_user = EndUser(
-                tenant_id=app_model.tenant_id,
-                app_id=app_model.id,
-                type="browser",
-                is_anonymous=True,
-                session_id=generate_session_id(),
+            user_id = session.get("supersonic_user")
+            end_user = (
+                db.session.query(EndUser).filter(EndUser.app_id == app_model.id, EndUser.session_id == user_id).first()
             )
-            db.session.add(end_user)
-            db.session.commit()
+
+            if end_user:
+                pass
+            else:
+                end_user = EndUser(
+                    tenant_id=app_model.tenant_id,
+                    app_id=app_model.id,
+                    type="browser",
+                    is_anonymous=True,
+                    session_id=user_id,
+                )
+                db.session.add(end_user)
+                db.session.commit()
 
         payload = {
             "iss": site.app_id,
