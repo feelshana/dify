@@ -670,6 +670,10 @@ const translation = {
     supportedFormats: '支持 PNG、JPG、JPEG、WEBP 和 GIF 格式',
   },
   you: '你',
+  tooltip: {
+    ratingFromUser: '用户点踩',
+    ratingFromAdmin: '管理员点踩',
+  },
 }
 
 export default translation
