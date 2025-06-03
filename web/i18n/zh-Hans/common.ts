@@ -666,6 +666,10 @@ const translation = {
     browse: '浏览',
     supportedFormats: '支持PNG、JPG、JPEG、WEBP和GIF格式',
   },
+  tooltip: {
+    ratingFromUser: '用户点踩',
+    ratingFromAdmin: '管理员点踩',
+  },
 }
 
 export default translation

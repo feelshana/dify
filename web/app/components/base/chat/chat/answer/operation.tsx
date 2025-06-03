@@ -21,6 +21,7 @@ import Log from '@/app/components/base/chat/chat/log'
 import ActionButton, { ActionButtonState } from '@/app/components/base/action-button'
 import NewAudioButton from '@/app/components/base/new-audio-button'
 import cn from '@/utils/classnames'
+import Tooltip from '@/app/components/base/tooltip'
 
 type OperationProps = {
   item: ChatItem
@@ -109,6 +110,24 @@ const Operation: FC<OperationProps> = ({
         )}
         // style={(!hasWorkflowProcess && positionRight) ? { left: contentWidth + 8 } : {}}
       >
+        {!isOpeningStatement && feedback && (
+          <Tooltip
+            popupContent={t('common.tooltip.ratingFromUser')}
+          >
+            <div className='ml-1 flex items-center gap-0.5 rounded-[10px] border-[0.5px] border-components-actionbar-border bg-components-actionbar-bg p-0.5 shadow-md backdrop-blur-sm'>
+              {feedback?.rating === 'like' && (
+                <ActionButton state={ActionButtonState.Active} styleCss={{ cursor: 'not-allowed' }}>
+                  <RiThumbUpLine className='h-4 w-4' />
+                </ActionButton>
+              )}
+              {feedback?.rating === 'dislike' && (
+                <ActionButton state={ActionButtonState.Destructive} styleCss={{ cursor: 'not-allowed' }}>
+                  <RiThumbDownLine className='h-4 w-4' />
+                </ActionButton>
+              )}
+            </div>
+          </Tooltip>
+        )}
         {showPromptLog && !isOpeningStatement && (
           <div className='group-hover:block'>
             <Log logItem={item} />
@@ -147,34 +166,38 @@ const Operation: FC<OperationProps> = ({
             )}
           </div>
         )}
-        {!isOpeningStatement && config?.supportFeedback && !localFeedback?.rating && onFeedback && (
-          <div className='ml-1 items-center gap-0.5 rounded-[10px] border-[0.5px] border-components-actionbar-border bg-components-actionbar-bg p-0.5 shadow-md backdrop-blur-sm group-hover:flex'>
-            {!localFeedback?.rating && (
-              <>
-                <ActionButton onClick={() => handleFeedback('like')}>
+        <Tooltip
+          popupContent={t('common.tooltip.ratingFromAdmin')}
+        >
+          {!isOpeningStatement && config?.supportFeedback && !localFeedback?.rating && onFeedback && (
+            <div className='ml-1 items-center gap-0.5 rounded-[10px] border-[0.5px] border-components-actionbar-border bg-components-actionbar-bg p-0.5 shadow-md backdrop-blur-sm group-hover:flex'>
+              {!localFeedback?.rating && (
+                <>
+                  <ActionButton onClick={() => handleFeedback('like')}>
+                    <RiThumbUpLine className='h-4 w-4' />
+                  </ActionButton>
+                  <ActionButton onClick={() => handleFeedback('dislike')}>
+                    <RiThumbDownLine className='h-4 w-4' />
+                  </ActionButton>
+                </>
+              )}
+            </div>
+          )}
+          {!isOpeningStatement && config?.supportFeedback && localFeedback?.rating && onFeedback && (
+            <div className='ml-1 flex items-center gap-0.5 rounded-[10px] border-[0.5px] border-components-actionbar-border bg-components-actionbar-bg p-0.5 shadow-md backdrop-blur-sm'>
+              {localFeedback?.rating === 'like' && (
+                <ActionButton state={ActionButtonState.Active} onClick={() => handleFeedback(null)}>
                   <RiThumbUpLine className='h-4 w-4' />
                 </ActionButton>
-                <ActionButton onClick={() => handleFeedback('dislike')}>
+              )}
+              {localFeedback?.rating === 'dislike' && (
+                <ActionButton state={ActionButtonState.Destructive} onClick={() => handleFeedback(null)}>
                   <RiThumbDownLine className='h-4 w-4' />
                 </ActionButton>
-              </>
-            )}
-          </div>
-        )}
-        {!isOpeningStatement && config?.supportFeedback && localFeedback?.rating && onFeedback && (
-          <div className='ml-1 flex items-center gap-0.5 rounded-[10px] border-[0.5px] border-components-actionbar-border bg-components-actionbar-bg p-0.5 shadow-md backdrop-blur-sm'>
-            {localFeedback?.rating === 'like' && (
-              <ActionButton state={ActionButtonState.Active} onClick={() => handleFeedback(null)}>
-                <RiThumbUpLine className='h-4 w-4' />
-              </ActionButton>
-            )}
-            {localFeedback?.rating === 'dislike' && (
-              <ActionButton state={ActionButtonState.Destructive} onClick={() => handleFeedback(null)}>
-                <RiThumbDownLine className='h-4 w-4' />
-              </ActionButton>
-            )}
-          </div>
-        )}
+              )}
+            </div>
+          )}
+        </Tooltip>
       </div>
       <EditReplyModal
         isShow={isShowReplyModal}
