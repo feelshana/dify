@@ -1,19 +1,20 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import mermaid from 'mermaid'
 import { useTranslation } from 'react-i18next'
-import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
+// import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import { MoonIcon, SunIcon } from '@heroicons/react/24/solid'
 import {
   cleanUpSvgCode,
   isMermaidCodeComplete,
+  isNoEmptySVG,
   prepareMermaidCode,
   processSvgForTheme,
   svgToBase64,
   waitForDOMElement,
 } from './utils'
-import LoadingAnim from '@/app/components/base/chat/chat/loading-anim'
+// import LoadingAnim from '@/app/components/base/chat/chat/loading-anim'
 import cn from '@/utils/classnames'
-import ImagePreview from '@/app/components/base/image-uploader/image-preview'
+// import ImagePreview from '@/app/components/base/image-uploader/image-preview'
 import { Theme } from '@/types/app'
 
 // Global flags and cache for mermaid
@@ -114,6 +115,7 @@ const Flowchart = React.forwardRef((props: {
 }, ref) => {
   const { t } = useTranslation()
   const [svgCode, setSvgCode] = useState<string | null>(null)
+  const [svgStr, setSvgStr] = useState<string | null>(null)
   const [look, setLook] = useState<'classic' | 'handDrawn'>('classic')
   const [isInitialized, setIsInitialized] = useState(false)
   const [currentTheme, setCurrentTheme] = useState<'light' | 'dark'>(props.theme || 'light')
@@ -130,39 +132,76 @@ const Flowchart = React.forwardRef((props: {
   const cacheKey = useMemo(() => {
     return `${props.PrimitiveCode}-${look}-${currentTheme}`
   }, [props.PrimitiveCode, look, currentTheme])
-
+  const cacheKeyForSVG = useMemo(() => {
+    return `${props.PrimitiveCode}-${look}-${currentTheme}-svg`
+  }, [props.PrimitiveCode, look, currentTheme])
+  const timerRef = useRef<NodeJS.Timeout | null>(null)
+  const lastRejectRef = useRef<((reason?: any) => void) | null>(null)
   /**
    * Renders Mermaid chart
    */
-  const renderMermaidChart = async (code: string, style: 'classic' | 'handDrawn') => {
-    if (style === 'handDrawn') {
-      // Special handling for hand-drawn style
-      if (containerRef.current)
-        containerRef.current.innerHTML = `<div id="${chartId}"></div>`
-      await new Promise(resolve => setTimeout(resolve, 30))
+ const renderMermaidChartDebounce = useCallback(async (code: string, style: 'classic' | 'handDrawn') => {
+    // 防抖核心逻辑：清除前次调用
+    if (timerRef.current) {
+      clearTimeout(timerRef.current)
+      timerRef.current = null
+    }
+    if (lastRejectRef.current) {
+      lastRejectRef.current(new Error('RenderCancelled'))
+      lastRejectRef.current = null
+    }
 
-      if (typeof window !== 'undefined' && mermaidAPI) {
-        // Prefer using mermaidAPI directly for hand-drawn style
-        return await mermaidAPI.render(chartId, code)
-      }
-      else {
-        // Fall back to standard rendering if mermaidAPI is not available
-        const { svg } = await mermaid.render(chartId, code)
-        return { svg }
-      }
+    const executeRender = async (resolve: (value: { svg: string }) => void, reject: (reason?: any) => void) => {
+      // 保存当前调用的reject方法
+      lastRejectRef.current = reject
+
+      // 设置延时执行实际渲染
+      timerRef.current = setTimeout(async () => {
+        try {
+          // 清除引用
+          lastRejectRef.current = null
+          timerRef.current = null
+
+          // 实际渲染逻辑
+          let result: { svg: string }
+          if (style === 'handDrawn') {
+            if (containerRef.current)
+              containerRef.current.innerHTML = `<div id="${chartId}"></div>`
+
+            await new Promise(resolve => setTimeout(resolve, 500))
+
+            if (typeof window !== 'undefined' && mermaidAPI) {
+              const mermaidResult = await mermaidAPI.render(chartId, code)
+              result = mermaidResult
+            }
+ else {
+              const { svg } = await mermaid.render(chartId, code)
+              result = { svg }
+            }
+          }
+ else {
+            const renderWithRetry = async () => {
+              if (containerRef.current)
+                containerRef.current.innerHTML = `<div id="${chartId}"></div>`
+
+              await new Promise(resolve => setTimeout(resolve, 500))
+              const { svg } = await mermaid.render(chartId, code)
+              return { svg }
+            }
+            result = await waitForDOMElement(renderWithRetry)
+          }
+          resolve(result)
+        }
+ catch (error) {
+          reject(error)
+        }
+      }, 300)
     }
-    else {
-      // Standard rendering for classic style - using the extracted waitForDOMElement function
-      const renderWithRetry = async () => {
-        if (containerRef.current)
-          containerRef.current.innerHTML = `<div id="${chartId}"></div>`
-        await new Promise(resolve => setTimeout(resolve, 30))
-        const { svg } = await mermaid.render(chartId, code)
-        return { svg }
-      }
-      return await waitForDOMElement(renderWithRetry)
-    }
-  }
+
+    return new Promise<{ svg: string }>((resolve, reject) => {
+      executeRender(resolve, reject).catch(reject)
+    })
+  }, [containerRef, mermaidAPI, waitForDOMElement, chartId])
 
   /**
    * Handle rendering errors
@@ -186,7 +225,7 @@ const Flowchart = React.forwardRef((props: {
       try {
         // Clear possible cache issues
         diagramCache.delete(`${props.PrimitiveCode}-handDrawn-${currentTheme}`)
-
+        diagramCache.delete(`${props.PrimitiveCode}-handDrawn-${currentTheme}-svg`)
         // Reset mermaid configuration
         mermaid.initialize({
           startOnLoad: false,
@@ -276,7 +315,7 @@ const Flowchart = React.forwardRef((props: {
     }
 
     // Don't render if code is not complete yet
-    if (!isCodeComplete) {
+    if (!isMermaidCodeComplete(props.PrimitiveCode)) {
       setIsLoading(true)
       return
     }
@@ -284,6 +323,7 @@ const Flowchart = React.forwardRef((props: {
     // Return cached result if available
     if (diagramCache.has(cacheKey)) {
       setSvgCode(diagramCache.get(cacheKey) || null)
+      setSvgStr(diagramCache.get(cacheKeyForSVG) || null)
       setIsLoading(false)
       return
     }
@@ -309,7 +349,7 @@ const Flowchart = React.forwardRef((props: {
       }
 
       // Step 2: Render chart
-      const svgGraph = await renderMermaidChart(finalCode, look)
+      const svgGraph = await renderMermaidChartDebounce(finalCode, look)
 
       // Step 3: Apply theme to SVG using the extracted processSvgForTheme function
       const processedSvg = processSvgForTheme(
@@ -323,9 +363,11 @@ const Flowchart = React.forwardRef((props: {
       const cleanedSvg = cleanUpSvgCode(processedSvg)
       const base64Svg = await svgToBase64(cleanedSvg)
 
-      if (base64Svg && typeof base64Svg === 'string') {
+      if (base64Svg && typeof base64Svg === 'string' && isNoEmptySVG(cleanedSvg)) {
+        diagramCache.set(cacheKeyForSVG, cleanedSvg)
         diagramCache.set(cacheKey, base64Svg)
         setSvgCode(base64Svg)
+        setSvgStr(cleanedSvg)
       }
 
       setIsLoading(false)
@@ -429,6 +471,7 @@ const Flowchart = React.forwardRef((props: {
   useEffect(() => {
     if (diagramCache.has(cacheKey)) {
       setSvgCode(diagramCache.get(cacheKey) || null)
+      setSvgStr(diagramCache.get(cacheKeyForSVG) || null)
       setIsLoading(false)
       return
     }
@@ -441,6 +484,7 @@ const Flowchart = React.forwardRef((props: {
   useEffect(() => {
     if (diagramCache.has(cacheKey)) {
       setSvgCode(diagramCache.get(cacheKey) || null)
+      setSvgStr(diagramCache.get(cacheKeyForSVG) || null)
       setIsLoading(false)
       return
     }
@@ -544,7 +588,7 @@ const Flowchart = React.forwardRef((props: {
 
       <div ref={containerRef} style={{ position: 'absolute', visibility: 'hidden', height: 0, overflow: 'hidden' }} />
 
-      {isLoading && !svgCode && (
+      {/* {isLoading && !svgCode && (
         <div className='px-[26px] py-4'>
           <LoadingAnim type='text'/>
           {!isCodeComplete && (
@@ -553,10 +597,12 @@ const Flowchart = React.forwardRef((props: {
             </div>
           )}
         </div>
-      )}
+      )} */}
 
       {svgCode && (
-        <div className={themeClasses.mermaidDiv} style={{ objectFit: 'cover' }} onClick={() => setImagePreviewUrl(svgCode)}>
+        <div className={themeClasses.mermaidDiv} style={{ objectFit: 'cover' }}
+          // onClick={() => setImagePreviewUrl(svgCode)}
+        >
           <div className="absolute bottom-2 left-2 z-[100]">
             <button
               onClick={(e) => {
@@ -571,27 +617,31 @@ const Flowchart = React.forwardRef((props: {
             </button>
           </div>
 
-          <img
-            src={svgCode}
+          {/* <img
+            src={svgStr as string}
             alt="mermaid_chart"
             style={{ maxWidth: '100%' }}
             onError={() => { setErrMsg('Chart rendering failed, please refresh and retry') }}
+          /> */}
+          <div
+            dangerouslySetInnerHTML={{ __html: svgStr as string }}
+            style={{ maxWidth: '100%' }}
           />
         </div>
       )}
 
-      {errMsg && (
+      {/* {errMsg && (
         <div className={themeClasses.errorMessage}>
           <div className="flex items-center">
             <ExclamationTriangleIcon className={themeClasses.errorIcon}/>
             <span className="ml-2">{errMsg}</span>
           </div>
         </div>
-      )}
+      )} */}
 
-      {imagePreviewUrl && (
+      {/* {imagePreviewUrl && (
         <ImagePreview title='mermaid_chart' url={imagePreviewUrl} onCancel={() => setImagePreviewUrl('')} />
-      )}
+      )} */}
     </div>
   )
 })

@@ -241,3 +241,47 @@ export function waitForDOMElement(callback: () => Promise<any>, maxAttempts = 3,
     tryRender()
   })
 }
+
+export function isNoEmptySVG(svgString: string): boolean {
+    try {
+        const parser = new DOMParser()
+        const doc = parser.parseFromString(svgString, 'image/svg+xml')
+        const svgRoot = doc.documentElement
+
+        // 查找所有图形元素
+        const graphicalElements = svgRoot.querySelectorAll(
+            'g, path, rect, circle, ellipse, line, polyline, polygon, text, marker',
+        )
+
+        if (graphicalElements.length === 0) return false
+
+        // 检查每个元素是否实质为空
+        for (const el of graphicalElements) {
+            if (el.tagName === 'MARKER') {
+                // 检查marker是否包含可见元素
+                if (el.querySelector('path, circle, rect')) return true
+            }
+ else if (el.tagName === 'g') {
+                // 检查g标签是否包含非空白内容
+                const hasContent = Array.from(el.childNodes).some((node) => {
+                    if (node.nodeType === Node.ELEMENT_NODE) return true
+                    if (node.nodeType === Node.TEXT_NODE)
+                        return node.textContent?.trim() !== ''
+
+                    return false
+                })
+                if (hasContent) return true
+            }
+ else {
+                // 其他图形元素直接认为非空
+                return true
+            }
+        }
+
+        return false
+    }
+ catch (e) {
+        console.error('SVG解析错误:', e)
+        return false
+    }
+}
