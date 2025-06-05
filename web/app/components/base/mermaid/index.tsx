@@ -8,12 +8,11 @@ import {
   isMermaidCodeComplete,
   prepareMermaidCode,
   processSvgForTheme,
-  svgToBase64,
   waitForDOMElement,
 } from './utils'
 import LoadingAnim from '@/app/components/base/chat/chat/loading-anim'
 import cn from '@/utils/classnames'
-import ImagePreview from '@/app/components/base/image-uploader/image-preview'
+// import ImagePreview from '@/app/components/base/image-uploader/image-preview'
 import { Theme } from '@/types/app'
 
 // Global flags and cache for mermaid
@@ -313,13 +312,12 @@ const Flowchart = React.forwardRef((props: {
         THEMES,
       )
 
-      // Step 4: Clean SVG code and convert to base64 using the extracted functions
+      // Step 4: Clean SVG code
       const cleanedSvg = cleanUpSvgCode(processedSvg)
-      const base64Svg = await svgToBase64(cleanedSvg)
 
-      if (base64Svg && typeof base64Svg === 'string') {
-        diagramCache.set(cacheKey, base64Svg)
-        setSvgCode(base64Svg)
+      if (cleanedSvg && typeof cleanedSvg === 'string') {
+        diagramCache.set(cacheKey, cleanedSvg)
+        setSvgCode(cleanedSvg)
       }
 
       setIsLoading(false)
@@ -545,7 +543,9 @@ const Flowchart = React.forwardRef((props: {
       )}
 
       {svgCode && (
-        <div className={themeClasses.mermaidDiv} style={{ objectFit: 'cover' }} onClick={() => setImagePreviewUrl(svgCode)}>
+        <div className={themeClasses.mermaidDiv} style={{ objectFit: 'cover' }}
+        // onClick={() => setImagePreviewUrl(svgCode)}
+        >
           <div className="absolute bottom-2 left-2 z-[100]">
             <button
               onClick={(e) => {
@@ -560,11 +560,9 @@ const Flowchart = React.forwardRef((props: {
             </button>
           </div>
 
-          <img
-            src={svgCode}
-            alt="mermaid_chart"
+          <div
+            dangerouslySetInnerHTML={{ __html: svgCode as string }}
             style={{ maxWidth: '100%' }}
-            onError={() => { setErrMsg('Chart rendering failed, please refresh and retry') }}
           />
         </div>
       )}
@@ -578,9 +576,9 @@ const Flowchart = React.forwardRef((props: {
         </div>
       )}
 
-      {imagePreviewUrl && (
+      {/* {imagePreviewUrl && (
         <ImagePreview title='mermaid_chart' url={imagePreviewUrl} onCancel={() => setImagePreviewUrl('')} />
-      )}
+      )} */}
     </div>
   )
 })
