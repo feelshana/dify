@@ -22,6 +22,7 @@ import ActionButton, { ActionButtonState } from '@/app/components/base/action-bu
 import NewAudioButton from '@/app/components/base/new-audio-button'
 import cn from '@/utils/classnames'
 import Tooltip from '@/app/components/base/tooltip'
+import { usePathname } from 'next/navigation'
 
 type OperationProps = {
   item: ChatItem
@@ -43,6 +44,7 @@ const Operation: FC<OperationProps> = ({
   hasWorkflowProcess,
   noChatInput,
 }) => {
+  const pathname = usePathname()
   const { t } = useTranslation()
   const {
     config,
@@ -110,7 +112,7 @@ const Operation: FC<OperationProps> = ({
         )}
         // style={(!hasWorkflowProcess && positionRight) ? { left: contentWidth + 8 } : {}}
       >
-        {!isOpeningStatement && feedback && (
+        {!isOpeningStatement && feedback && pathname.includes('/logs') && (
           <Tooltip
             popupContent={t('common.tooltip.ratingFromUser')}
           >
@@ -167,7 +169,7 @@ const Operation: FC<OperationProps> = ({
           </div>
         )}
         <Tooltip
-          popupContent={t('common.tooltip.ratingFromAdmin')}
+          popupContent={pathname.includes('/logs') ? t('common.tooltip.ratingFromAdmin') : t('common.tooltip.ratingFromUser')}
         >
           {!isOpeningStatement && config?.supportFeedback && !localFeedback?.rating && onFeedback && (
             <div className='ml-1 items-center gap-0.5 rounded-[10px] border-[0.5px] border-components-actionbar-border bg-components-actionbar-bg p-0.5 shadow-md backdrop-blur-sm group-hover:flex'>
