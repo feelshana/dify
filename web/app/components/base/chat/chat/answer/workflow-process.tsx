@@ -41,6 +41,8 @@ const WorkflowProcessItem = ({
 
   return (
     <div
+      // 根据需求，不显示，先隐藏
+      style={{ display: 'none' }}
       className={cn(
         '-mx-1 rounded-xl px-2.5',
         collapse ? 'border-l-[0.25px] border-components-panel-border py-[7px]' : 'border-[0.5px] border-components-panel-border-subtle px-1 pb-1 pt-[7px]',
