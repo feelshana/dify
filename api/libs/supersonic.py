@@ -25,5 +25,5 @@ def check_supersonic_token():
             raise InvalidSupersonicTokenError()
         # 将用户名存入session中
         session["supersonic_user"] = userName
-    except (requests.exceptions.RequestException, ValueError, KeyError):
+    except (requests.exceptions.RequestException, ValueError, KeyError, TypeError, json.JSONDecodeError):
         raise InvalidSupersonicTokenError()
