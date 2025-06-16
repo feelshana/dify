@@ -27,6 +27,11 @@ import cn from '@/utils/classnames'
 import type { FileEntity } from '../../file-uploader/types'
 
 const ChatWrapper = () => {
+  const [extraInputs, setExtraInputs] = useState<object>({})
+  const handleExtraInputsChange = useCallback((value: object) => {
+    console.log(value, 'handleExtraInputsChange')
+    setExtraInputs(value)
+  }, [])
   const {
     appData,
     appParams,
@@ -129,7 +134,7 @@ const ChatWrapper = () => {
     const data: any = {
       query: message,
       files,
-      inputs: currentConversationId ? currentConversationInputs : newConversationInputs,
+      inputs: currentConversationId ? { ...currentConversationInputs, ...extraInputs } : { ...newConversationInputs, ...extraInputs },
       conversation_id: currentConversationId,
       parent_message_id: (isRegenerate ? parentAnswer?.id : getLastAnswer(chatList)?.id) || null,
     }
@@ -143,7 +148,7 @@ const ChatWrapper = () => {
         isPublicAPI: !isInstalledApp,
       },
     )
-  }, [currentConversationId, currentConversationInputs, newConversationInputs, chatList, handleSend, isInstalledApp, appId, handleNewConversationCompleted])
+  }, [currentConversationId, currentConversationInputs, newConversationInputs, chatList, handleSend, isInstalledApp, appId, handleNewConversationCompleted, extraInputs])
 
   const doRegenerate = useCallback((chatItem: ChatItemInTree, editedQuestion?: { message: string, files?: FileEntity[] }) => {
     const question = editedQuestion ? chatItem : chatList.find(item => item.id === chatItem.parentMessageId)!
@@ -162,6 +167,13 @@ const ChatWrapper = () => {
   }, [chatList, currentConversationId])
 
   const [collapsed, setCollapsed] = useState(!!currentConversationId)
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const reportId = params.get('reportId')
+    if(reportId)
+      setCollapsed(true)
+  }, [])
 
   const chatNode = useMemo(() => {
     if (allInputsHidden || !inputsForms.length)
@@ -261,6 +273,7 @@ const ChatWrapper = () => {
       switchSibling={siblingMessageId => setTargetMessageId(siblingMessageId)}
       inputDisabled={inputDisabled}
       isMobile={isMobile}
+      onExtraInputsChange={handleExtraInputsChange}
     />
   )
 }

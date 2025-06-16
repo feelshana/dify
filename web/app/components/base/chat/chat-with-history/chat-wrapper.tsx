@@ -25,6 +25,11 @@ import cn from '@/utils/classnames'
 import type { FileEntity } from '../../file-uploader/types'
 
 const ChatWrapper = () => {
+  const [extraInputs, setExtraInputs] = useState<object>({})
+  const handleExtraInputsChange = useCallback((value: object) => {
+    console.log(value, 'handleExtraInputsChange')
+    setExtraInputs(value)
+  }, [])
   const {
     appParams,
     appPrevChatTree,
@@ -121,7 +126,6 @@ const ChatWrapper = () => {
       currentChatInstanceRef.current.handleStop = handleStop
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
   useEffect(() => {
     setIsResponding(respondingState)
   }, [respondingState, setIsResponding])
@@ -130,7 +134,7 @@ const ChatWrapper = () => {
     const data: any = {
       query: message,
       files,
-      inputs: currentConversationId ? currentConversationInputs : newConversationInputs,
+      inputs: currentConversationId ? { ...currentConversationInputs, ...extraInputs } : { ...newConversationInputs, ...extraInputs },
       conversation_id: currentConversationId,
       parent_message_id: (isRegenerate ? parentAnswer?.id : getLastAnswer(chatList)?.id) || null,
     }
@@ -144,7 +148,7 @@ const ChatWrapper = () => {
         isPublicAPI: !isInstalledApp,
       },
     )
-  }, [chatList, handleNewConversationCompleted, handleSend, currentConversationId, currentConversationInputs, newConversationInputs, isInstalledApp, appId])
+  }, [chatList, handleNewConversationCompleted, handleSend, currentConversationId, currentConversationInputs, newConversationInputs, isInstalledApp, appId, extraInputs])
 
   const doRegenerate = useCallback((chatItem: ChatItemInTree, editedQuestion?: { message: string, files?: FileEntity[] }) => {
     const question = editedQuestion ? chatItem : chatList.find(item => item.id === chatItem.parentMessageId)!
@@ -163,6 +167,13 @@ const ChatWrapper = () => {
   }, [chatList, currentConversationId])
 
   const [collapsed, setCollapsed] = useState(!!currentConversationId)
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const reportId = params.get('reportId')
+    if(reportId)
+      setCollapsed(true)
+  }, [])
 
   const chatNode = useMemo(() => {
     if (allInputsHidden || !inputsForms.length)
@@ -266,6 +277,7 @@ const ChatWrapper = () => {
         inputDisabled={inputDisabled}
         isMobile={isMobile}
         sidebarCollapseState={sidebarCollapseState}
+        onExtraInputsChange={handleExtraInputsChange}
       />
     </div>
   )

@@ -72,7 +72,8 @@ export type ChatProps = {
   noSpacing?: boolean
   inputDisabled?: boolean
   isMobile?: boolean
-  sidebarCollapseState?: boolean
+  sidebarCollapseState?: boolean,
+  onExtraInputsChange?: (value: object) => void
 }
 
 const Chat: FC<ChatProps> = ({
@@ -112,7 +113,24 @@ const Chat: FC<ChatProps> = ({
   inputDisabled,
   isMobile,
   sidebarCollapseState,
+  onExtraInputsChange,
 }) => {
+  const handleMessage = useCallback((event: MessageEvent) => {
+    if (event.origin !== location.origin) return
+    if (event.data.type === 'EXTRA_INPUT') {
+      console.log('EXTRA_INPUT:', event.data.key, event.data.value)
+      onExtraInputsChange && onExtraInputsChange({ ...event.data.value })
+    }
+  }, [])
+
+  useEffect(() => {
+    onExtraInputsChange && onExtraInputsChange({})
+    window.addEventListener('message', handleMessage)
+    return () => {
+      onExtraInputsChange && onExtraInputsChange({})
+      window.removeEventListener('message', handleMessage)
+    }
+  }, [onExtraInputsChange, handleMessage])
   const { t } = useTranslation()
   const { currentLogItem, setCurrentLogItem, showPromptLogModal, setShowPromptLogModal, showAgentLogModal, setShowAgentLogModal } = useAppStore(useShallow(state => ({
     currentLogItem: state.currentLogItem,
