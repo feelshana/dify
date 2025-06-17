@@ -117,8 +117,8 @@ const Chat: FC<ChatProps> = ({
 }) => {
   const handleMessage = useCallback((event: MessageEvent) => {
     if (event.origin !== location.origin) return
-    if (event.data.type === 'EXTRA_INPUT') {
-      console.log('EXTRA_INPUT:', event.data.key, event.data.value)
+    if (event.data.type === 'AUTO_INPUT') {
+      console.log('AUTO_INPUT:', event.data.key, event.data.value)
       onExtraInputsChange && onExtraInputsChange({ ...event.data.value })
     }
   }, [])
