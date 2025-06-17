@@ -73,7 +73,7 @@ export type ChatProps = {
   inputDisabled?: boolean
   isMobile?: boolean
   sidebarCollapseState?: boolean,
-  onExtraInputsChange?: (value: object) => void
+  onAutoInputsChange?: (value: object) => void
 }
 
 const Chat: FC<ChatProps> = ({
@@ -113,24 +113,24 @@ const Chat: FC<ChatProps> = ({
   inputDisabled,
   isMobile,
   sidebarCollapseState,
-  onExtraInputsChange,
+  onAutoInputsChange,
 }) => {
   const handleMessage = useCallback((event: MessageEvent) => {
     if (event.origin !== location.origin) return
     if (event.data.type === 'AUTO_INPUT') {
       console.log('AUTO_INPUT:', event.data.key, event.data.value)
-      onExtraInputsChange && onExtraInputsChange({ ...event.data.value })
+      onAutoInputsChange && onAutoInputsChange({ ...event.data.value })
     }
   }, [])
 
   useEffect(() => {
-    onExtraInputsChange && onExtraInputsChange({})
+    onAutoInputsChange && onAutoInputsChange({})
     window.addEventListener('message', handleMessage)
     return () => {
-      onExtraInputsChange && onExtraInputsChange({})
+      onAutoInputsChange && onAutoInputsChange({})
       window.removeEventListener('message', handleMessage)
     }
-  }, [onExtraInputsChange, handleMessage])
+  }, [onAutoInputsChange, handleMessage])
   const { t } = useTranslation()
   const { currentLogItem, setCurrentLogItem, showPromptLogModal, setShowPromptLogModal, showAgentLogModal, setShowAgentLogModal } = useAppStore(useShallow(state => ({
     currentLogItem: state.currentLogItem,
