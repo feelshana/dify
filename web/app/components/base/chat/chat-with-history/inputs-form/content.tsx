@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from 'react'
+import React, { memo, useCallback, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useChatWithHistoryContext } from '../context'
 import Input from '@/app/components/base/input'
@@ -35,6 +35,21 @@ const InputsFormContent = ({ showTip }: Props) => {
       [variable]: value,
     })
   }, [newConversationInputsRef, handleNewConversationInputsChange, currentConversationInputs, setCurrentConversationInputs])
+
+  const handleMessage = useCallback((event: MessageEvent) => {
+    if (event.origin !== location.origin) return
+    if (event.data.type === 'AUTO_INPUT') {
+      for (const variable in event.data.value)
+        handleFormChange(variable, event.data.value[variable])
+    }
+  }, [])
+
+  useEffect(() => {
+    window.addEventListener('message', handleMessage)
+    return () => {
+      window.removeEventListener('message', handleMessage)
+    }
+  }, [handleMessage])
 
   const visibleInputsForms = inputsForms.filter(form => form.hide !== true)
 
