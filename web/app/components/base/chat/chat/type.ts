@@ -103,6 +103,7 @@ export type IChatItem = {
   siblingIndex?: number
   prevSibling?: string
   nextSibling?: string
+  inputs?: any
 }
 
 export type Metadata = {

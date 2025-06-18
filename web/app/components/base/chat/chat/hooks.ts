@@ -488,9 +488,10 @@ export const useChat = (
             parentId: data.parent_message_id,
           })
         },
-        onWorkflowStarted: ({ workflow_run_id, task_id }) => {
+        onWorkflowStarted: ({ workflow_run_id, task_id, data: dataInRes }) => {
           taskIdRef.current = task_id
           responseItem.workflow_run_id = workflow_run_id
+          responseItem.inputs = dataInRes.inputs
           responseItem.workflowProcess = {
             status: WorkflowRunningStatus.Running,
             tracing: [],

@@ -27,7 +27,7 @@ import cn from '@/utils/classnames'
 import type { FileEntity } from '../../file-uploader/types'
 
 const ChatWrapper = () => {
-  const [autoInputs, setAutoInputs] = useState<object>({})
+  const [autoInputs, setAutoInputs] = useState<any>({})
   const [showChatNode, setShowChatNode] = useState(true)
   const handleAutoInputsChange = useCallback((value: object) => {
     console.log(value, 'handleAutoInputsChange')
@@ -276,6 +276,7 @@ const ChatWrapper = () => {
       inputDisabled={inputDisabled}
       isMobile={isMobile}
       onAutoInputsChange={handleAutoInputsChange}
+      autoInputs={autoInputs}
     />
   )
 }

@@ -49,6 +49,7 @@ function getFormattedChatList(messages: any[]) {
       isAnswer: false,
       message_files: getProcessedFilesFromResponse(questionFiles.map((item: any) => ({ ...item, related_id: item.id }))),
       parentMessageId: item.parent_message_id || undefined,
+      inputs: item.inputs,
     })
     const answerFiles = item.message_files?.filter((file: any) => file.belongs_to === 'assistant') || []
     newChatList.push({
@@ -60,6 +61,7 @@ function getFormattedChatList(messages: any[]) {
       citation: item.retriever_resources,
       message_files: getProcessedFilesFromResponse(answerFiles.map((item: any) => ({ ...item, related_id: item.id }))),
       parentMessageId: `question-${item.id}`,
+      inputs: item.inputs,
     })
   })
   return newChatList
@@ -159,7 +161,9 @@ export const useEmbeddedChatbot = () => {
       : [],
     [appChatListData, currentConversationId],
   )
-
+  useEffect(() => {
+    console.log(appChatListData, 'appChatListData')
+  }, [appChatListData])
   const [showNewConversationItemInList, setShowNewConversationItemInList] = useState(false)
 
   const pinnedConversationList = useMemo(() => {

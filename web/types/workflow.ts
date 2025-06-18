@@ -154,6 +154,7 @@ export type WorkflowStartedResponse = {
     workflow_id: string
     sequence_number: number
     created_at: number
+    inputs: any
   }
 }
 

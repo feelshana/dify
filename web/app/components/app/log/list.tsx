@@ -118,11 +118,13 @@ const getFormattedChatList = (messages: ChatMessage[], conversationId: string, t
       isAnswer: false,
       message_files: getProcessedFilesFromResponse(questionFiles.map((item: any) => ({ ...item, related_id: item.id }))),
       parentMessageId: item.parent_message_id || undefined,
+      inputs: item.inputs,
     })
 
     const answerFiles = item.message_files?.filter((file: any) => file.belongs_to === 'assistant') || []
     newChatList.push({
       id: item.id,
+      inputs: item.inputs,
       content: item.answer,
       agent_thoughts: addFileInfos(item.agent_thoughts ? sortAgentSorts(item.agent_thoughts) : item.agent_thoughts, item.message_files),
       feedback: item.feedbacks.find(item => item.from_source === 'user'), // user feedback

@@ -74,6 +74,7 @@ export type ChatProps = {
   isMobile?: boolean
   sidebarCollapseState?: boolean,
   onAutoInputsChange?: (value: object) => void
+  autoInputs?: any
 }
 
 const Chat: FC<ChatProps> = ({
@@ -114,7 +115,9 @@ const Chat: FC<ChatProps> = ({
   isMobile,
   sidebarCollapseState,
   onAutoInputsChange,
+  autoInputs,
 }) => {
+  const autoInputsRef = useRef<any>(autoInputs)
   const handleMessage = useCallback((event: MessageEvent) => {
     if (event.origin !== location.origin) return
     if (event.data.type === 'AUTO_INPUT') {
@@ -122,6 +125,15 @@ const Chat: FC<ChatProps> = ({
       onAutoInputsChange && onAutoInputsChange({ ...event.data.value })
     }
   }, [])
+
+  const clearReport = useCallback(() => {
+    onAutoInputsChange && onAutoInputsChange({ ...autoInputsRef.current, reportName: '', reportId: '' })
+  }, [])
+
+  useEffect(() => {
+    console.log(autoInputs, 'autoInputs----')
+    autoInputsRef.current = autoInputs
+  }, [autoInputs])
 
   useEffect(() => {
     onAutoInputsChange && onAutoInputsChange({})
@@ -293,6 +305,20 @@ const Chat: FC<ChatProps> = ({
             }
           </div>
         </div>
+        {autoInputs && autoInputs.reportName && <div
+
+          className="absolute bottom-20 right-5 z-50 flex max-w-full shrink-0 flex-wrap items-center rounded-lg border-[0.5px] border-components-button-secondary-border bg-components-button-secondary-bg px-3 py-2 text-components-button-secondary-accent-text shadow-xs"
+        >
+          <div className="flex-1 truncate px-2">
+            {`对【${autoInputs.reportName}】报表提问`}
+          </div>
+          <div
+            onClick={clearReport}
+            className="flex h-full w-[30px] cursor-pointer items-center justify-center text-gray-600 transition-colors hover:text-components-button-secondary-accent-text"
+          >
+            ×
+          </div>
+        </div>}
         <div
           className={`absolute bottom-0 z-20 flex justify-center bg-chat-input-mask ${(hasTryToAsk || !noChatInput || !noStopResponding) && chatFooterClassName}`}
           ref={chatFooterRef}
