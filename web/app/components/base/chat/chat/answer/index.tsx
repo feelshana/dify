@@ -121,7 +121,7 @@ const Answer: FC<AnswerProps> = ({
         <div className={cn('group relative pr-10', chatAnswerContainerInner)}>
           {
             (item.inputs && item.inputs.reportName)
-            ? (<div>{`对【${item.inputs && item.inputs.reportName}】的回答`}</div>) : ''
+            ? (<div>{`对【${item.inputs && item.inputs.reportName}】报表的回答`}</div>) : ''
           }
           <div
             ref={contentRef}

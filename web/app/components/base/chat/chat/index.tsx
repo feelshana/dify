@@ -305,12 +305,12 @@ const Chat: FC<ChatProps> = ({
             }
           </div>
         </div>
-        {autoInputs && autoInputs.reportName && <div
+        {((inputs && inputs.reportName) || (autoInputs && autoInputs.reportName)) && <div
 
           className="absolute bottom-20 right-5 z-50 flex max-w-full shrink-0 flex-wrap items-center rounded-lg border-[0.5px] border-components-button-secondary-border bg-components-button-secondary-bg px-3 py-2 text-components-button-secondary-accent-text shadow-xs"
         >
           <div className="flex-1 truncate px-2">
-            {`对【${autoInputs.reportName}】报表提问`}
+            {`对【${autoInputs?.reportName || inputs?.reportName}】报表提问`}
           </div>
           <div
             onClick={clearReport}
