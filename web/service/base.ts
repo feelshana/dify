@@ -23,7 +23,7 @@ import type {
 } from '@/types/workflow'
 import { removeAccessToken } from '@/app/components/share/utils'
 import type { FetchOptionType, ResponseError } from './fetch'
-import { ContentType, base, baseOptions, getAccessToken, getSupersonicToken } from './fetch'
+import { ContentType, base, baseOptions, getAccessToken, getElephantToken } from './fetch'
 import { asyncRunSafe } from '@/utils'
 const TIME_OUT = 100000
 
@@ -296,13 +296,13 @@ const baseFetch = base
 export const upload = async (options: any, isPublicAPI?: boolean, url?: string, searchParams?: string): Promise<any> => {
   const urlPrefix = isPublicAPI ? PUBLIC_API_PREFIX : API_PREFIX
   const token = await getAccessToken(isPublicAPI)
-  const supersonicToken = getSupersonicToken()
+  const elephantToken = getElephantToken()
   const defaultOptions = {
     method: 'POST',
     url: (url ? `${urlPrefix}${url}` : `${urlPrefix}/files/upload`) + (searchParams || ''),
     headers: {
       Authorization: `Bearer ${token}`,
-      ...(supersonicToken && { 'X-SUPERSONIC-TOKEN': supersonicToken })
+      ...(elephantToken && { 'X-ELEPHANT-TOKEN': elephantToken })
     },
     data: {},
   }
@@ -395,9 +395,9 @@ export const ssePost = async (
 
   const accessToken = await getAccessToken(isPublicAPI)
     ; (options.headers as Headers).set('Authorization', `Bearer ${accessToken}`)
-  const supersonicToken = getSupersonicToken()
-  if (supersonicToken)
-    (options.headers as Headers).set('X-SUPERSONIC-TOKEN', supersonicToken)
+  const elephantToken = getElephantToken()
+  if (elephantToken)
+    (options.headers as Headers).set('X-ELEPHANT-TOKEN', elephantToken)
 
   globalThis.fetch(urlWithPrefix, options as RequestInit)
     .then((res) => {
@@ -506,7 +506,7 @@ export const request = async<T>(url: string, options = {}, otherOptions?: IOther
         globalThis.location.reload()
         return Promise.reject(err)
       }
-      if (code === 'invalid_supersonic_token') {
+      if (code === 'invalid_elephant_token') {
         if (globalThis.top) {
             globalThis.top.location.href = '/'
         } else {
