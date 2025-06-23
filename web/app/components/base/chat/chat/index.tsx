@@ -120,8 +120,8 @@ const Chat: FC<ChatProps> = ({
   const autoInputsRef = useRef<any>(autoInputs)
   const handleMessage = useCallback((event: MessageEvent) => {
     if (event.origin !== location.origin) return
-    if (event.data.type === 'AUTO_INPUT') {
-      console.log('AUTO_INPUT:', event.data.key, event.data.value)
+    if (event.data.type === 'AUTO_INPUTS') {
+      console.log('AUTO_INPUTS:', event.data.key, event.data.value)
       onAutoInputsChange && onAutoInputsChange({ ...event.data.value })
     }
   }, [])
