@@ -671,8 +671,8 @@ const translation = {
   },
   you: '你',
   tooltip: {
-    ratingFromUser: '用户点踩',
-    ratingFromAdmin: '管理员点踩',
+    ratingFromUser: '用户点赞/踩',
+    ratingFromAdmin: '管理员点赞/踩',
   },
 }
 
