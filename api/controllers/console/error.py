@@ -132,7 +132,7 @@ class CompilanceRateLimitError(BaseHTTPException):
     description = "Rate limit exceeded for downloading compliance report."
     code = 429
 
-class InvalidSupersonicTokenError(BaseHTTPException):
-    error_code = "invalid_supersonic_token"
-    description = "Invalid Supersonic token."
+class InvalidElephantTokenError(BaseHTTPException):
+    error_code = "invalid_elephant_token"
+    description = "Invalid Elephant token."
     code = 401

@@ -69,8 +69,8 @@ const beforeErrorToast = (otherOptions: IOtherOptions): BeforeErrorHook => {
   }
 }
 
-export function getSupersonicToken() {
-  return localStorage.getItem('SUPERSONIC_TOKEN')
+export function getElephantToken() {
+  return localStorage.getItem('elephant_token')
 }
 
 export async function getAccessToken(isPublicAPI?: boolean) {
@@ -97,18 +97,18 @@ export async function getAccessToken(isPublicAPI?: boolean) {
 const beforeRequestPublicAuthorization: BeforeRequestHook = async (request) => {
   const token = await getAccessToken(true)
   request.headers.set('Authorization', `Bearer ${token}`)
-  const supersonicToken = getSupersonicToken()
-  if (supersonicToken) {
-    request.headers.set('X-SUPERSONIC-TOKEN', supersonicToken)
+  const elephantToken = getElephantToken()
+  if (elephantToken) {
+    request.headers.set('X-ELEPHANT-TOKEN', elephantToken)
   }
 }
 
 const beforeRequestAuthorization: BeforeRequestHook = async (request) => {
   const accessToken = await getAccessToken()
   request.headers.set('Authorization', `Bearer ${accessToken}`)
-  const supersonicToken = getSupersonicToken()
-  if (supersonicToken) {
-    request.headers.set('X-SUPERSONIC-TOKEN', supersonicToken)
+  const elephantToken = getElephantToken()
+  if (elephantToken) {
+    request.headers.set('X-ELEPHANT-TOKEN', elephantToken)
   }
 }
 
