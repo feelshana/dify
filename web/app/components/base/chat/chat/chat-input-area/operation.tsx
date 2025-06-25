@@ -1,7 +1,6 @@
 import { memo } from 'react'
 import {
   RiMicLine,
-  RiSendPlane2Fill,
 } from '@remixicon/react'
 import type {
   EnableType,
@@ -12,6 +11,7 @@ import ActionButton from '@/app/components/base/action-button'
 import { FileUploaderInChatInput } from '@/app/components/base/file-uploader'
 import type { FileUpload } from '@/app/components/base/features/types'
 import cn from '@/utils/classnames'
+import sendBtnImg from '@/assets/ic_send@2x.png'
 
 type OperationProps = {
   fileConfig?: FileUpload
@@ -60,14 +60,24 @@ const Operation = (
           variant='primary'
           onClick={onSend}
           style={
+            /* eslint-disable-next-line sonarjs/no-all-duplicated-branches */
             theme
               ? {
-                backgroundColor: theme.primaryColor,
+                // backgroundColor: theme.primaryColor,
+                backgroundImage: `url(${sendBtnImg.src})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
               }
-              : {}
+              : {
+                backgroundImage: `url(${sendBtnImg.src})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+              }
           }
         >
-          <RiSendPlane2Fill className='h-4 w-4' />
+          {/* <RiSendPlane2Fill className='h-4 w-4' /> */}
         </Button>
       </div>
     </div>
