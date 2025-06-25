@@ -42,6 +42,7 @@ type ChatInputAreaProps = {
   theme?: Theme | null
   isResponding?: boolean
   disabled?: boolean
+  autoInputs?: any
 }
 const ChatInputArea = ({
   botName,
@@ -57,6 +58,7 @@ const ChatInputArea = ({
   theme,
   isResponding,
   disabled,
+  autoInputs,
 }: ChatInputAreaProps) => {
   const { t } = useTranslation()
   const { notify } = useToastContext()
@@ -176,6 +178,13 @@ const ChatInputArea = ({
           disabled && 'pointer-events-none border-components-panel-border opacity-50 shadow-none',
         )}
       >
+        {
+          ((inputs && inputs.reportName) || (autoInputs && autoInputs.reportName)) && <div
+            className="relative z-50 m-1 inline-block rounded-lg border-[0.5px] border-[#CCDFED] px-2 text-[#8DAABE]"
+          >
+            <div className="h-6 py-1 text-xs">{`对【${autoInputs?.reportName || inputs?.reportName}】报表提问`}</div>
+          </div>
+        }
         <div className='relative max-h-[158px] overflow-y-auto overflow-x-hidden px-[9px] pt-[9px]'>
           <FileListInChatInput fileConfig={visionConfig!} />
           <div
