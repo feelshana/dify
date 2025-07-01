@@ -85,7 +85,7 @@ export default function MailAndPasswordAuth({ isEmailSetup }: MailAndPasswordAut
       })
       if (res.result === 'success') {
         localStorage.setItem('dify_webapp_access_token', res.data.access_token)
-        const tokenResp = await fetchAccessToken({ appCode, webAppAccessToken: res.data.access_token })
+        const tokenResp = await fetchAccessToken({ appCode, userId: localStorage.getItem('userName') as string, webAppAccessToken: res.data.access_token })
         await setAccessToken(appCode, tokenResp.access_token)
         router.replace(redirectUrl)
       }

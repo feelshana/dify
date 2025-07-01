@@ -93,7 +93,7 @@ const ChatWithHistory: FC<ChatWithHistoryProps> = ({
 
   return (
     <div className={cn(
-      'flex h-full bg-background-default-burn',
+      'flex h-full',
       isMobile && 'flex-col',
       className,
     )}>

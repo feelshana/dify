@@ -123,6 +123,10 @@ const Answer: FC<AnswerProps> = ({
             (item.inputs && item.inputs.reportName)
             ? (<div>{`选中报表【${item.inputs && item.inputs.reportName}】`}</div>) : ''
           }
+          {
+            (item.inputs && item.inputs.dashboardName)
+            ? (<div>{`选中仪表盘【${item.inputs && item.inputs.dashboardName}】`}</div>) : ''
+          }
           <div
             ref={contentRef}
             className={cn('body-lg-regular relative inline-block max-w-full rounded-2xl bg-chat-bubble-bg px-4 py-3 text-text-primary', workflowProcess && 'w-full')}
