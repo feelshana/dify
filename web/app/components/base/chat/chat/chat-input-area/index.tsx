@@ -179,14 +179,14 @@ const ChatInputArea = ({
         )}
       >
         {
-          ((inputs && inputs.reportName) || (autoInputs && autoInputs.reportName)) && <div
+          (!autoInputs?.dashboardId && ((inputs && inputs.reportName) || (autoInputs && autoInputs.reportName))) && <div
             className="relative z-50 m-1 inline-block rounded-lg border-[0.5px] border-[#CCDFED] px-2 text-[#8DAABE]"
           >
             <div className="h-6 py-1 text-xs">{`对【${autoInputs?.reportName || inputs?.reportName}】报表提问`}</div>
           </div>
         }
         {
-          ((inputs && inputs.dashboardName) || (autoInputs && autoInputs.dashboardName)) && <div
+          (!autoInputs?.reportId && ((inputs && inputs.dashboardName) || (autoInputs && autoInputs.dashboardName))) && <div
             className="relative z-50 m-1 inline-block rounded-lg border-[0.5px] border-[#CCDFED] px-2 text-[#8DAABE]"
           >
             <div className="h-6 py-1 text-xs">{`对【${autoInputs?.dashboardName || inputs?.dashboardName}】仪表盘提问`}</div>
