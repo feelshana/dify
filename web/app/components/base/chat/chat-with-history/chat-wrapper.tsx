@@ -132,10 +132,24 @@ const ChatWrapper = () => {
   }, [respondingState, setIsResponding])
 
   const doSend: OnSend = useCallback((message, files, isRegenerate = false, parentAnswer: ChatItem | null = null) => {
+    const currentInputs = { ...currentConversationInputs, ...autoInputs }
+    const newInputs = { ...newConversationInputs, ...autoInputs }
+    if (autoInputs.reportId) {
+      delete currentInputs.dashboardId
+      delete currentInputs.dashboardName
+      delete newInputs.dashboardId
+      delete newInputs.dashboardName
+    }
+    if (autoInputs.dashboardId) {
+      delete currentInputs.reportId
+      delete currentInputs.reportName
+      delete newInputs.reportId
+      delete newInputs.reportName
+    }
     const data: any = {
       query: message,
       files,
-      inputs: currentConversationId ? { ...currentConversationInputs, ...autoInputs } : { ...newConversationInputs, ...autoInputs },
+      inputs: currentConversationId ? currentInputs : newInputs,
       conversation_id: currentConversationId,
       parent_message_id: (isRegenerate ? parentAnswer?.id : getLastAnswer(chatList)?.id) || null,
     }
