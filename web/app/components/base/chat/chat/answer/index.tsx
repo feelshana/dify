@@ -121,11 +121,11 @@ const Answer: FC<AnswerProps> = ({
         <div className={cn('group relative pr-10', chatAnswerContainerInner)}>
           {
             (item.inputs && item.inputs.reportName)
-            ? (<div>{`选中报表【${item.inputs && item.inputs.reportName}】`}</div>) : ''
+            ? (<div className='text-text-primary'>{`已选报表【${item.inputs && item.inputs.reportName}】`}</div>) : ''
           }
           {
             (item.inputs && item.inputs.dashboardName)
-            ? (<div>{`选中仪表盘【${item.inputs && item.inputs.dashboardName}】`}</div>) : ''
+            ? (<div className='text-text-primary'>{`已选仪表盘【${item.inputs && item.inputs.dashboardName}】`}</div>) : ''
           }
           <div
             ref={contentRef}
