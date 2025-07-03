@@ -210,7 +210,8 @@ const ChatInputArea = ({
                 className={cn(
                   'body-lg-regular w-full resize-none bg-transparent p-1 leading-6 text-text-primary outline-none',
                 )}
-                placeholder={t('common.chat.inputPlaceholder', { botName }) || ''}
+                // placeholder={t('common.chat.inputPlaceholder', { botName }) || ''}
+                placeholder={t('common.chat.inputPlaceholder1')}
                 autoFocus
                 minRows={1}
                 onResize={handleTextareaResize}

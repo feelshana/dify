@@ -570,6 +570,7 @@ const translation = {
       hitScore: '召回得分：',
     },
     inputPlaceholder: '和 {{botName}} 聊天',
+    inputPlaceholder1: '您希望红海chatBI回答您什么问题？请直接输入',
     thinking: '深度思考中...',
     thought: '已深度思考',
     resend: '重新发送',

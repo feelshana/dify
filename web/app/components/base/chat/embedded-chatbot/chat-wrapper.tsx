@@ -30,7 +30,6 @@ const ChatWrapper = () => {
   const [autoInputs, setAutoInputs] = useState<any>({})
   const [showChatNode, setShowChatNode] = useState(true)
   const handleAutoInputsChange = useCallback((value: object) => {
-    console.log(value, 'handleAutoInputsChange')
     setAutoInputs(value)
   }, [])
   const {
@@ -183,11 +182,12 @@ const ChatWrapper = () => {
 
   const [collapsed, setCollapsed] = useState(!!currentConversationId)
 
-  // 根据需求报表集打开的dify参数输入框应该隐藏
+  // 根据需求BI打开的dify参数输入框应该隐藏
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
     const reportId = params.get('reportId')
-    if(reportId)
+    const dashboardId = params.get('dashboardId')
+    if(reportId || dashboardId)
       setShowChatNode(false)
   }, [])
 
