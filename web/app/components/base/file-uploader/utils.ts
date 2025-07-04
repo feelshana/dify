@@ -6,6 +6,7 @@ import { FILE_EXTS } from '@/app/components/base/prompt-editor/constants'
 import { SupportUploadFileTypes } from '@/app/components/workflow/types'
 import type { FileResponse } from '@/types/workflow'
 import { TransferMethod } from '@/types/app'
+import { basePath } from '@/utils/var'
 
 type FileUploadParams = {
   file: File
@@ -204,7 +205,7 @@ export const fileIsUploaded = (file: FileEntity) => {
 
 export const downloadFile = (url: string, filename: string) => {
   const anchor = document.createElement('a')
-  anchor.href = url
+  anchor.href = `${basePath}${url}`
   anchor.download = filename
   anchor.style.display = 'none'
   anchor.target = '_blank'
