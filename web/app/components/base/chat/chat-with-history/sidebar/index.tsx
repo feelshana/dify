@@ -23,9 +23,10 @@ import { useGlobalPublicStore } from '@/context/global-public-context'
 
 type Props = {
   isPanel?: boolean
+  onShowSideBar?: () => void
 }
 
-const Sidebar = ({ isPanel }: Props) => {
+const Sidebar = ({ isPanel, onShowSideBar }: Props) => {
   const { t } = useTranslation()
   const {
     isInstalledApp,
@@ -78,6 +79,15 @@ const Sidebar = ({ isPanel }: Props) => {
       handleRenameConversation(showRename.id, newName, { onSuccess: handleCancelRename })
   }, [showRename, handleRenameConversation, handleCancelRename])
 
+  const handleChangeConversationLinkage = (conversationId: string) => {
+    handleChangeConversation(conversationId)
+    onShowSideBar && onShowSideBar()
+  }
+  const handleNewConversationLinkage = () => {
+    handleNewConversation()
+    onShowSideBar && onShowSideBar()
+  }
+
   return (
     <div className={cn(
       'flex w-full grow flex-col',
@@ -96,6 +106,11 @@ const Sidebar = ({ isPanel }: Props) => {
           />
         </div>
         <div className={cn('system-md-semibold grow truncate text-text-secondary')}>{appData?.site.title}</div>
+        {isMobile && onShowSideBar && (
+          <ActionButton size='l' onClick={() => onShowSideBar()}>
+            <RiLayoutLeft2Line className='h-[18px] w-[18px]' />
+          </ActionButton>
+        )}
         {!isMobile && isSidebarCollapsed && (
           <ActionButton size='l' onClick={() => handleSidebarCollapse(false)}>
             <RiExpandRightLine className='h-[18px] w-[18px]' />
@@ -108,7 +123,7 @@ const Sidebar = ({ isPanel }: Props) => {
         )}
       </div>
       <div className='shrink-0 px-3 py-4'>
-        <Button variant='secondary-accent' disabled={isResponding} className='w-full justify-center' onClick={handleNewConversation}>
+        <Button variant='secondary-accent' disabled={isResponding} className='w-full justify-center' onClick={handleNewConversationLinkage}>
           <RiEditBoxLine className='mr-1 h-4 w-4' />
           {t('share.chat.newChat')}
         </Button>
@@ -121,7 +136,7 @@ const Sidebar = ({ isPanel }: Props) => {
               isPin
               title={t('share.chat.pinnedTitle') || ''}
               list={pinnedConversationList}
-              onChangeConversation={handleChangeConversation}
+              onChangeConversation={handleChangeConversationLinkage}
               onOperate={handleOperate}
               currentConversationId={currentConversationId}
             />
@@ -131,7 +146,7 @@ const Sidebar = ({ isPanel }: Props) => {
           <List
             title={(pinnedConversationList.length && t('share.chat.unpinnedTitle')) || ''}
             list={conversationList}
-            onChangeConversation={handleChangeConversation}
+            onChangeConversation={handleChangeConversationLinkage}
             onOperate={handleOperate}
             currentConversationId={currentConversationId}
           />
