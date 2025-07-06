@@ -97,7 +97,7 @@ export const useNodesSyncDraft = () => {
 
     if (postParams) {
       navigator.sendBeacon(
-        `${API_PREFIX}/apps/${params.appId}/workflows/draft?_token=${localStorage.getItem('dify_console_token')}`,
+        `${API_PREFIX}/apps/${params.appId}/workflows/draft?_token=${localStorage.getItem('dify_console_token')}&_elephant_token=${localStorage.getItem('elephant_token')}`,
         JSON.stringify(postParams.params),
       )
     }
