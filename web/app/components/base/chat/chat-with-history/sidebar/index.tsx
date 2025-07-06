@@ -23,10 +23,10 @@ import { useGlobalPublicStore } from '@/context/global-public-context'
 
 type Props = {
   isPanel?: boolean
-  onShowSideBar?: () => void
+  onHideSideBar?: () => void
 }
 
-const Sidebar = ({ isPanel, onShowSideBar }: Props) => {
+const Sidebar = ({ isPanel, onHideSideBar }: Props) => {
   const { t } = useTranslation()
   const {
     isInstalledApp,
@@ -81,11 +81,11 @@ const Sidebar = ({ isPanel, onShowSideBar }: Props) => {
 
   const handleChangeConversationLinkage = (conversationId: string) => {
     handleChangeConversation(conversationId)
-    onShowSideBar && onShowSideBar()
+    onHideSideBar && onHideSideBar()
   }
   const handleNewConversationLinkage = () => {
     handleNewConversation()
-    onShowSideBar && onShowSideBar()
+    onHideSideBar && onHideSideBar()
   }
 
   return (
@@ -106,8 +106,8 @@ const Sidebar = ({ isPanel, onShowSideBar }: Props) => {
           />
         </div>
         <div className={cn('system-md-semibold grow truncate text-text-secondary')}>{appData?.site.title}</div>
-        {isMobile && onShowSideBar && (
-          <ActionButton size='l' onClick={() => onShowSideBar()}>
+        {isMobile && onHideSideBar && (
+          <ActionButton size='l' onClick={() => onHideSideBar()}>
             <RiLayoutLeft2Line className='h-[18px] w-[18px]' />
           </ActionButton>
         )}
