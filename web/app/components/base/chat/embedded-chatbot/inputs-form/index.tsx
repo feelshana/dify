@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Message3Fill } from '@/app/components/base/icons/src/public/other'
 import Button from '@/app/components/base/button'
@@ -25,6 +25,15 @@ const InputsFormNode = ({
     allInputsHidden,
     inputsForms,
   } = useEmbeddedChatbotContext()
+
+  // 用于直接嵌入分析云的dify直接开启对话
+  // 如有需要在dify填写参数并手动开启对话的需求（现在暂时没有）须给下面的代码做判断
+  useEffect(() => {
+    if(inputsForms.length > 0) {
+      console.log('自动开始对话')
+      handleStartChat(() => setCollapsed(true))
+    }
+  }, [inputsForms])
 
   if (allInputsHidden || inputsForms.length === 0)
     return null
