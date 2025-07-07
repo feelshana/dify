@@ -65,7 +65,8 @@ const HeaderInMobile = () => {
 
   return (
     <>
-      <div className='flex shrink-0 items-center gap-1 bg-mask-top2bottom-gray-50-to-transparent px-2 py-3'>
+      <div className='flex shrink-0 items-center gap-1 px-2 py-3'>
+        <div className="scalaY(-1) pointer-events-none absolute inset-0 z-[-1] bg-chatbot-bg"></div>
         <ActionButton size='l' className='shrink-0' onClick={() => setShowSidebar(true)}>
           <RiMenuLine className='h-[18px] w-[18px]' />
         </ActionButton>
@@ -107,7 +108,7 @@ const HeaderInMobile = () => {
         <div className='fixed inset-0 z-50 flex bg-background-overlay p-1'
           onClick={() => setShowSidebar(false)}
         >
-          <div className='flex h-full w-[calc(100vw_-_40px)] rounded-xl bg-components-panel-bg shadow-lg backdrop-blur-sm' onClick={e => e.stopPropagation()}>
+          <div className='flex h-full w-[100vw] rounded-xl bg-components-panel-bg shadow-lg backdrop-blur-sm' onClick={e => e.stopPropagation()}>
             <Sidebar onHideSideBar={() => setShowSidebar(false)}/>
           </div>
         </div>
