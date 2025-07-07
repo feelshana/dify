@@ -12,7 +12,8 @@ export const getInitialTokenV2 = (): Record<string, any> => ({
 
 export const checkOrSetAccessToken = async (appCode?: string) => {
   const sharedToken = appCode || globalThis.location.pathname.split('/').slice(-1)[0]
-  const userId = (await getProcessedSystemVariablesFromUrlParams()).user_id
+  let userId = (await getProcessedSystemVariablesFromUrlParams()).user_id
+  userId = userId || localStorage.getItem('userName') as string
   const accessToken = localStorage.getItem('dify_token') || JSON.stringify(getInitialTokenV2())
   let accessTokenJson = getInitialTokenV2()
   try {
