@@ -76,7 +76,8 @@ export function getElephantToken() {
 export async function getAccessToken(isPublicAPI?: boolean) {
   if (isPublicAPI) {
     const sharedToken = globalThis.location.pathname.split('/').slice(-1)[0]
-    const userId = (await getProcessedSystemVariablesFromUrlParams()).user_id
+    let userId = (await getProcessedSystemVariablesFromUrlParams()).user_id
+    userId = userId || localStorage.getItem('account')
     const accessToken = localStorage.getItem('dify_token') || JSON.stringify({ version: 2 })
     let accessTokenJson: Record<string, any> = { version: 2 }
     try {
@@ -98,18 +99,16 @@ const beforeRequestPublicAuthorization: BeforeRequestHook = async (request) => {
   const token = await getAccessToken(true)
   request.headers.set('Authorization', `Bearer ${token}`)
   const elephantToken = getElephantToken()
-  if (elephantToken) {
+  if (elephantToken)
     request.headers.set('X-ELEPHANT-TOKEN', elephantToken)
-  }
 }
 
 const beforeRequestAuthorization: BeforeRequestHook = async (request) => {
   const accessToken = await getAccessToken()
   request.headers.set('Authorization', `Bearer ${accessToken}`)
   const elephantToken = getElephantToken()
-  if (elephantToken) {
+  if (elephantToken)
     request.headers.set('X-ELEPHANT-TOKEN', elephantToken)
-  }
 }
 
 const baseHooks: Hooks = {
