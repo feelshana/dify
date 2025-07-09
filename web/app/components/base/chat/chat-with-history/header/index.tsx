@@ -12,7 +12,6 @@ import Operation from './operation'
 import ActionButton, { ActionButtonState } from '@/app/components/base/action-button'
 import AppIcon from '@/app/components/base/app-icon'
 import Tooltip from '@/app/components/base/tooltip'
-import ViewFormDropdown from '@/app/components/base/chat/chat-with-history/inputs-form/view-form-dropdown'
 import Confirm from '@/app/components/base/confirm'
 import RenameModal from '@/app/components/base/chat/chat-with-history/sidebar/rename-modal'
 import type { ConversationItem } from '@/models/share'
@@ -134,9 +133,10 @@ const Header = () => {
               </ActionButton>
             </Tooltip>
           )}
-          {currentConversationId && inputsForms.length > 0 && (
+          {/* 按照需求参数表单的控制按钮需要隐藏 */}
+          {/* {currentConversationId && inputsForms.length > 0 && (
             <ViewFormDropdown />
-          )}
+          )} */}
         </div>
       </div>
       {!!showConfirm && (
