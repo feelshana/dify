@@ -83,7 +83,7 @@ export const useChatWithHistory = (installedAppInfo?: InstalledApp) => {
     isInstalledApp,
     enabled: systemFeatures.webapp_auth.enabled,
   })
-
+  const [changeAppPinnedConversationNameTime, setChangeAppPinnedConversationNameTime] = useState<number>(0)
   useAppFavicon({
     enable: !installedAppInfo,
     icon_type: appInfo?.site.icon_type,
@@ -186,8 +186,8 @@ export const useChatWithHistory = (installedAppInfo?: InstalledApp) => {
   const [showNewConversationItemInList, setShowNewConversationItemInList] = useState(false)
 
   const pinnedConversationList = useMemo(() => {
-    return appPinnedConversationData?.data || []
-  }, [appPinnedConversationData])
+    return (appPinnedConversationData?.data) ? JSON.parse(JSON.stringify(appPinnedConversationData.data)) : []
+  }, [appPinnedConversationData, changeAppPinnedConversationNameTime])
   const { t } = useTranslation()
   const newConversationInputsRef = useRef<Record<string, any>>({})
   const [newConversationInputs, setNewConversationInputs] = useState<Record<string, any>>({})
@@ -432,6 +432,16 @@ export const useChatWithHistory = (installedAppInfo?: InstalledApp) => {
   }, [isInstalledApp, appId, notify, t, handleUpdateConversationList, handleNewConversation, currentConversationId, conversationDeleting])
 
   const [conversationRenaming, setConversationRenaming] = useState(false)
+  const changeAppPinnedConversationName = (newName: string, conversationId: string) => {
+    const data = appPinnedConversationData?.data
+    if (data) {
+      const index = data.findIndex(item => item.id === conversationId)
+      data[index] = {
+        ...data[index],
+        name: newName,
+      }
+    }
+  }
   const handleRenameConversation = useCallback(async (
     conversationId: string,
     newName: string,
@@ -458,15 +468,20 @@ export const useChatWithHistory = (installedAppInfo?: InstalledApp) => {
         type: 'success',
         message: t('common.actionMsg.modifiedSuccessfully'),
       })
-      setOriginConversationList(produce((draft) => {
-        const index = originConversationList.findIndex(item => item.id === conversationId)
-        const item = draft[index]
-
-        draft[index] = {
-          ...item,
-          name: newName,
-        }
-      }))
+      const index = originConversationList.findIndex(item => item.id === conversationId)
+      if (index === -1) {
+        changeAppPinnedConversationName(newName, conversationId)
+        setChangeAppPinnedConversationNameTime(+new Date())
+      }
+ else {
+        setOriginConversationList(produce((draft) => {
+          const item = draft[index]
+          draft[index] = {
+            ...item,
+            name: newName,
+          }
+        }))
+      }
       onSuccess()
     }
     finally {

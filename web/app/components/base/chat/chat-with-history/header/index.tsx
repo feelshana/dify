@@ -1,6 +1,5 @@
 import { useCallback, useState } from 'react'
 import {
-  RiEditBoxLine,
   RiLayoutRight2Line,
   RiResetLeftLine,
 } from '@remixicon/react'
@@ -9,7 +8,7 @@ import {
   useChatWithHistoryContext,
 } from '../context'
 import Operation from './operation'
-import ActionButton, { ActionButtonState } from '@/app/components/base/action-button'
+import ActionButton from '@/app/components/base/action-button'
 import AppIcon from '@/app/components/base/app-icon'
 import Tooltip from '@/app/components/base/tooltip'
 import Confirm from '@/app/components/base/confirm'
@@ -105,7 +104,7 @@ const Header = () => {
           <div className='flex items-center px-1'>
             <div className='h-[14px] w-px bg-divider-regular'></div>
           </div>
-          {isSidebarCollapsed && (
+          {/* {isSidebarCollapsed && (
             <Tooltip
               disabled={!!currentConversationId}
               popupContent={t('share.chat.newChatTip')}
@@ -121,7 +120,7 @@ const Header = () => {
                 </ActionButton>
               </div>
             </Tooltip>
-          )}
+          )} */}
         </div>
         <div className='flex items-center gap-1'>
           {currentConversationId && (
