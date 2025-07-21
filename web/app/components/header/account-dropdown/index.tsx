@@ -25,7 +25,6 @@ import Compliance from './compliance'
 import PremiumBadge from '@/app/components/base/premium-badge'
 import { useGetDocLanguage } from '@/context/i18n'
 import Avatar from '@/app/components/base/avatar'
-import ThemeSwitcher from '@/app/components/base/theme-switcher'
 import { logout } from '@/service/common'
 import { useAppContext } from '@/context/app-context'
 import { useProviderContext } from '@/context/provider-context'
@@ -193,8 +192,8 @@ export default function AppSelector() {
                     <div className='p-1'>
                       <div className={cn(itemClassName, 'hover:bg-transparent')}>
                         <RiTShirt2Line className='size-4 shrink-0 text-text-tertiary' />
-                        <div className='system-md-regular grow px-1 text-text-secondary'>{t('common.theme.theme')}</div>
-                        <ThemeSwitcher />
+                        {/* <div className='system-md-regular grow px-1 text-text-secondary'>{t('common.theme.theme')}</div>
+                        <ThemeSwitcher /> */}
                       </div>
                     </div>
                   </MenuItem>

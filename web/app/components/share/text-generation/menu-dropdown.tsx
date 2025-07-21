@@ -15,7 +15,6 @@ import {
   PortalToFollowElemContent,
   PortalToFollowElemTrigger,
 } from '@/app/components/base/portal-to-follow-elem'
-import ThemeSwitcher from '@/app/components/base/theme-switcher'
 import type { SiteInfo } from '@/models/share'
 import cn from '@/utils/classnames'
 import { useGlobalPublicStore } from '@/context/global-public-context'
@@ -75,12 +74,12 @@ const MenuDropdown: FC<Props> = ({
         </PortalToFollowElemTrigger>
         <PortalToFollowElemContent className='z-50'>
           <div className='w-[224px] rounded-xl border-[0.5px] border-components-panel-border bg-components-panel-bg-blur shadow-lg backdrop-blur-sm'>
-            <div className='p-1'>
+            {/* <div className='p-1'>
               <div className={cn('system-md-regular flex cursor-pointer items-center rounded-lg py-1.5 pl-3 pr-2 text-text-secondary')}>
                 <div className='grow'>{t('common.theme.theme')}</div>
                 <ThemeSwitcher />
               </div>
-            </div>
+            </div> */}
             <Divider type='horizontal' className='my-0' />
             <div className='p-1'>
               {data?.privacy_policy && (

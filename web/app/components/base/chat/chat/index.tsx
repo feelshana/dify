@@ -34,6 +34,7 @@ import AgentLogModal from '@/app/components/base/agent-log-modal'
 import PromptLogModal from '@/app/components/base/prompt-log-modal'
 import { useStore as useAppStore } from '@/app/components/app/store'
 import type { AppData } from '@/models/share'
+import { useTheme } from 'next-themes'
 
 export type ChatProps = {
   appData?: AppData
@@ -123,7 +124,6 @@ const Chat: FC<ChatProps> = ({
     if (event.data.type === 'AUTO_INPUTS')
       onAutoInputsChange && onAutoInputsChange({ ...event.data.value })
   }, [])
-
   useEffect(() => {
     autoInputsRef.current = autoInputs
   }, [autoInputs])
@@ -177,7 +177,11 @@ const Chat: FC<ChatProps> = ({
     handleWindowResize()
   }, [handleScrollToBottom, handleWindowResize])
 
+  const { setTheme } = useTheme()
   useEffect(() => {
+    // 根据需求，只保留light模式
+    setTheme('light')
+
     if (chatContainerRef.current) {
       requestAnimationFrame(() => {
         handleScrollToBottom()
