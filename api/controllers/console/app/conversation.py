@@ -187,6 +187,8 @@ class ChatConversationApi(Resource):
                         Conversation.name.ilike(keyword_filter),
                         Conversation.introduction.ilike(keyword_filter),
                         subquery.c.from_end_user_session_id.ilike(keyword_filter),
+                        Conversation.id.ilike(keyword_filter),
+                        Conversation.from_end_user_id.ilike(keyword_filter),
                     ),
                 )
                 .group_by(Conversation.id)
