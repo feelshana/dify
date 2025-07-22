@@ -76,6 +76,8 @@ export type ChatProps = {
   sidebarCollapseState?: boolean,
   onAutoInputsChange?: (value: object) => void
   autoInputs?: any
+  showCurrentLabel?: boolean
+  setShowCurrentLabel?: any
 }
 
 const Chat: FC<ChatProps> = ({
@@ -117,10 +119,12 @@ const Chat: FC<ChatProps> = ({
   sidebarCollapseState,
   onAutoInputsChange,
   autoInputs,
+  showCurrentLabel,
+  setShowCurrentLabel,
 }) => {
   const autoInputsRef = useRef<any>(autoInputs)
   const handleMessage = useCallback((event: MessageEvent) => {
-    if (event.origin !== location.origin) return
+    // if (event.origin !== location.origin) return
     if (event.data.type === 'AUTO_INPUTS')
       onAutoInputsChange && onAutoInputsChange({ ...event.data.value })
   }, [])
@@ -350,6 +354,8 @@ const Chat: FC<ChatProps> = ({
                   theme={themeBuilder?.theme}
                   isResponding={isResponding}
                   autoInputs={autoInputs}
+                  showCurrentLabel={showCurrentLabel}
+                  setShowCurrentLabel={setShowCurrentLabel}
                 />
               )
             }

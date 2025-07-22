@@ -43,6 +43,8 @@ type ChatInputAreaProps = {
   isResponding?: boolean
   disabled?: boolean
   autoInputs?: any
+  showCurrentLabel?: any
+  setShowCurrentLabel?: any
 }
 const ChatInputArea = ({
   botName,
@@ -59,6 +61,8 @@ const ChatInputArea = ({
   isResponding,
   disabled,
   autoInputs,
+  showCurrentLabel,
+  setShowCurrentLabel,
 }: ChatInputAreaProps) => {
   const { t } = useTranslation()
   const { notify } = useToastContext()
@@ -179,17 +183,19 @@ const ChatInputArea = ({
         )}
       >
         {
-          (!autoInputs?.dashboardId && ((inputs && inputs.reportName) || (autoInputs && autoInputs.reportName))) && <div
-            className="relative z-50 m-1 inline-block rounded-lg border-[0.5px] border-[#CCDFED] px-2 text-[#8DAABE]"
+          (showCurrentLabel && !autoInputs?.dashboardId && ((inputs && inputs.reportName) || (autoInputs && autoInputs.reportName))) && <div
+            className="relative z-50 m-1 inline-block inline-flex rounded-lg border-[0.5px] border-[#CCDFED] px-2 text-[#8DAABE]"
           >
             <div className="h-6 py-1 text-xs">{`已选报表【${autoInputs?.reportName || inputs?.reportName}】`}</div>
+            <div className="h-6 cursor-pointer py-1 text-xs" onClick={() => { setShowCurrentLabel(false) }}>×</div>
           </div>
         }
         {
-          (!autoInputs?.reportId && ((inputs && inputs.dashboardName) || (autoInputs && autoInputs.dashboardName))) && <div
-            className="relative z-50 m-1 inline-block rounded-lg border-[0.5px] border-[#CCDFED] px-2 text-[#8DAABE]"
+          (showCurrentLabel && !autoInputs?.reportId && ((inputs && inputs.dashboardName) || (autoInputs && autoInputs.dashboardName))) && <div
+            className="relative z-50 m-1 inline-block inline-flex rounded-lg border-[0.5px] border-[#CCDFED] px-2 text-[#8DAABE]"
           >
             <div className="h-6 py-1 text-xs">{`已选仪表盘【${autoInputs?.dashboardName || inputs?.dashboardName}】`}</div>
+            <div className="h-6 cursor-pointer py-1 text-xs" onClick={() => { setShowCurrentLabel(false) }}>×</div>
           </div>
         }
         <div className='relative max-h-[158px] overflow-y-auto overflow-x-hidden px-[9px] pt-[9px]'>

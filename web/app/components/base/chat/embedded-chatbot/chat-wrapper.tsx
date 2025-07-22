@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Chat from '../chat'
 import type {
   ChatConfig,
@@ -29,9 +29,18 @@ import type { FileEntity } from '../../file-uploader/types'
 const ChatWrapper = () => {
   const [autoInputs, setAutoInputs] = useState<any>({})
   const [showChatNode, setShowChatNode] = useState(true)
+  const [showCurrentLabel, setShowCurrentLabel] = useState(true)
+  const showCurrentLabelRef = useRef(showCurrentLabel)
   const handleAutoInputsChange = useCallback((value: object) => {
+    setShowCurrentLabel(true)
     setAutoInputs(value)
   }, [])
+  const setShowCurrentLabelFunc = (isShow: boolean) => {
+    setShowCurrentLabel(isShow)
+  }
+  useEffect(() => {
+    showCurrentLabelRef.current = showCurrentLabel
+  }, [showCurrentLabel])
   const {
     appData,
     appParams,
@@ -133,17 +142,29 @@ const ChatWrapper = () => {
   const doSend: OnSend = useCallback((message, files, isRegenerate = false, parentAnswer: ChatItem | null = null) => {
     const currentInputs = { ...currentConversationInputs, ...autoInputs }
     const newInputs = { ...newConversationInputs, ...autoInputs }
-    if (autoInputs.reportId) {
+    if(!showCurrentLabelRef.current) {
       delete currentInputs.dashboardId
       delete currentInputs.dashboardName
       delete newInputs.dashboardId
       delete newInputs.dashboardName
-    }
-    if (autoInputs.dashboardId) {
       delete currentInputs.reportId
       delete currentInputs.reportName
       delete newInputs.reportId
       delete newInputs.reportName
+    }
+ else {
+      if (autoInputs.reportId) {
+        delete currentInputs.dashboardId
+        delete currentInputs.dashboardName
+        delete newInputs.dashboardId
+        delete newInputs.dashboardName
+      }
+      if (autoInputs.dashboardId) {
+        delete currentInputs.reportId
+        delete currentInputs.reportName
+        delete newInputs.reportId
+        delete newInputs.reportName
+      }
     }
     const data: any = {
       query: message,
@@ -291,6 +312,8 @@ const ChatWrapper = () => {
       isMobile={isMobile}
       onAutoInputsChange={handleAutoInputsChange}
       autoInputs={autoInputs}
+      showCurrentLabel={showCurrentLabel}
+      setShowCurrentLabel={setShowCurrentLabelFunc}
     />
   )
 }
