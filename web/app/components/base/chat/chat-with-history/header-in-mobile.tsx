@@ -14,6 +14,7 @@ import InputsFormContent from '@/app/components/base/chat/chat-with-history/inpu
 import Confirm from '@/app/components/base/confirm'
 import RenameModal from '@/app/components/base/chat/chat-with-history/sidebar/rename-modal'
 import type { ConversationItem } from '@/models/share'
+import Tooltip from '@/app/components/base/tooltip'
 
 const HeaderInMobile = () => {
   const {
@@ -67,9 +68,12 @@ const HeaderInMobile = () => {
     <>
       <div className='flex shrink-0 items-center gap-1 px-2 py-3'>
         <div className="scalaY(-1) pointer-events-none absolute inset-0 z-[-1] bg-chatbot-bg"></div>
-        <ActionButton size='l' className='shrink-0' onClick={() => setShowSidebar(true)}>
-          <RiMenuLine className='h-[18px] w-[18px]' />
-        </ActionButton>
+        <Tooltip popupContent={t('common.tooltip.historyConversation')}>
+          <ActionButton size='l' className='shrink-0' onClick={() => setShowSidebar(true)}>
+            <RiMenuLine className='h-[18px] w-[18px]' />
+          </ActionButton>
+        </Tooltip>
+
         <div className='flex grow items-center justify-center'>
           {!currentConversationId && (
             <>

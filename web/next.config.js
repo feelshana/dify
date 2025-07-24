@@ -21,8 +21,8 @@ const remoteImageURLs = [hasSetWebPrefix ? new URL(`${process.env.NEXT_PUBLIC_WE
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  basePath,
-  assetPrefix,
+  basePath: process.env.NEXT_PUBLIC_DEPLOY_ENV === 'DEVELOPMENT' ? '' : basePath,
+  assetPrefix: process.env.NEXT_PUBLIC_DEPLOY_ENV === 'DEVELOPMENT' ? '' : assetPrefix,
   webpack: (config, { dev, isServer }) => {
     config.plugins.push(codeInspectorPlugin({ bundler: 'webpack' }))
     return config
@@ -60,6 +60,18 @@ const nextConfig = {
         source: '/',
         destination: '/apps',
         permanent: false,
+      },
+    ]
+  },
+  async rewrites() {
+    return [
+      {
+        source: '/prefix/api/:path*',
+        destination: 'https://dc.migu.cn/dify/api/:path*',
+      },
+      {
+        source: '/prefix/console/api/:path*',
+        destination: 'https://dc.migu.cn/dify/console/api/:path*',
       },
     ]
   },
