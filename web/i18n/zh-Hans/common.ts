@@ -674,6 +674,7 @@ const translation = {
   tooltip: {
     ratingFromUser: '用户点赞/踩',
     ratingFromAdmin: '管理员点赞/踩',
+    historyConversation: '历史会话',
   },
 }
 
