@@ -5,9 +5,11 @@ html[data-theme="light"] {
     --color-chat-bubble-bg: linear-gradient(180deg,
             #fff 0%,
             rgba(255, 255, 255, 0.6) 100%);
-    --color-chat-input-mask: linear-gradient(180deg,
+    --color-chat-input-mask: linear-gradient(90deg,
             #F2F4F7 0%,
-            #F2F4F7 100%);
+            #F2F4F7 90%,
+            rgba(255,255,255,0) 100%
+            );
     --color-workflow-process-bg: linear-gradient(90deg,
             rgba(200, 206, 218, 0.2) 0%,
             rgba(200, 206, 218, 0.04) 100%);

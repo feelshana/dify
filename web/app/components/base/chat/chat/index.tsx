@@ -176,6 +176,11 @@ const Chat: FC<ChatProps> = ({
       chatFooterInnerRef.current.style.width = `${chatContainerInnerRef.current.clientWidth}px`
   }, [])
 
+  const onsendWithScrollToBottom = useCallback(((...args: any[]) => {
+    onSend && onSend(...args as Parameters<OnSend>)
+    userScrolledRef.current = false // 之后执行handleScrollToBottom函数就可以自动到最底部了
+  }) as OnSend, [onSend])
+
   useEffect(() => {
     handleScrollToBottom()
     handleWindowResize()
@@ -235,7 +240,7 @@ const Chat: FC<ChatProps> = ({
       const setUserScrolled = () => {
         // eslint-disable-next-line sonarjs/no-gratuitous-expressions
         if (chatContainer) // its in event callback, chatContainer may be null
-          userScrolledRef.current = chatContainer.scrollHeight - chatContainer.scrollTop > chatContainer.clientHeight
+          userScrolledRef.current = chatContainer.scrollHeight - chatContainer.scrollTop > chatContainer.clientHeight + 100
       }
       chatContainer.addEventListener('scroll', setUserScrolled)
       return () => chatContainer.removeEventListener('scroll', setUserScrolled)
@@ -257,7 +262,7 @@ const Chat: FC<ChatProps> = ({
       showPromptLog={showPromptLog}
       questionIcon={questionIcon}
       answerIcon={answerIcon}
-      onSend={onSend}
+      onSend={onsendWithScrollToBottom}
       onRegenerate={onRegenerate}
       onAnnotationAdded={onAnnotationAdded}
       onAnnotationEdited={onAnnotationEdited}
@@ -332,7 +337,7 @@ const Chat: FC<ChatProps> = ({
               hasTryToAsk && (
                 <TryToAsk
                   suggestedQuestions={suggestedQuestions}
-                  onSend={onSend}
+                  onSend={onsendWithScrollToBottom}
                   isMobile={isMobile}
                 />
               )
@@ -348,7 +353,7 @@ const Chat: FC<ChatProps> = ({
                   onFeatureBarClick={onFeatureBarClick}
                   visionConfig={config?.file_upload}
                   speechToTextConfig={config?.speech_to_text}
-                  onSend={onSend}
+                  onSend={onsendWithScrollToBottom}
                   inputs={inputs}
                   inputsForm={inputsForm}
                   theme={themeBuilder?.theme}
