@@ -1,6 +1,7 @@
 from datetime import UTC, datetime
 
 import pytz  # pip install pytz
+import re
 from flask_login import current_user
 from flask_restful import Resource, marshal_with, reqparse
 from flask_restful.inputs import int_range
@@ -174,24 +175,27 @@ class ChatConversationApi(Resource):
 
         if args["keyword"]:
             keyword_filter = "%{}%".format(args["keyword"])
+            # 检查是否为合法的 UUID 格式 (v4)
+            is_valid_uuid = bool(re.match(r'^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$', 
+                                        args["keyword"], re.IGNORECASE))
+            
+            conditions = [
+                Message.query.ilike(keyword_filter),
+                Message.answer.ilike(keyword_filter),
+                Conversation.name.ilike(keyword_filter),
+                Conversation.introduction.ilike(keyword_filter),
+                subquery.c.from_end_user_session_id.ilike(keyword_filter)
+            ]
+            
+            # 仅在输入是合法 UUID 时添加精确匹配条件
+            if is_valid_uuid:
+                conditions.append(Conversation.id == args["keyword"])
+            
             query = (
-                query.join(
-                    Message,
-                    Message.conversation_id == Conversation.id,
-                )
-                .join(subquery, subquery.c.conversation_id == Conversation.id)
-                .filter(
-                    or_(
-                        Message.query.ilike(keyword_filter),
-                        Message.answer.ilike(keyword_filter),
-                        Conversation.name.ilike(keyword_filter),
-                        Conversation.introduction.ilike(keyword_filter),
-                        subquery.c.from_end_user_session_id.ilike(keyword_filter),
-                        Conversation.id.ilike(keyword_filter),
-                        Conversation.from_end_user_id.ilike(keyword_filter),
-                    ),
-                )
-                .group_by(Conversation.id)
+                query.join(Message, Message.conversation_id == Conversation.id)
+                    .join(subquery, subquery.c.conversation_id == Conversation.id)
+                    .filter(or_(*conditions))
+                    .group_by(Conversation.id)
             )
 
         account = current_user
