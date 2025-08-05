@@ -675,6 +675,8 @@ const translation = {
     ratingFromUser: '用户点赞/踩',
     ratingFromAdmin: '管理员点赞/踩',
     historyConversation: '历史会话',
+    hideHistoryConversation: '收起',
+    showHistoryConversation: '展开',
   },
 }
 

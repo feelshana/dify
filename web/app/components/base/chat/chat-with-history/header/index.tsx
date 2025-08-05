@@ -72,9 +72,11 @@ const Header = () => {
     <>
       <div className='flex h-14 shrink-0 items-center justify-between p-3'>
         <div className={cn('flex items-center gap-1 transition-all duration-200 ease-in-out', !isSidebarCollapsed && 'user-select-none opacity-0')}>
-          <ActionButton className={cn(!isSidebarCollapsed && 'cursor-default')} size='l' onClick={() => handleSidebarCollapse(false)}>
-            <RiLayoutRight2Line className='h-[18px] w-[18px]' />
-          </ActionButton>
+          <Tooltip popupContent={t('common.tooltip.historyConversation')}>
+            <ActionButton className={cn(!isSidebarCollapsed && 'cursor-default')} size='l' onClick={() => handleSidebarCollapse(false)}>
+              <RiLayoutRight2Line className='h-[18px] w-[18px]' />
+            </ActionButton>
+          </Tooltip>
           <div className='mr-1 shrink-0'>
             <AppIcon
               size='large'

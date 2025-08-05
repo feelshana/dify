@@ -20,6 +20,7 @@ import DifyLogo from '@/app/components/base/logo/dify-logo'
 import type { ConversationItem } from '@/models/share'
 import cn from '@/utils/classnames'
 import { useGlobalPublicStore } from '@/context/global-public-context'
+import Tooltip from '@/app/components/base/tooltip'
 
 type Props = {
   isPanel?: boolean
@@ -112,14 +113,18 @@ const Sidebar = ({ isPanel, onHideSideBar }: Props) => {
           </ActionButton>
         )}
         {!isMobile && isSidebarCollapsed && (
-          <ActionButton size='l' onClick={() => handleSidebarCollapse(false)}>
-            <RiExpandRightLine className='h-[18px] w-[18px]' />
-          </ActionButton>
+          <Tooltip popupContent={t('common.tooltip.showHistoryConversation')}>
+            <ActionButton size='l' onClick={() => handleSidebarCollapse(false)}>
+              <RiExpandRightLine className='h-[18px] w-[18px]' />
+            </ActionButton>
+          </Tooltip>
         )}
         {!isMobile && !isSidebarCollapsed && (
-          <ActionButton size='l' onClick={() => handleSidebarCollapse(true)}>
-            <RiLayoutLeft2Line className='h-[18px] w-[18px]' />
-          </ActionButton>
+          <Tooltip popupContent={t('common.tooltip.hideHistoryConversation')}>
+            <ActionButton size='l' onClick={() => handleSidebarCollapse(true)}>
+              <RiLayoutLeft2Line className='h-[18px] w-[18px]' />
+            </ActionButton>
+          </Tooltip>
         )}
       </div>
       <div className='shrink-0 px-3 py-4'>
