@@ -60,7 +60,7 @@ export default function CheckCode() {
       const ret = await webAppEmailLoginWithCode({ email, code, token })
       if (ret.result === 'success') {
         localStorage.setItem('dify_webapp_access_token', ret.data.access_token)
-        const tokenResp = await fetchAccessToken({ appCode, userId: localStorage.getItem('userName') as string, webAppAccessToken: ret.data.access_token })
+        const tokenResp = await fetchAccessToken({ appCode, userId: localStorage.getItem('account') as string, webAppAccessToken: ret.data.access_token })
         await setAccessToken(appCode, tokenResp.access_token)
         router.replace(redirectUrl)
       }
