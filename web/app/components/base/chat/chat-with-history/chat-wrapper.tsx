@@ -140,6 +140,9 @@ const ChatWrapper = () => {
   }, [respondingState, setIsResponding])
 
   const doSend: OnSend = useCallback((message, files, isRegenerate = false, parentAnswer: ChatItem | null = null) => {
+    if (autoInputs.agentId)
+      autoInputs.supersonicToken = localStorage.getItem('SUPERSONIC_TOKEN')
+
     const currentInputs = { ...currentConversationInputs, ...autoInputs }
     const newInputs = { ...newConversationInputs, ...autoInputs }
     if (!showCurrentLabelRef.current) {
@@ -166,8 +169,6 @@ const ChatWrapper = () => {
         delete newInputs.reportName
       }
     }
-    if (autoInputs.agentId)
-      autoInputs.supersonicToken = localStorage.getItem('SUPERSONIC_TOKEN')
 
     const data: any = {
       query: message,
