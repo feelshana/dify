@@ -152,7 +152,7 @@ const ChatWrapper = () => {
       delete newInputs.reportId
       delete newInputs.reportName
     }
- else {
+    else {
       if (autoInputs.reportId) {
         delete currentInputs.dashboardId
         delete currentInputs.dashboardName
@@ -166,6 +166,8 @@ const ChatWrapper = () => {
         delete newInputs.reportName
       }
     }
+    if (autoInputs.agentId)
+      autoInputs.supersonicToken = localStorage.getItem('SUPERSONIC_TOKEN')
     const data: any = {
       query: message,
       files,

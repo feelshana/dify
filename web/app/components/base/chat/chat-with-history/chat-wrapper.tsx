@@ -142,7 +142,7 @@ const ChatWrapper = () => {
   const doSend: OnSend = useCallback((message, files, isRegenerate = false, parentAnswer: ChatItem | null = null) => {
     const currentInputs = { ...currentConversationInputs, ...autoInputs }
     const newInputs = { ...newConversationInputs, ...autoInputs }
-    if(!showCurrentLabelRef.current) {
+    if (!showCurrentLabelRef.current) {
       delete currentInputs.dashboardId
       delete currentInputs.dashboardName
       delete newInputs.dashboardId
@@ -152,7 +152,7 @@ const ChatWrapper = () => {
       delete newInputs.reportId
       delete newInputs.reportName
     }
- else {
+    else {
       if (autoInputs.reportId) {
         delete currentInputs.dashboardId
         delete currentInputs.dashboardName
@@ -166,6 +166,9 @@ const ChatWrapper = () => {
         delete newInputs.reportName
       }
     }
+    if (autoInputs.agentId)
+      autoInputs.supersonicToken = localStorage.getItem('SUPERSONIC_TOKEN')
+
     const data: any = {
       query: message,
       files,
