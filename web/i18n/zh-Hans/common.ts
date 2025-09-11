@@ -677,6 +677,8 @@ const translation = {
     historyConversation: '历史会话',
     hideHistoryConversation: '收起',
     showHistoryConversation: '展开',
+    copy: '复制',
+    regenerate: '重新生成',
   },
 }
 

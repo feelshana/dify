@@ -31,19 +31,19 @@ import { createWorkflowSlice } from './workflow-slice'
 import { WorkflowContext } from '@/app/components/workflow/context'
 import type { WorkflowSliceShape as WorkflowAppSliceShape } from '@/app/components/workflow-app/store/workflow/workflow-slice'
 
-export type Shape =
-  ChatVariableSliceShape &
-  EnvVariableSliceShape &
-  FormSliceShape &
-  HelpLineSliceShape &
-  HistorySliceShape &
-  NodeSliceShape &
-  PanelSliceShape &
-  ToolSliceShape &
-  VersionSliceShape &
-  WorkflowDraftSliceShape &
-  WorkflowSliceShape &
-  WorkflowAppSliceShape
+export type Shape
+  = ChatVariableSliceShape
+  & EnvVariableSliceShape
+  & FormSliceShape
+  & HelpLineSliceShape
+  & HistorySliceShape
+  & NodeSliceShape
+  & PanelSliceShape
+  & ToolSliceShape
+  & VersionSliceShape
+  & WorkflowDraftSliceShape
+  & WorkflowSliceShape
+  & WorkflowAppSliceShape
 
 type CreateWorkflowStoreParams = {
   injectWorkflowStoreSliceFn?: StateCreator<WorkflowAppSliceShape>

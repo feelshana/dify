@@ -8,7 +8,7 @@ import cn from 'classnames'
 import { CheckCircleIcon } from '@heroicons/react/24/solid'
 import Input from '../components/base/input'
 import Button from '@/app/components/base/button'
-import { changePasswordWithToken, verifyForgotPasswordToken, encryptPassword } from '@/service/common'
+import { changePasswordWithToken, encryptPassword, verifyForgotPasswordToken } from '@/service/common'
 import Toast from '@/app/components/base/toast'
 import Loading from '@/app/components/base/loading'
 

@@ -52,7 +52,7 @@ async function getNewAccessToken(timeout: number): Promise<void> {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json;utf-8',
-          ...(elephantToken && { 'X-ELEPHANT-TOKEN': elephantToken })
+          ...(elephantToken && { 'X-ELEPHANT-TOKEN': elephantToken }),
         },
         body: JSON.stringify({ refresh_token }),
       }))

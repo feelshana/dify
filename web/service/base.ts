@@ -302,7 +302,7 @@ export const upload = async (options: any, isPublicAPI?: boolean, url?: string, 
     url: (url ? `${urlPrefix}${url}` : `${urlPrefix}/files/upload`) + (searchParams || ''),
     headers: {
       Authorization: `Bearer ${token}`,
-      ...(elephantToken && { 'X-ELEPHANT-TOKEN': elephantToken })
+      ...(elephantToken && { 'X-ELEPHANT-TOKEN': elephantToken }),
     },
     data: {},
   }
@@ -507,11 +507,11 @@ export const request = async<T>(url: string, options = {}, otherOptions?: IOther
         return Promise.reject(err)
       }
       if (code === 'invalid_elephant_token') {
-        if (globalThis.top) {
+        if (globalThis.top)
             globalThis.top.location.href = '/'
-        } else {
+         else
             globalThis.location.href = '/'
-        }
+
         return Promise.reject(err)
       }
       const {

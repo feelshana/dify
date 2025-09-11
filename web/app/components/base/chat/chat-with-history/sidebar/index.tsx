@@ -108,9 +108,11 @@ const Sidebar = ({ isPanel, onHideSideBar }: Props) => {
         </div>
         <div className={cn('system-md-semibold grow truncate text-text-secondary')}>{appData?.site.title}</div>
         {isMobile && onHideSideBar && (
-          <ActionButton size='l' onClick={() => onHideSideBar()}>
-            <RiLayoutLeft2Line className='h-[18px] w-[18px]' />
-          </ActionButton>
+          <Tooltip popupContent={t('common.tooltip.hideHistoryConversation')}>
+            <ActionButton size='l' onClick={() => onHideSideBar()}>
+              <RiLayoutLeft2Line className='h-[18px] w-[18px]' />
+            </ActionButton>
+          </Tooltip>
         )}
         {!isMobile && isSidebarCollapsed && (
           <Tooltip popupContent={t('common.tooltip.showHistoryConversation')}>

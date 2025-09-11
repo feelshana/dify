@@ -144,16 +144,20 @@ const Operation: FC<OperationProps> = ({
                 voice={config?.text_to_speech?.voice}
               />
             )}
-            <ActionButton onClick={() => {
-              copy(content)
-              Toast.notify({ type: 'success', message: t('common.actionMsg.copySuccessfully') })
-            }}>
-              <RiClipboardLine className='h-4 w-4' />
-            </ActionButton>
+            <Tooltip popupContent={t('common.tooltip.copy')}>
+              <ActionButton onClick={() => {
+                copy(content)
+                Toast.notify({ type: 'success', message: t('common.actionMsg.copySuccessfully') })
+              }}>
+                <RiClipboardLine className='h-4 w-4' />
+              </ActionButton>
+            </Tooltip>
             {!noChatInput && (
+            <Tooltip popupContent={t('common.tooltip.regenerate')}>
               <ActionButton onClick={() => onRegenerate?.(item)}>
                 <RiResetLeftLine className='h-4 w-4' />
               </ActionButton>
+            </Tooltip>
             )}
             {(config?.supportAnnotation && config.annotation_reply?.enabled) && (
               <AnnotationCtrlButton

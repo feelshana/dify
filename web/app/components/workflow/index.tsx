@@ -352,8 +352,8 @@ export const WorkflowWithInnerContext = memo(({
   )
 })
 
-type WorkflowWithDefaultContextProps =
-  Pick<WorkflowProps, 'edges' | 'nodes'>
+type WorkflowWithDefaultContextProps
+  = Pick<WorkflowProps, 'edges' | 'nodes'>
   & {
     children: React.ReactNode
   }

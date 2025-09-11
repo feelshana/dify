@@ -379,10 +379,10 @@ export const getDocDownloadUrl = (doc_name: string) =>
   get<{ url: string }>('/compliance/download', { params: { doc_name } }, { silent: true })
 
 export const encryptPassword = (password: string) => {
-  if (!password) {
-    return password;
-  }
+  if (!password)
+    return password
+
   const srcs = CryptoJS.enc.Utf8.parse(password)
   const encrypted = CryptoJS.SHA256(srcs)
   return encrypted.toString(CryptoJS.enc.Hex)
-};
+}

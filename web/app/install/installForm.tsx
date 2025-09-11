@@ -14,7 +14,7 @@ import Loading from '../components/base/loading'
 import classNames from '@/utils/classnames'
 import Button from '@/app/components/base/button'
 
-import { fetchInitValidateStatus, fetchSetupStatus, setup, encryptPassword } from '@/service/common'
+import { encryptPassword, fetchInitValidateStatus, fetchSetupStatus, setup } from '@/service/common'
 import type { InitValidateStatusResponse, SetupStatusResponse } from '@/models/common'
 import useDocumentTitle from '@/hooks/use-document-title'
 
