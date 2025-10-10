@@ -5,6 +5,13 @@ import Toast from '@/app/components/base/toast'
 import { API_PREFIX, MARKETPLACE_API_PREFIX, PUBLIC_API_PREFIX } from '@/config'
 import { getInitialTokenV2, isTokenV1 } from '@/app/components/share/utils'
 import { getProcessedSystemVariablesFromUrlParams } from '@/app/components/base/chat/utils'
+  // #region 给非分析云用户用的聊天框是从查询参数中取的token, 从查询参数中去account
+  const params = new URLSearchParams(window.location.search)
+  const elephant_token = params.get('token')
+  elephant_token && localStorage.setItem('elephant_token', elephant_token)
+  const account = params.get('account')
+  account && localStorage.setItem('account', account)
+  // #endregion 给非分析云用户用的聊天框是从查询参数中取的token，从查询参数中去account
 
 const TIME_OUT = 100000
 
