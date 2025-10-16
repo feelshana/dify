@@ -865,7 +865,7 @@ class RegisterService:
         return f"member_invite:token:{token}"
 
     @classmethod
-    def setup(cls, email: str, name: str, password: str, ip_address: str) -> None:
+    def setup(cls, email: str, name: str, password: str, ip_address: str, language: str) -> None:
         """
         Setup dify
 
@@ -879,7 +879,7 @@ class RegisterService:
             account = AccountService.create_account(
                 email=email,
                 name=name,
-                interface_language=languages[0],
+                interface_language=language or languages[0],
                 password=password,
                 is_setup=True,
             )

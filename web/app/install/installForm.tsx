@@ -35,7 +35,7 @@ type AccountFormValues = z.infer<typeof accountFormSchema>
 
 const InstallForm = () => {
   useDocumentTitle('')
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const router = useRouter()
   const [showPassword, setShowPassword] = React.useState(false)
   const [loading, setLoading] = React.useState(true)
@@ -58,6 +58,7 @@ const InstallForm = () => {
         name: data.name,
         password: encryptPassword(data.password),
         email: data.email,
+        language: i18n.language,
       },
     })
     router.push('/signin')

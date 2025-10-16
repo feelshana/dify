@@ -325,7 +325,7 @@ export const verifyForgotPasswordToken: Fetcher<CommonResponse & { is_valid: boo
   return post(url, { body }) as Promise<CommonResponse & { is_valid: boolean; email: string }>
 }
 
-export const changePasswordWithToken: Fetcher<CommonResponse, { url: string; body: { token: string; new_password: string; password_confirm: string } }> = ({ url, body }) =>
+export const changePasswordWithToken: Fetcher<CommonResponse, { url: string; body: { token: string; new_password: string; password_confirm: string, language: string } }> = ({ url, body }) =>
   post<CommonResponse>(url, { body })
 
 export const sendWebAppForgotPasswordEmail: Fetcher<CommonResponse & { data: string }, { url: string; body: { email: string } }> = ({ url, body }) =>
@@ -345,7 +345,7 @@ export const uploadRemoteFileInfo = (url: string, isPublic?: boolean) => {
 export const sendEMailLoginCode = (email: string, language = 'en-US') =>
   post<CommonResponse & { data: string }>('/email-code-login', { body: { email, language } })
 
-export const emailLoginWithCode = (data: { email: string; code: string; token: string }) =>
+export const emailLoginWithCode = (data: { email: string; code: string; token: string, language: string }) =>
   post<LoginResponse>('/email-code-login/validity', { body: data })
 
 export const sendResetPasswordCode = (email: string, language = 'en-US') =>

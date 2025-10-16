@@ -15,7 +15,7 @@ import Loading from '@/app/components/base/loading'
 const validPassword = /^(?=.*[a-zA-Z])(?=.*\d).{8,}$/
 
 const ChangePasswordForm = () => {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const searchParams = useSearchParams()
   const token = searchParams.get('token')
 
@@ -66,6 +66,7 @@ const ChangePasswordForm = () => {
           token,
           new_password: encryptPassword(password),
           password_confirm: encryptPassword(confirmPassword),
+          language: i18n.language,
         },
       })
       setShowSuccess(true)

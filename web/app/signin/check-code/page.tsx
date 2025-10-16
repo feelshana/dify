@@ -12,12 +12,13 @@ import { emailLoginWithCode, sendEMailLoginCode } from '@/service/common'
 import I18NContext from '@/context/i18n'
 
 export default function CheckCode() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const router = useRouter()
   const searchParams = useSearchParams()
   const email = decodeURIComponent(searchParams.get('email') as string)
   const token = decodeURIComponent(searchParams.get('token') as string)
   const invite_token = decodeURIComponent(searchParams.get('invite_token') || '')
+  const language = i18n.language
   const [code, setVerifyCode] = useState('')
   const [loading, setIsLoading] = useState(false)
   const { locale } = useContext(I18NContext)
@@ -39,7 +40,7 @@ export default function CheckCode() {
         return
       }
       setIsLoading(true)
-      const ret = await emailLoginWithCode({ email, code, token })
+      const ret = await emailLoginWithCode({ email, code, token, language })
       if (ret.result === 'success') {
         localStorage.setItem('dify_console_token', ret.data.access_token)
         localStorage.setItem('dify_refresh_token', ret.data.refresh_token)

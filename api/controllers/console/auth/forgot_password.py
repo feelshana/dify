@@ -108,6 +108,7 @@ class ForgotPasswordResetApi(Resource):
         parser.add_argument("token", type=str, required=True, nullable=False, location="json")
         parser.add_argument("new_password", type=valid_password, required=True, nullable=False, location="json")
         parser.add_argument("password_confirm", type=valid_password, required=True, nullable=False, location="json")
+        parser.add_argument("language", type=str, required=False, location="json")
         args = parser.parse_args()
 
         # Validate passwords match
@@ -137,7 +138,7 @@ class ForgotPasswordResetApi(Resource):
             if account:
                 self._update_existing_account(account, password_hashed, salt, session)
             else:
-                self._create_new_account(email, args["password_confirm"])
+                self._create_new_account(email, args["password_confirm"], args["language"])
 
         return {"result": "success"}
 
@@ -157,14 +158,14 @@ class ForgotPasswordResetApi(Resource):
             account.current_tenant = tenant
             tenant_was_created.send(tenant)
 
-    def _create_new_account(self, email, password):
+    def _create_new_account(self, email, password, language):
         # Create new account if allowed
         try:
             AccountService.create_account_and_tenant(
                 email=email,
                 name=email,
                 password=password,
-                interface_language=languages[0],
+                interface_language=language or languages[0],
             )
         except WorkSpaceNotAllowedCreateError:
             pass

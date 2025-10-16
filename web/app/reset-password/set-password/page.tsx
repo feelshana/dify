@@ -13,7 +13,7 @@ import Input from '@/app/components/base/input'
 const validPassword = /^(?=.*[a-zA-Z])(?=.*\d).{8,}$/
 
 const ChangePasswordForm = () => {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const router = useRouter()
   const searchParams = useSearchParams()
   const token = decodeURIComponent(searchParams.get('token') || '')
@@ -75,6 +75,7 @@ const ChangePasswordForm = () => {
           token,
           new_password: encryptPassword(password),
           password_confirm: encryptPassword(confirmPassword),
+          language: i18n.language,
         },
       })
       setShowSuccess(true)
