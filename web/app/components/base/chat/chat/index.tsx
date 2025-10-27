@@ -122,14 +122,6 @@ const Chat: FC<ChatProps> = ({
   showCurrentLabel,
   setShowCurrentLabel,
 }) => {
-    // #region 给非分析云用户用的聊天框是从查询参数中取的token, 从查询参数中去account
-  const params = new URLSearchParams(window.location.search)
-  const elephant_token = params.get('token')
-  elephant_token && localStorage.setItem('elephant_token', elephant_token)
-  const account = params.get('account')
-  account && localStorage.setItem('account', account)
-  // #endregion 给非分析云用户用的聊天框是从查询参数中取的token，从查询参数中去account
-
   const autoInputsRef = useRef<any>(autoInputs)
   const handleMessage = useCallback((event: MessageEvent) => {
     if (event.origin !== location.origin) return
