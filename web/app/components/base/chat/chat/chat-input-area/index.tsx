@@ -1,5 +1,6 @@
 import {
   useCallback,
+  useEffect,
   useRef,
   useState,
 } from 'react'
@@ -27,6 +28,7 @@ import { useToastContext } from '@/app/components/base/toast'
 import FeatureBar from '@/app/components/base/features/new-feature-panel/feature-bar'
 import type { FileUpload } from '@/app/components/base/features/types'
 import { TransferMethod } from '@/types/app'
+import { useSearchParams } from 'next/navigation'
 
 type ChatInputAreaProps = {
   botName?: string
@@ -64,6 +66,12 @@ const ChatInputArea = ({
   showCurrentLabel,
   setShowCurrentLabel,
 }: ChatInputAreaProps) => {
+  const [placeholderFromURL, setPlaceholderFromURL] = useState('')
+  const searchParams = useSearchParams()
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams)
+    setPlaceholderFromURL(params.get('placeholder') || '')
+  }, [])
   const { t } = useTranslation()
   const { notify } = useToastContext()
   const {
@@ -217,7 +225,7 @@ const ChatInputArea = ({
                   'body-lg-regular w-full resize-none bg-transparent p-1 leading-6 text-text-primary outline-none',
                 )}
                 // placeholder={t('common.chat.inputPlaceholder', { botName }) || ''}
-                placeholder={t('common.chat.inputPlaceholder1')}
+                placeholder={placeholderFromURL || t('common.chat.inputPlaceholder1')}
                 autoFocus
                 minRows={1}
                 onResize={handleTextareaResize}
