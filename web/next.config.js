@@ -67,11 +67,11 @@ const nextConfig = {
     return [
       {
         source: '/prefix/api/:path*',
-        destination: 'https://dc.migu.cn/dify/api/:path*',
+        destination: '',
       },
       {
         source: '/prefix/console/api/:path*',
-        destination: 'https://dc.migu.cn/dify/console/api/:path*',
+        destination: '',
       },
     ]
   },
