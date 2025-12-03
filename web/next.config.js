@@ -63,18 +63,6 @@ const nextConfig = {
       },
     ]
   },
-  async rewrites() {
-    return [
-      {
-        source: '/prefix/api/:path*',
-        destination: '',
-      },
-      {
-        source: '/prefix/console/api/:path*',
-        destination: '',
-      },
-    ]
-  },
   output: 'standalone',
 }
 
