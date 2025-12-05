@@ -723,6 +723,69 @@ class AdvancedChatAppGenerateTaskPipeline:
         if self._task_state.metadata.annotation_reply:
             del extras["annotation_reply"]
 
+        # Read conversation variables for classification selection
+        try:
+            from sqlalchemy import select
+            from sqlalchemy.orm import Session
+
+            from extensions.ext_database import db
+            from models.workflow import ConversationVariable
+
+            app_id = self._application_generate_entity.app_config.app_id
+            conversation_id = self._conversation_id
+
+            logger.info(f"[Classification] Reading conversation variables for conversation {conversation_id}")
+
+            stmt = select(ConversationVariable).where(
+                ConversationVariable.app_id == app_id,
+                ConversationVariable.conversation_id == conversation_id,
+            )
+
+            with Session(db.engine) as session:
+                db_vars = session.scalars(stmt).all()
+                logger.info(f"[Classification] Found {len(db_vars)} conversation variables")
+
+                vars_dict = {}
+                for db_var in db_vars:
+                    var = db_var.to_variable()
+                    vars_dict[var.name] = var.value
+                    logger.info(f"[Classification] Variable: {var.name} = {var.value} "
+                                f"(type: {type(var.value).__name__})")
+
+                # Read classification selection variables
+                need_selection = vars_dict.get("need_classification_selection", 0)
+                option_a = vars_dict.get("classification_option_a", "")
+                option_b = vars_dict.get("classification_option_b", "")
+
+                logger.info(f"[Classification] Raw values - need_selection: {need_selection}, "
+                            f"option_a: {option_a}, option_b: {option_b}")
+
+                # Convert and add to metadata
+                if need_selection and option_a and option_b:
+                    # Handle different types for need_selection
+                    if isinstance(need_selection, str):
+                        need_selection_bool = (need_selection == "1" or need_selection.lower() == "true")
+                    else:
+                        need_selection_bool = bool(need_selection) and (int(need_selection) == 1)
+
+                    logger.info(f"[Classification] Converted need_selection to: {need_selection_bool}")
+
+                    if need_selection_bool:
+                        extras["classification_selection"] = {
+                            "need_selection": 1,
+                            "option_a": str(option_a),
+                            "option_b": str(option_b),
+                        }
+                        logger.info(f"[Classification]  Classification selection enabled for "
+                                    f"message {self._message_id}: option_a={option_a}, option_b={option_b}")
+                    else:
+                        logger.info("[Classification] need_selection is False, not adding to metadata")
+                else:
+                    logger.info(f"[Classification]  Missing required values - need_selection: {bool(need_selection)}, "
+                               f"option_a: {bool(option_a)}, option_b: {bool(option_b)}")
+        except Exception as e:
+            logger.error(f"[Classification]  Error reading classification selection variables: {str(e)}", exc_info=True)
+
         return MessageEndStreamResponse(
             task_id=self._application_generate_entity.task_id,
             id=self._message_id,

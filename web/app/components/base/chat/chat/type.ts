@@ -63,6 +63,12 @@ export type CitationItem = {
   word_count: number
 }
 
+export type ClassificationOptions = {
+  needSelection: boolean
+  optionA?: string
+  optionB?: string
+}
+
 export type IChatItem = {
   id: string
   content: string
@@ -104,6 +110,8 @@ export type IChatItem = {
   prevSibling?: string
   nextSibling?: string
   inputs?: any
+  // for classification selection
+  classificationOptions?: ClassificationOptions
 }
 
 export type Metadata = {

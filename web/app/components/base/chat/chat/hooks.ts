@@ -469,6 +469,16 @@ export const useChat = (
           const processedFilesFromResponse = getProcessedFilesFromResponse(messageEnd.files || [])
           responseItem.allFiles = uniqBy([...(responseItem.allFiles || []), ...(processedFilesFromResponse || [])], 'id')
 
+          // Handle classification selection metadata
+          if (messageEnd.metadata?.classification_selection) {
+            const classificationData = messageEnd.metadata.classification_selection
+            responseItem.classificationOptions = {
+              needSelection: classificationData.need_selection === true || classificationData.need_selection === 1,
+              optionA: classificationData.option_a,
+              optionB: classificationData.option_b,
+            }
+          }
+
           updateCurrentQAOnTree({
             placeholderQuestionId,
             questionItem,

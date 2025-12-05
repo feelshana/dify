@@ -12,6 +12,7 @@ import Operation from './operation'
 import AgentContent from './agent-content'
 import BasicContent from './basic-content'
 import SuggestedQuestions from './suggested-questions'
+import ClassificationSelector from './classification-selector'
 import More from './more'
 import WorkflowProcessItem from './workflow-process'
 import LoadingAnim from '@/app/components/base/chat/chat/loading-anim'
@@ -61,8 +62,12 @@ const Answer: FC<AnswerProps> = ({
     workflowProcess,
     allFiles,
     message_files,
+    classificationOptions,
   } = item
   const hasAgentThoughts = !!agent_thoughts?.length
+  const needClassificationSelection = classificationOptions?.needSelection
+    && classificationOptions?.optionA
+    && classificationOptions?.optionB
 
   const [containerWidth, setContainerWidth] = useState(0)
   const [contentWidth, setContentWidth] = useState(0)
@@ -173,18 +178,27 @@ const Answer: FC<AnswerProps> = ({
                 </div>
               )
             }
+            {/* 分类选择器：优先显示，替代正常内容 */}
             {
-              content && !hasAgentThoughts && (
-                <BasicContent item={item} />
-              )
-            }
-            {
-              (hasAgentThoughts) && (
-                <AgentContent
-                  item={item}
-                  responding={responding}
-                  content={content}
-                />
+              needClassificationSelection ? (
+                <ClassificationSelector item={item} />
+              ) : (
+                <>
+                  {
+                    content && !hasAgentThoughts && (
+                      <BasicContent item={item} />
+                    )
+                  }
+                  {
+                    (hasAgentThoughts) && (
+                      <AgentContent
+                        item={item}
+                        responding={responding}
+                        content={content}
+                      />
+                    )
+                  }
+                </>
               )
             }
             {
