@@ -139,12 +139,12 @@ const ChatWrapper = () => {
     setIsResponding(respondingState)
   }, [respondingState, setIsResponding])
 
-  const doSend: OnSend = useCallback((message, files, isRegenerate = false, parentAnswer: ChatItem | null = null) => {
+  const doSend: OnSend = useCallback((message, files, isRegenerate = false, parentAnswer: ChatItem | null = null, extraParam: object = {}) => {
     if (autoInputs.agentId)
       autoInputs.supersonicToken = localStorage.getItem('SUPERSONIC_TOKEN')
 
-    const currentInputs = { ...currentConversationInputs, ...autoInputs }
-    const newInputs = { ...newConversationInputs, ...autoInputs }
+    const currentInputs = { ...currentConversationInputs, ...autoInputs, ...extraParam }
+    const newInputs = { ...newConversationInputs, ...autoInputs, ...extraParam }
     if (!showCurrentLabelRef.current) {
       delete currentInputs.dashboardId
       delete currentInputs.dashboardName
