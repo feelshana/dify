@@ -127,20 +127,28 @@ const Chat: FC<ChatProps> = ({
     onSend && onSend(...args as Parameters<OnSend>)
     userScrolledRef.current = false // 之后执行handleScrollToBottom函数就可以自动到最底部了
   }) as OnSend, [onSend])
+  const onsendWithScrollToBottomRef = useRef<OnSend>()
+  useEffect(() => {
+    onsendWithScrollToBottomRef.current = onsendWithScrollToBottom
+  }, [onsendWithScrollToBottom])
+  const onAutoInputsChangeRef = useRef<any>()
+  useEffect(() => {
+    onAutoInputsChangeRef.current = onAutoInputsChange
+  }, [onAutoInputsChange])
   const autoInputsRef = useRef<any>(autoInputs)
   const handleMessage = useCallback((event: MessageEvent) => {
     if (event.origin !== location.origin)
       return
 
     if (event.data.type === 'AUTO_INPUTS')
-      onAutoInputsChange && onAutoInputsChange({ ...event.data.value })
+      onAutoInputsChangeRef.current && onAutoInputsChangeRef.current({ ...event.data.value })
 
     if (event.data.type === 'INTELLIGENT_SUMMERY') {
       //* 标记*
       console.log(event.data.value, 'INTELLIGENT_SUMMERY')
-      onsendWithScrollToBottom('请解读当前数据', [], false, null, { ...event.data.value })
+      onsendWithScrollToBottomRef.current && onsendWithScrollToBottomRef.current('请解读当前数据', [], false, null, { ...event.data.value })
     }
-  }, [onsendWithScrollToBottom, onAutoInputsChange])
+  }, [])
   useEffect(() => {
     autoInputsRef.current = autoInputs
   }, [autoInputs])
