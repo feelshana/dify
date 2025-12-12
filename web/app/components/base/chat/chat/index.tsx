@@ -151,6 +151,8 @@ const Chat: FC<ChatProps> = ({
       handleNewConversation()
     if (event.data.type === 'HANDLE_HISTRORY')
       emit('changeSidebarState')
+    if (event.data.type === 'SEND_MESSAGE')
+      onsendWithScrollToBottomRef.current && onsendWithScrollToBottomRef.current(event.data.value, [])
   }, [handleNewConversation, emit])
   useEffect(() => {
     autoInputsRef.current = autoInputs
