@@ -149,8 +149,10 @@ const Chat: FC<ChatProps> = ({
       onsendWithScrollToBottomRef.current && onsendWithScrollToBottomRef.current('请解读当前数据', [], false, null, { ...event.data.value })
     if (event.data.type === 'NEW_CONVERSATION')
       handleNewConversation()
-    if (event.data.type === 'HANDLE_HISTRORY')
+    if (event.data.type === 'HANDLE_HISTRORY') {
+      console.log('changeSidebarState')
       emit('changeSidebarState')
+    }
     if (event.data.type === 'SEND_MESSAGE')
       onsendWithScrollToBottomRef.current && onsendWithScrollToBottomRef.current(event.data.value, [])
   }, [handleNewConversation, emit])

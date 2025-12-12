@@ -28,10 +28,9 @@ import { useMittContext } from '@/context/mitt-context'
 type Props = {
   isPanel?: boolean
   onHideSideBar?: () => void
-  onSwitchSideBarState?: () => void
 }
 
-const Sidebar = ({ isPanel, onHideSideBar, onSwitchSideBarState }: Props) => {
+const Sidebar = ({ isPanel, onHideSideBar }: Props) => {
   const { t } = useTranslation()
   const {
     isInstalledApp,
@@ -97,10 +96,10 @@ const Sidebar = ({ isPanel, onHideSideBar, onSwitchSideBarState }: Props) => {
     onHideSideBar && onHideSideBar()
   }
   useSubscribe('changeSidebarState', () => {
-    if (isMobile)
-      onSwitchSideBarState && onSwitchSideBarState()
-    else
+    if (!isMobile) {
+      console.log('changeSidebarState-pc')
       handleSidebarCollapse(!sidebarCollapseStateRef.current)
+    }
   })
   return (
     <div className={cn(

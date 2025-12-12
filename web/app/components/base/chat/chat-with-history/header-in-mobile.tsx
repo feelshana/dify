@@ -15,6 +15,7 @@ import Confirm from '@/app/components/base/confirm'
 import RenameModal from '@/app/components/base/chat/chat-with-history/sidebar/rename-modal'
 import type { ConversationItem } from '@/models/share'
 import Tooltip from '@/app/components/base/tooltip'
+import { useMittContext } from '@/context/mitt-context'
 
 const HeaderInMobile = () => {
   const {
@@ -63,7 +64,14 @@ const HeaderInMobile = () => {
   }, [showRename, handleRenameConversation, handleCancelRename])
   const [showSidebar, setShowSidebar] = useState(false)
   const [showChatSettings, setShowChatSettings] = useState(false)
-
+  const onSwitchSideBarState = useCallback(() => {
+    setShowSidebar(!showSidebar)
+  }, [showSidebar])
+  const { useSubscribe } = useMittContext()
+  useSubscribe('changeSidebarState', () => {
+    console.log('changeSidebarState-mobile')
+    onSwitchSideBarState()
+  })
   return (
     <>
       <div className='flex shrink-0 items-center gap-1 px-2 py-3'>
@@ -113,7 +121,7 @@ const HeaderInMobile = () => {
           onClick={() => setShowSidebar(false)}
         >
           <div className='flex h-full w-[100vw] rounded-xl bg-components-panel-bg shadow-lg backdrop-blur-sm' onClick={e => e.stopPropagation()}>
-            <Sidebar onHideSideBar={() => setShowSidebar(false)} onSwitchSideBarState={() => setShowSidebar(!showSidebar)}/>
+            <Sidebar onHideSideBar={() => setShowSidebar(false)} />
           </div>
         </div>
       )}
