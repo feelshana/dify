@@ -9,6 +9,7 @@ import {
   useRef,
   useState,
 } from 'react'
+import { useChatWithHistoryContext } from '../chat-with-history/context'
 import { useTranslation } from 'react-i18next'
 import { debounce } from 'lodash-es'
 import { useShallow } from 'zustand/react/shallow'
@@ -35,6 +36,7 @@ import PromptLogModal from '@/app/components/base/prompt-log-modal'
 import { useStore as useAppStore } from '@/app/components/app/store'
 import type { AppData } from '@/models/share'
 import { useTheme } from 'next-themes'
+import { useMittContext } from '@/context/mitt-context'
 
 export type ChatProps = {
   appData?: AppData
@@ -123,6 +125,8 @@ const Chat: FC<ChatProps> = ({
   setShowCurrentLabel,
 }) => {
   const userScrolledRef = useRef(false)
+  const { handleNewConversation } = useChatWithHistoryContext()
+  const { emit } = useMittContext()
   const onsendWithScrollToBottom = useCallback(((...args: any[]) => {
     onSend && onSend(...args as Parameters<OnSend>)
     userScrolledRef.current = false // 之后执行handleScrollToBottom函数就可以自动到最底部了
@@ -139,15 +143,14 @@ const Chat: FC<ChatProps> = ({
   const handleMessage = useCallback((event: MessageEvent) => {
     if (event.origin !== location.origin)
       return
-
     if (event.data.type === 'AUTO_INPUTS')
       onAutoInputsChangeRef.current && onAutoInputsChangeRef.current({ ...event.data.value })
-
-    if (event.data.type === 'INTELLIGENT_SUMMERY') {
-      //* 标记*
-      console.log(event.data.value, 'INTELLIGENT_SUMMERY')
+    if (event.data.type === 'INTELLIGENT_SUMMERY')
       onsendWithScrollToBottomRef.current && onsendWithScrollToBottomRef.current('请解读当前数据', [], false, null, { ...event.data.value })
-    }
+    if (event.data.type === 'NEW_CONVERSATION')
+      handleNewConversation()
+    if (event.data.type === 'HANDLE_HISTRORY')
+      emit('changeSidebarState')
   }, [])
   useEffect(() => {
     autoInputsRef.current = autoInputs

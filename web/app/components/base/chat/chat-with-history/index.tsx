@@ -11,6 +11,7 @@ import {
   ChatWithHistoryContext,
   useChatWithHistoryContext,
 } from './context'
+import { MittProvider } from '@/context/mitt-context'
 import { useChatWithHistory } from './hooks'
 import Sidebar from './sidebar'
 import Header from './header'
@@ -190,51 +191,53 @@ const ChatWithHistoryWrap: FC<ChatWithHistoryWrapProps> = ({
   } = useChatWithHistory(installedAppInfo)
 
   return (
-    <ChatWithHistoryContext.Provider value={{
-      appInfoError,
-      appInfoLoading,
-      appData,
-      userCanAccess,
-      appParams,
-      appMeta,
-      appChatListDataLoading,
-      currentConversationId,
-      currentConversationItem,
-      appPrevChatTree,
-      pinnedConversationList,
-      conversationList,
-      newConversationInputs,
-      newConversationInputsRef,
-      handleNewConversationInputsChange,
-      inputsForms,
-      handleNewConversation,
-      handleStartChat,
-      handleChangeConversation,
-      handlePinConversation,
-      handleUnpinConversation,
-      handleDeleteConversation,
-      conversationRenaming,
-      handleRenameConversation,
-      handleNewConversationCompleted,
-      chatShouldReloadKey,
-      isMobile,
-      isInstalledApp,
-      appId,
-      handleFeedback,
-      currentChatInstanceRef,
-      themeBuilder,
-      sidebarCollapseState,
-      handleSidebarCollapse,
-      clearChatList,
-      setClearChatList,
-      isResponding,
-      setIsResponding,
-      currentConversationInputs,
-      setCurrentConversationInputs,
-      allInputsHidden,
-    }}>
-      <ChatWithHistory className={className} />
-    </ChatWithHistoryContext.Provider>
+    <MittProvider>
+      <ChatWithHistoryContext.Provider value={{
+        appInfoError,
+        appInfoLoading,
+        appData,
+        userCanAccess,
+        appParams,
+        appMeta,
+        appChatListDataLoading,
+        currentConversationId,
+        currentConversationItem,
+        appPrevChatTree,
+        pinnedConversationList,
+        conversationList,
+        newConversationInputs,
+        newConversationInputsRef,
+        handleNewConversationInputsChange,
+        inputsForms,
+        handleNewConversation,
+        handleStartChat,
+        handleChangeConversation,
+        handlePinConversation,
+        handleUnpinConversation,
+        handleDeleteConversation,
+        conversationRenaming,
+        handleRenameConversation,
+        handleNewConversationCompleted,
+        chatShouldReloadKey,
+        isMobile,
+        isInstalledApp,
+        appId,
+        handleFeedback,
+        currentChatInstanceRef,
+        themeBuilder,
+        sidebarCollapseState,
+        handleSidebarCollapse,
+        clearChatList,
+        setClearChatList,
+        isResponding,
+        setIsResponding,
+        currentConversationInputs,
+        setCurrentConversationInputs,
+        allInputsHidden,
+      }}>
+        <ChatWithHistory className={className} />
+      </ChatWithHistoryContext.Provider>
+    </MittProvider>
   )
 }
 

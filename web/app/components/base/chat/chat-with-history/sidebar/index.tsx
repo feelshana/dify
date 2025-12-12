@@ -1,5 +1,7 @@
 import {
   useCallback,
+  useEffect,
+  useRef,
   useState,
 } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -21,13 +23,15 @@ import type { ConversationItem } from '@/models/share'
 import cn from '@/utils/classnames'
 import { useGlobalPublicStore } from '@/context/global-public-context'
 import Tooltip from '@/app/components/base/tooltip'
+import { useMittContext } from '@/context/mitt-context'
 
 type Props = {
   isPanel?: boolean
   onHideSideBar?: () => void
+  onSwitchSideBarState?: () => void
 }
 
-const Sidebar = ({ isPanel, onHideSideBar }: Props) => {
+const Sidebar = ({ isPanel, onHideSideBar, onSwitchSideBarState }: Props) => {
   const { t } = useTranslation()
   const {
     isInstalledApp,
@@ -48,10 +52,14 @@ const Sidebar = ({ isPanel, onHideSideBar }: Props) => {
     isResponding,
   } = useChatWithHistoryContext()
   const isSidebarCollapsed = sidebarCollapseState
+  const sidebarCollapseStateRef = useRef(sidebarCollapseState)
+  useEffect(() => {
+    sidebarCollapseStateRef.current = sidebarCollapseState
+  }, [sidebarCollapseState])
   const systemFeatures = useGlobalPublicStore(s => s.systemFeatures)
   const [showConfirm, setShowConfirm] = useState<ConversationItem | null>(null)
   const [showRename, setShowRename] = useState<ConversationItem | null>(null)
-
+  const { useSubscribe } = useMittContext()
   const handleOperate = useCallback((type: string, item: ConversationItem) => {
     if (type === 'pin')
       handlePinConversation(item.id)
@@ -88,7 +96,12 @@ const Sidebar = ({ isPanel, onHideSideBar }: Props) => {
     handleNewConversation()
     onHideSideBar && onHideSideBar()
   }
-
+  useSubscribe('changeSidebarState', () => {
+    if (isMobile)
+      onSwitchSideBarState && onSwitchSideBarState()
+    else
+      handleSidebarCollapse(!sidebarCollapseStateRef.current)
+  })
   return (
     <div className={cn(
       'flex w-full grow flex-col',

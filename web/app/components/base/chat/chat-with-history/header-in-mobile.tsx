@@ -113,7 +113,7 @@ const HeaderInMobile = () => {
           onClick={() => setShowSidebar(false)}
         >
           <div className='flex h-full w-[100vw] rounded-xl bg-components-panel-bg shadow-lg backdrop-blur-sm' onClick={e => e.stopPropagation()}>
-            <Sidebar onHideSideBar={() => setShowSidebar(false)}/>
+            <Sidebar onHideSideBar={() => setShowSidebar(false)} onSwitchSideBarState={() => setShowSidebar(!showSidebar)}/>
           </div>
         </div>
       )}
