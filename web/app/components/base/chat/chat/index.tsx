@@ -151,7 +151,7 @@ const Chat: FC<ChatProps> = ({
       handleNewConversation()
     if (event.data.type === 'HANDLE_HISTRORY')
       emit('changeSidebarState')
-  }, [])
+  }, [handleNewConversation, emit])
   useEffect(() => {
     autoInputsRef.current = autoInputs
   }, [autoInputs])
