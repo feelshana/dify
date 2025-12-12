@@ -85,7 +85,7 @@ export const ChatWithHistoryContext = createContext<ChatWithHistoryContextValue>
   isInstalledApp: false,
   handleFeedback: noop,
   currentChatInstanceRef: { current: { handleStop: noop } },
-  sidebarCollapseState: false,
+  sidebarCollapseState: true,
   handleSidebarCollapse: noop,
   clearChatList: false,
   setClearChatList: noop,

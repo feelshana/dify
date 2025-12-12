@@ -69,7 +69,6 @@ const HeaderInMobile = () => {
   }, [showSidebar])
   const { useSubscribe } = useMittContext()
   useSubscribe('changeSidebarState', () => {
-    console.log('changeSidebarState-mobile')
     onSwitchSideBarState()
   })
   return (
