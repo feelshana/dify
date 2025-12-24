@@ -23,6 +23,7 @@ import AnswerIcon from '@/app/components/base/answer-icon'
 import cn from '@/utils/classnames'
 import { FileList } from '@/app/components/base/file-uploader'
 import ContentSwitch from '../content-switch'
+import { WorkflowRunningStatus } from '@/app/components/workflow/types'
 
 type AnswerProps = {
   item: ChatItem
@@ -68,6 +69,13 @@ const Answer: FC<AnswerProps> = ({
   const needClassificationSelection = classificationOptions?.needSelection
     && classificationOptions?.optionA
     && classificationOptions?.optionB
+  const currentTracing = workflowProcess?.tracing?.slice().reverse().find(i => i.status === WorkflowRunningStatus.Running) || workflowProcess?.tracing?.[workflowProcess?.tracing?.length - 1]
+  const currentTracingTitle = currentTracing?.title || ''
+  const completedTracingTitles = (workflowProcess?.tracing || [])
+    .filter(i => i.status === WorkflowRunningStatus.Succeeded)
+    .map(i => i.title)
+    .filter(Boolean)
+    .slice(-3)
 
   const [containerWidth, setContainerWidth] = useState(0)
   const [contentWidth, setContentWidth] = useState(0)
@@ -112,6 +120,7 @@ const Answer: FC<AnswerProps> = ({
       item.nextSibling && switchSibling?.(item.nextSibling)
   }, [switchSibling, item.prevSibling, item.nextSibling])
 
+  const isWorkflowRunning = responding && !content && !hasAgentThoughts && !!workflowProcess
   return (
     <div className='mb-2 flex last:mb-0'>
       <div className='relative h-10 w-10 shrink-0'>
@@ -134,7 +143,16 @@ const Answer: FC<AnswerProps> = ({
           } */}
           <div
             ref={contentRef}
-            className={cn('body-lg-regular relative inline-block max-w-full rounded-2xl bg-chat-bubble-bg px-4 py-3 text-text-primary', workflowProcess && 'w-full')}
+            className={cn(
+              'body-lg-regular relative inline-block max-w-full rounded-2xl text-text-primary',
+              !isWorkflowRunning && 'bg-chat-bubble-bg px-4 py-3',
+              workflowProcess && 'w-full',
+              isWorkflowRunning && 'px-0 py-0',
+            )}
+            style={{
+              backgroundColor: isWorkflowRunning ? 'transparent' : undefined,
+              boxShadow: isWorkflowRunning ? 'none' : undefined,
+            }}
           >
             {
               !responding && (
@@ -173,9 +191,46 @@ const Answer: FC<AnswerProps> = ({
             }
             {
               responding && !content && !hasAgentThoughts && (
-                <div className='flex h-5 w-6 items-center justify-center'>
-                  <LoadingAnim type='text' />
-                </div>
+                workflowProcess
+                  ? (
+                    <div className='w-full space-y-1.5'>
+                      <style>
+                        {`
+                          @keyframes shimmer {
+                            0% { background-position: 100% 50%; }
+                            100% { background-position: -100% 50%; }
+                          }
+                        `}
+                      </style>
+                      <div
+                        className='inline-block text-base font-medium'
+                        style={{
+                          background: 'linear-gradient(90deg, var(--color-text-tertiary) 0%, var(--color-text-tertiary) 35%, var(--color-text-primary) 50%, var(--color-text-tertiary) 65%, var(--color-text-tertiary) 100%)',
+                          backgroundSize: '200% 100%',
+                          WebkitBackgroundClip: 'text',
+                          WebkitTextFillColor: 'transparent',
+                          animation: 'shimmer 1.5s infinite linear',
+                        }}
+                      >
+                        {currentTracingTitle ? `${currentTracingTitle}…` : '正在处理中…'}
+                      </div>
+                      {/* {!!question && (
+                        <div className='system-xs-regular break-all text-text-quaternary'>
+                          {`“${question}”`}
+                        </div>
+                      )} */}
+                      {/* {!!completedTracingTitles.length && (
+                        <div className='system-xs-regular text-text-quaternary'>
+                          {`已完成：${completedTracingTitles.join('、')}`}
+                        </div>
+                      )} */}
+                    </div>
+                  )
+                  : (
+                    <div className='flex h-5 w-6 items-center justify-center'>
+                      <LoadingAnim type='text' />
+                    </div>
+                  )
               )
             }
             {/* 分类选择器：优先显示，替代正常内容 */}
