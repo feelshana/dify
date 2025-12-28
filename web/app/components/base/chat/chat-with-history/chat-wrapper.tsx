@@ -213,7 +213,8 @@ const ChatWrapper = () => {
     const reportId = params.get('reportId')
     const dashboardId = params.get('dashboardId')
     const token = params.get('token')
-    if(reportId || dashboardId || token)
+    const account = params.get('account')
+    if(reportId || dashboardId || token || account)
       setShowChatNode(false)
   }, [])
 
