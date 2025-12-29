@@ -40,6 +40,21 @@ server {
       include proxy.conf;
     }
 
+    location /dify/proxy {
+        proxy_pass http://172.17.0.1:8002;
+        include proxy.conf;
+    }
+
+    location /dify/docs {
+        proxy_pass http://10.194.2.66:8006/admin/docrepo;
+        include proxy.conf;
+    }
+
+    location /dify/docs/api/ {
+        proxy_pass http://10.194.2.66:8006/api/;
+        include proxy.conf;
+    }
+
     # placeholder for acme challenge location
     ${ACME_CHALLENGE_LOCATION}
 
