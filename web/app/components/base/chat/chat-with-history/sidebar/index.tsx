@@ -7,7 +7,7 @@ import {
 import { useTranslation } from 'react-i18next'
 import {
   RiEditBoxLine,
-  RiExpandRightLine,
+  // RiExpandRightLine,
   RiLayoutLeft2Line,
 } from '@remixicon/react'
 import { useChatWithHistoryContext } from '../context'
@@ -138,13 +138,13 @@ const Sidebar = ({ isPanel, onHideSideBar }: Props) => {
             </ActionButton>
           </Tooltip>
         )}
-        {!isMobile && isSidebarCollapsed && (
+        {/* {!isMobile && isSidebarCollapsed && (
           <Tooltip popupContent={t('common.tooltip.showHistoryConversation')}>
             <ActionButton size='l' onClick={() => handleSidebarCollapse(false)}>
               <RiExpandRightLine className='h-[18px] w-[18px]' />
             </ActionButton>
           </Tooltip>
-        )}
+        )} */}
         {!isMobile && !isSidebarCollapsed && (
           <Tooltip popupContent={t('common.tooltip.hideHistoryConversation')}>
             <ActionButton size='l' onClick={() => handleSidebarCollapse(true)}>

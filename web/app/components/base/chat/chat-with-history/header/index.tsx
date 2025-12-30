@@ -1,7 +1,6 @@
 import { useCallback, useState } from 'react'
 import {
   RiLayoutRight2Line,
-  RiResetLeftLine,
 } from '@remixicon/react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -125,7 +124,7 @@ const Header = () => {
           )} */}
         </div>
         <div className='flex items-center gap-1'>
-          {currentConversationId && (
+          {/* {currentConversationId && (
             <Tooltip
               popupContent={t('share.chat.resetChat')}
             >
@@ -133,7 +132,7 @@ const Header = () => {
                 <RiResetLeftLine className='h-[18px] w-[18px]' />
               </ActionButton>
             </Tooltip>
-          )}
+          )} */}
           {/* 按照需求参数表单的控制按钮需要隐藏 */}
           {/* {currentConversationId && inputsForms.length > 0 && (
             <ViewFormDropdown />
