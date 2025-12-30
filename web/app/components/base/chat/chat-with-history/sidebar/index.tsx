@@ -101,6 +101,18 @@ const Sidebar = ({ isPanel, onHideSideBar }: Props) => {
       handleSidebarCollapse(!sidebarCollapseStateRef.current)
     }
   })
+    useSubscribe('openSiderbar', () => {
+    if (!isMobile) {
+      console.log('openSiderbar')
+      handleSidebarCollapse(false)
+    }
+  })
+    useSubscribe('closeSiderbar', () => {
+    if (!isMobile) {
+      console.log('closeSiderbar')
+      handleSidebarCollapse(true)
+    }
+  })
   return (
     <div className={cn(
       'flex w-full grow flex-col',
