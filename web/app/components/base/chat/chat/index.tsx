@@ -141,6 +141,7 @@ const Chat: FC<ChatProps> = ({
   }, [onAutoInputsChange])
   const autoInputsRef = useRef<any>(autoInputs)
   const handleMessage = useCallback((event: MessageEvent) => {
+    console.log(event.data.type, 'event.data.type')
     if (event.origin !== location.origin)
       return
     if (event.data.type === 'AUTO_INPUTS')
@@ -155,8 +156,10 @@ const Chat: FC<ChatProps> = ({
       emit('openSiderbar')
       console.log('打开历史记录~')
     }
-    if (event.data.type === 'CLOSE_HISTORY')
+    if (event.data.type === 'CLOSE_HISTORY') {
+      console.log('收起历史记录~')
       emit('closeSiderbar')
+    }
     if (event.data.type === 'SEND_MESSAGE')
       onsendWithScrollToBottomRef.current && onsendWithScrollToBottomRef.current(event.data.value, [])
   }, [handleNewConversation, emit])
