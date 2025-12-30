@@ -151,8 +151,10 @@ const Chat: FC<ChatProps> = ({
       handleNewConversation()
     if (event.data.type === 'HANDLE_HISTORY')
       emit('changeSidebarState')
-    if (event.data.type === 'OPEN_HISTORY')
+    if (event.data.type === 'OPEN_HISTORY') {
       emit('openSiderbar')
+      console.log('打开历史记录~')
+    }
     if (event.data.type === 'CLOSE_HISTORY')
       emit('closeSiderbar')
     if (event.data.type === 'SEND_MESSAGE')
