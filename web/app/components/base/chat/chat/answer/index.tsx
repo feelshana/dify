@@ -38,6 +38,7 @@ type AnswerProps = {
   appData?: AppData
   noChatInput?: boolean
   switchSibling?: (siblingMessageId: string) => void
+  isLast?: boolean
 }
 const Answer: FC<AnswerProps> = ({
   item,
@@ -52,6 +53,7 @@ const Answer: FC<AnswerProps> = ({
   appData,
   noChatInput,
   switchSibling,
+  isLast,
 }) => {
   const { t } = useTranslation()
   const {
@@ -235,25 +237,22 @@ const Answer: FC<AnswerProps> = ({
             }
             {/* 分类选择器：优先显示，替代正常内容 */}
             {
-              needClassificationSelection ? (
-                <ClassificationSelector item={item} />
-              ) : (
-                <>
-                  {
-                    content && !hasAgentThoughts && (
-                      <BasicContent item={item} />
-                    )
-                  }
-                  {
-                    (hasAgentThoughts) && (
-                      <AgentContent
-                        item={item}
-                        responding={responding}
-                        content={content}
-                      />
-                    )
-                  }
-                </>
+              content && !hasAgentThoughts && (
+                <BasicContent item={item} />
+              )
+            }
+            {
+              (hasAgentThoughts) && (
+                <AgentContent
+                  item={item}
+                  responding={responding}
+                  content={content}
+                />
+              )
+            }
+            {
+              needClassificationSelection && (
+                <ClassificationSelector item={item} isLast={isLast} />
               )
             }
             {

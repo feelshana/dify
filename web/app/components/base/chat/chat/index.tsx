@@ -310,8 +310,8 @@ const Chat: FC<ChatProps> = ({
           >
             {
               chatList.map((item, index) => {
+                const isLast = index === chatList.length - 1
                 if (item.isAnswer) {
-                  const isLast = item.id === chatList[chatList.length - 1]?.id
                   return (
                     <Answer
                       appData={appData}
@@ -327,6 +327,7 @@ const Chat: FC<ChatProps> = ({
                       hideProcessDetail={hideProcessDetail}
                       noChatInput={noChatInput}
                       switchSibling={switchSibling}
+                      isLast={isLast}
                     />
                   )
                 }
