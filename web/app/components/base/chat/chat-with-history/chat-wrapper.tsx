@@ -154,6 +154,12 @@ const ChatWrapper = () => {
       delete currentInputs.reportName
       delete newInputs.reportId
       delete newInputs.reportName
+      delete currentInputs.agentId
+      delete currentInputs.agentName
+      delete currentInputs.supersonicToken
+      delete newInputs.agentId
+      delete newInputs.agentName
+      delete newInputs.supersonicToken
     }
     else {
       if (autoInputs.reportId) {
