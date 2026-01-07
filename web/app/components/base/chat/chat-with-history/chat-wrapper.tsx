@@ -140,9 +140,14 @@ const ChatWrapper = () => {
   }, [respondingState, setIsResponding])
 
   const doSend: OnSend = useCallback((message, files, isRegenerate = false, parentAnswer: ChatItem | null = null, extraParam: object = {}) => {
+    /* 标记 处理inputs参数 */
+    const params = new URLSearchParams(window.location.search)
+    const account = params.get('account')
+    const userName = params.get('userName')
+    if(account && !userName)
+      autoInputs.userName = account
     if (autoInputs.agentId)
       autoInputs.supersonicToken = localStorage.getItem('SUPERSONIC_TOKEN')
-
     const currentInputs = { ...currentConversationInputs, ...autoInputs, ...extraParam }
     const newInputs = { ...newConversationInputs, ...autoInputs, ...extraParam }
     if (!showCurrentLabelRef.current) {
@@ -213,14 +218,15 @@ const ChatWrapper = () => {
 
   const [collapsed, setCollapsed] = useState(!!currentConversationId)
 
-  // 根据需求BI打开的dify参数输入框应该隐藏
+  /* 标记 根据需求BI打开的dify参数输入框应该隐藏 */
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
     const reportId = params.get('reportId')
     const dashboardId = params.get('dashboardId')
     const token = params.get('token')
     const account = params.get('account')
-    if(reportId || dashboardId || token || account)
+    const userName = params.get('userName')
+    if(reportId || dashboardId || token || userName || account)
       setShowChatNode(false)
   }, [])
 
