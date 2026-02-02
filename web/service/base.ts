@@ -115,7 +115,7 @@ function requiredWebSSOLogin(message?: string, code?: number) {
     params.append('message', message)
   if (code)
     params.append('code', String(code))
-  globalThis.location.href = `/webapp-signin?${params.toString()}`
+  // globalThis.location.href = `/webapp-signin?${params.toString()}`
 }
 
 export function format(text: string) {
@@ -482,10 +482,11 @@ export const request = async<T>(url: string, options = {}, otherOptions?: IOther
       return resp
     const errResp: Response = err as any
     if (errResp.status === 401) {
+      console.warn('已禁用身份验证失败时的重定向。')
       const [parseErr, errRespData] = await asyncRunSafe<ResponseError>(errResp.json())
-      const loginUrl = `${globalThis.location.origin}${basePath}/signin`
+      // const loginUrl = `${globalThis.location.origin}${basePath}/signin`
       if (parseErr) {
-        globalThis.location.href = loginUrl
+        // globalThis.location.href = loginUrl
         return Promise.reject(err)
       }
       // special code
@@ -507,10 +508,11 @@ export const request = async<T>(url: string, options = {}, otherOptions?: IOther
         return Promise.reject(err)
       }
       if (code === 'invalid_elephant_token') {
-        if (globalThis.top)
-            globalThis.top.location.href = '/'
-         else
-            globalThis.location.href = '/'
+        /* eslint-disable-next-line sonarjs/no-commented-code */
+        // if (globalThis.top)
+        //     globalThis.top.location.href = '/'
+        //  else
+        //     globalThis.location.href = '/'
 
         return Promise.reject(err)
       }
@@ -528,11 +530,11 @@ export const request = async<T>(url: string, options = {}, otherOptions?: IOther
         return Promise.reject(err)
       }
       if (code === 'not_init_validated' && IS_CE_EDITION) {
-        globalThis.location.href = `${globalThis.location.origin}${basePath}/init`
+        // globalThis.location.href = `${globalThis.location.origin}${basePath}/init`
         return Promise.reject(err)
       }
       if (code === 'not_setup' && IS_CE_EDITION) {
-        globalThis.location.href = `${globalThis.location.origin}${basePath}/install`
+        // globalThis.location.href = `${globalThis.location.origin}${basePath}/install`
         return Promise.reject(err)
       }
 
@@ -541,14 +543,14 @@ export const request = async<T>(url: string, options = {}, otherOptions?: IOther
       if (refreshErr === null)
         return baseFetch<T>(url, options, otherOptionsForBaseFetch)
       if (location.pathname !== `${basePath}/signin` || !IS_CE_EDITION) {
-        globalThis.location.href = loginUrl
+        // globalThis.location.href = loginUrl
         return Promise.reject(err)
       }
       if (!silent) {
         Toast.notify({ type: 'error', message })
         return Promise.reject(err)
       }
-      globalThis.location.href = loginUrl
+      // globalThis.location.href = loginUrl
       return Promise.reject(err)
     }
     else {
