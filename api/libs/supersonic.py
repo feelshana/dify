@@ -16,8 +16,8 @@ def check_supersonic_token():
     if not elephant_token:
         raise InvalidElephantTokenError()
     login_type = request.headers.get("loginType")
-    if login_type and login_type == 2:
-        logger.info("check redsea token")
+    if login_type and login_type == "2":
+        logger.info("Check redsea token")
         check_redseatoken(elephant_token)
 
 def check_redseatoken(elephant_token):
