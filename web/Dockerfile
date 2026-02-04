@@ -64,6 +64,7 @@ COPY docker/entrypoint.sh ./entrypoint.sh
 
 
 # global runtime packages
+RUN pnpm config set registry https://registry.npmmirror.com
 RUN pnpm add -g pm2 \
     && mkdir /.pm2 \
     && chown -R 1001:0 /.pm2 /app/web \
