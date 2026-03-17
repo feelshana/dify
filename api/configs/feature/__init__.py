@@ -585,6 +585,11 @@ class AuthConfig(BaseSettings):
         default=None,
     )
 
+    REDSEA_TOKEN_URL: Optional[str] = Field(
+        description="Redsea token URL for authentication",
+        default=None,
+    )
+
 
 class ModerationConfig(BaseSettings):
     """
