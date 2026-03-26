@@ -132,7 +132,7 @@ const Answer: FC<AnswerProps> = ({
           </div>
         )}
       </div> */}
-      <div className='chat-answer-container group ml-4 w-0 grow pb-4' ref={containerRef}>
+      <div className='chat-answer-container group w-0 grow pb-4' ref={containerRef}>
         <div className={cn('group relative', chatAnswerContainerInner)}>
           {/* {
             (item.inputs && item.inputs.reportName)
