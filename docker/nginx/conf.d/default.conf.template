@@ -40,6 +40,11 @@ server {
         include proxy.conf;
     }
 
+    location /dify/lineage/data-graph/ {
+        proxy_pass http://172.17.0.1:8006/api/v1/lineage/data-graph/;
+        include proxy.conf;
+    }
+
     location /dify/lineage/auth/ {
         proxy_pass http://172.17.0.1:8006/api/v1/lineage/auth/;
         include proxy.conf;
