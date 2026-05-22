@@ -148,6 +148,19 @@ const Chat: FC<ChatProps> = ({
       onAutoInputsChangeRef.current && onAutoInputsChangeRef.current({ ...event.data.value })
     if (event.data.type === 'INTELLIGENT_SUMMERY')
       onsendWithScrollToBottomRef.current && onsendWithScrollToBottomRef.current('请解读当前数据', [], false, null, { ...event.data.value })
+    if (event.data.type === 'LOG_SQL_ANALYSIS') {
+      console.log(event.data, 'LOG_SQL_ANALYSIS')
+      const handleTypeMap: Record<string, string> = {
+        sqlOptimize: 'sql优化',
+        sqlExplain: 'sql解释',
+        sqlCorrect: 'sql纠错',
+        sqlNote: 'sql注释',
+        aiLogInterPret: 'ai解读',
+      }
+      console.log(JSON.parse(event.data.value?.sqlAnalysisParams), 'sqlAnalysisParams')
+      const content = handleTypeMap[JSON.parse(event.data.value?.sqlAnalysisParams)?.btnType] || ''
+      onsendWithScrollToBottomRef.current && onsendWithScrollToBottomRef.current(content, [], false, null, { ...event.data.value })
+    }
     if (event.data.type === 'NEW_CONVERSATION')
       handleNewConversation()
     if (event.data.type === 'HANDLE_HISTORY')
