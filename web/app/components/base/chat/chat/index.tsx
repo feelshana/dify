@@ -146,8 +146,12 @@ const Chat: FC<ChatProps> = ({
       return
     if (event.data.type === 'AUTO_INPUTS')
       onAutoInputsChangeRef.current && onAutoInputsChangeRef.current({ ...event.data.value })
+    if (event.data.type === 'APPEND_AUTO_INPUTS') {
+      const nextAutoInputs = { ...autoInputsRef.current, ...event.data.value }
+      onAutoInputsChangeRef.current && onAutoInputsChangeRef.current(nextAutoInputs)
+    }
     if (event.data.type === 'INTELLIGENT_SUMMERY')
-      onsendWithScrollToBottomRef.current && onsendWithScrollToBottomRef.current('请解读当前数据', [], false, null, { ...event.data.value })
+        onsendWithScrollToBottomRef.current && onsendWithScrollToBottomRef.current('请解读当前数据', [], false, null, { ...event.data.value })
     if (event.data.type === 'LOG_SQL_ANALYSIS') {
       console.log(event.data, 'LOG_SQL_ANALYSIS')
       const handleTypeMap: Record<string, string> = {
@@ -157,8 +161,9 @@ const Chat: FC<ChatProps> = ({
         sqlNote: 'sql注释',
         aiLogInterPret: 'ai解读',
       }
-      console.log(JSON.parse(event.data.value?.sqlAnalysisParams), 'sqlAnalysisParams')
-      const content = handleTypeMap[JSON.parse(event.data.value?.sqlAnalysisParams)?.btnType] || ''
+      const action = event.data.value?.action || '{}'
+      const actionType = JSON.parse(action)?.type
+      const content = handleTypeMap[actionType] || ''
       onsendWithScrollToBottomRef.current && onsendWithScrollToBottomRef.current(content, [], false, null, { ...event.data.value })
     }
     if (event.data.type === 'NEW_CONVERSATION')
