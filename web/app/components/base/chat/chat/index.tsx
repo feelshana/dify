@@ -155,14 +155,16 @@ const Chat: FC<ChatProps> = ({
     if (event.data.type === 'LOG_SQL_ANALYSIS') {
       console.log(event.data, 'LOG_SQL_ANALYSIS')
       const handleTypeMap: Record<string, string> = {
-        sqlOptimize: 'sql优化',
-        sqlExplain: 'sql解释',
-        sqlCorrect: 'sql纠错',
-        sqlNote: 'sql注释',
-        aiLogInterPret: 'ai解读',
+        sqlOptimize: 'SQL优化',
+        sqlExplain: 'SQL解释',
+        sqlFix: 'SQL纠错',
+        sqlComment: '生成注释',
+        logDiagnose: '解读日志',
       }
       const action = event.data.value?.action || '{}'
       const actionType = JSON.parse(action)?.type
+      console.log(actionType, 'actionType')
+      console.log(handleTypeMap[actionType], 'handleTypeMap[actionType]')
       const content = handleTypeMap[actionType] || ''
       onsendWithScrollToBottomRef.current && onsendWithScrollToBottomRef.current(content, [], false, null, { ...event.data.value })
     }
