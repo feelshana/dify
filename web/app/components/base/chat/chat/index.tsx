@@ -144,9 +144,12 @@ const Chat: FC<ChatProps> = ({
     console.log(event.data.type, 'event.data.type')
     if (event.origin !== location.origin)
       return
-    if (event.data.type === 'AUTO_INPUTS')
+    if (event.data.type === 'AUTO_INPUTS') {
+      console.log(event.data, 'AUTO_INPUTS')
       onAutoInputsChangeRef.current && onAutoInputsChangeRef.current({ ...event.data.value })
+    }
     if (event.data.type === 'APPEND_AUTO_INPUTS') {
+      console.log(JSON.parse(JSON.stringify(autoInputsRef.current)), 'APPEND_AUTO_INPUTS_autoInputsRef')
       const nextAutoInputs = { ...autoInputsRef.current, ...event.data.value }
       onAutoInputsChangeRef.current && onAutoInputsChangeRef.current(nextAutoInputs)
     }
