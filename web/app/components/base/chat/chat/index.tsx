@@ -146,11 +146,14 @@ const Chat: FC<ChatProps> = ({
       return
     if (event.data.type === 'AUTO_INPUTS') {
       console.log(event.data, 'AUTO_INPUTS')
-      onAutoInputsChangeRef.current && onAutoInputsChangeRef.current({ ...event.data.value })
+      const newAutoInputs = { ...event.data.value }
+      autoInputsRef.current = newAutoInputs
+      onAutoInputsChangeRef.current && onAutoInputsChangeRef.current(newAutoInputs)
     }
     if (event.data.type === 'APPEND_AUTO_INPUTS') {
       console.log(JSON.parse(JSON.stringify(autoInputsRef.current)), 'APPEND_AUTO_INPUTS_autoInputsRef')
       const nextAutoInputs = { ...autoInputsRef.current, ...event.data.value }
+      autoInputsRef.current = nextAutoInputs
       onAutoInputsChangeRef.current && onAutoInputsChangeRef.current(nextAutoInputs)
     }
     if (event.data.type === 'INTELLIGENT_SUMMERY')
