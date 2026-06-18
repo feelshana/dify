@@ -161,11 +161,15 @@ const Chat: FC<ChatProps> = ({
     if (event.data.type === 'LOG_SQL_ANALYSIS') {
       console.log(event.data, 'LOG_SQL_ANALYSIS')
       const handleTypeMap: Record<string, string> = {
-        sqlOptimize: '代码优化',
-        sqlExplain: '代码解释',
-        sqlFix: '代码纠错',
+        sqlOptimize: 'SQL优化',
+        sqlExplain: 'SQL解释',
+        sqlFix: 'SQL纠错',
         sqlComment: '生成注释',
         logDiagnose: '解读日志',
+        codeOptimize: '代码优化',
+        codeExplain: '代码解释',
+        codeFix: '代码纠错',
+        codeComment: '生成注释',
       }
       const action = event.data.value?.action || '{}'
       const actionType = JSON.parse(action)?.type
