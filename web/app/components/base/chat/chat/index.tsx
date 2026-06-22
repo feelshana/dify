@@ -186,8 +186,10 @@ const Chat: FC<ChatProps> = ({
       emit('openSiderbar')
     if (event.data.type === 'CLOSE_HISTORY')
       emit('closeSiderbar')
-    if (event.data.type === 'SEND_MESSAGE')
+    if (event.data.type === 'SEND_MESSAGE') {
+      console.log('do_send_message')
       onsendWithScrollToBottomRef.current && onsendWithScrollToBottomRef.current(event.data.value, [], false, null, {})
+    }
   }, [handleNewConversation, emit])
   useEffect(() => {
     autoInputsRef.current = autoInputs
