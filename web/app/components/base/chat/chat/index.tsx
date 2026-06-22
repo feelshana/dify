@@ -127,6 +127,8 @@ const Chat: FC<ChatProps> = ({
   const userScrolledRef = useRef(false)
   const { handleNewConversation } = useChatWithHistoryContext()
   const { emit } = useMittContext()
+  const isInitializedRef = useRef(false)
+  const pendingSendMessageRef = useRef<any>(null)
   const onsendWithScrollToBottom = useCallback(((...args: any[]) => {
     onSend && onSend(...args as Parameters<OnSend>)
     userScrolledRef.current = false // 之后执行handleScrollToBottom函数就可以自动到最底部了
@@ -140,18 +142,28 @@ const Chat: FC<ChatProps> = ({
     onAutoInputsChangeRef.current = onAutoInputsChange
   }, [onAutoInputsChange])
   const autoInputsRef = useRef<any>(autoInputs)
+
+  // 监听 inputs 变化，标记初始化完成（inputs 包含从 URL 读取的参数）
+  useEffect(() => {
+    if (inputs && Object.keys(inputs).length > 0) {
+      isInitializedRef.current = true
+      // 如果有待处理的 SEND_MESSAGE 事件，现在执行
+      if (pendingSendMessageRef.current) {
+        const { message } = pendingSendMessageRef.current
+        pendingSendMessageRef.current = null
+        onsendWithScrollToBottomRef.current && onsendWithScrollToBottomRef.current(message, [])
+      }
+    }
+  }, [inputs])
   const handleMessage = useCallback((event: MessageEvent) => {
-    console.log(event.data.type, 'event.data.type')
     if (event.origin !== location.origin)
       return
     if (event.data.type === 'AUTO_INPUTS') {
-      console.log(event.data, 'AUTO_INPUTS')
       const newAutoInputs = { ...event.data.value }
       autoInputsRef.current = newAutoInputs
       onAutoInputsChangeRef.current && onAutoInputsChangeRef.current(newAutoInputs)
     }
     if (event.data.type === 'APPEND_AUTO_INPUTS') {
-      console.log(JSON.parse(JSON.stringify(autoInputsRef.current)), 'APPEND_AUTO_INPUTS_autoInputsRef')
       const nextAutoInputs = { ...autoInputsRef.current, ...event.data.value }
       autoInputsRef.current = nextAutoInputs
       onAutoInputsChangeRef.current && onAutoInputsChangeRef.current(nextAutoInputs)
@@ -159,7 +171,6 @@ const Chat: FC<ChatProps> = ({
     if (event.data.type === 'INTELLIGENT_SUMMERY')
         onsendWithScrollToBottomRef.current && onsendWithScrollToBottomRef.current('请解读当前数据', [], false, null, { ...event.data.value })
     if (event.data.type === 'LOG_SQL_ANALYSIS') {
-      console.log(event.data, 'LOG_SQL_ANALYSIS')
       const handleTypeMap: Record<string, string> = {
         sqlOptimize: 'SQL优化',
         sqlExplain: 'SQL解释',
@@ -173,8 +184,6 @@ const Chat: FC<ChatProps> = ({
       }
       const action = event.data.value?.action || '{}'
       const actionType = JSON.parse(action)?.type
-      console.log(actionType, 'actionType')
-      console.log(handleTypeMap[actionType], 'handleTypeMap[actionType]')
       const content = handleTypeMap[actionType] || ''
       onsendWithScrollToBottomRef.current && onsendWithScrollToBottomRef.current(content, [], false, null, { ...event.data.value })
     }
@@ -187,8 +196,13 @@ const Chat: FC<ChatProps> = ({
     if (event.data.type === 'CLOSE_HISTORY')
       emit('closeSiderbar')
     if (event.data.type === 'SEND_MESSAGE') {
-      console.log('do_send_message')
-      onsendWithScrollToBottomRef.current && onsendWithScrollToBottomRef.current(event.data.value, [], false, null, {})
+      // 如果还没有初始化完成，将消息暂存
+      if (!isInitializedRef.current) {
+        pendingSendMessageRef.current = { message: event.data.value }
+        return
+      }
+      // 已经初始化完成，直接发送
+      onsendWithScrollToBottomRef.current && onsendWithScrollToBottomRef.current(event.data.value, [])
     }
   }, [handleNewConversation, emit])
   useEffect(() => {

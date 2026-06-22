@@ -8,7 +8,6 @@ import type {
 } from '../types'
 import { useChat } from '../chat/hooks'
 import { getLastAnswer, isValidGeneratedAnswer } from '../utils'
-import { getRawInputsFromUrlParams } from '../utils'
 import { useEmbeddedChatbotContext } from './context'
 import { isDify } from './utils'
 import { InputVarType } from '@/app/components/workflow/types'
@@ -32,17 +31,6 @@ const ChatWrapper = () => {
   const [showChatNode, setShowChatNode] = useState(true)
   const [showCurrentLabel, setShowCurrentLabel] = useState(true)
   const showCurrentLabelRef = useRef(showCurrentLabel)
-
-  // Initialize autoInputs from URL params
-  useEffect(() => {
-    (async () => {
-      const urlParams = await getRawInputsFromUrlParams()
-      console.log('URL params from chat-wrapper:', urlParams)
-      if (Object.keys(urlParams).length > 0)
-        setAutoInputs(urlParams)
-    })()
-  }, [])
-
   const handleAutoInputsChange = useCallback((value: object) => {
     setShowCurrentLabel(true)
     setAutoInputs(value)
@@ -152,14 +140,11 @@ const ChatWrapper = () => {
   }, [respondingState, setIsResponding])
 
   const doSend: OnSend = useCallback((message, files, isRegenerate = false, parentAnswer: ChatItem | null = null) => {
-    console.log('doSend called with autoInputs:', autoInputs)
     if (autoInputs.agentId)
       autoInputs.supersonicToken = localStorage.getItem('SUPERSONIC_TOKEN')
 
     const currentInputs = { ...currentConversationInputs, ...autoInputs }
     const newInputs = { ...newConversationInputs, ...autoInputs }
-    console.log('doSend - currentInputs:', currentInputs)
-    console.log('doSend - newInputs:', newInputs)
     if(!showCurrentLabelRef.current) {
       delete currentInputs.dashboardId
       delete currentInputs.dashboardName
