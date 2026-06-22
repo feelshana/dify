@@ -37,6 +37,7 @@ const ChatWrapper = () => {
   useEffect(() => {
     (async () => {
       const urlParams = await getRawInputsFromUrlParams()
+      console.log('URL params from chat-wrapper:', urlParams)
       if (Object.keys(urlParams).length > 0)
         setAutoInputs(urlParams)
     })()
@@ -151,11 +152,14 @@ const ChatWrapper = () => {
   }, [respondingState, setIsResponding])
 
   const doSend: OnSend = useCallback((message, files, isRegenerate = false, parentAnswer: ChatItem | null = null) => {
+    console.log('doSend called with autoInputs:', autoInputs)
     if (autoInputs.agentId)
       autoInputs.supersonicToken = localStorage.getItem('SUPERSONIC_TOKEN')
 
     const currentInputs = { ...currentConversationInputs, ...autoInputs }
     const newInputs = { ...newConversationInputs, ...autoInputs }
+    console.log('doSend - currentInputs:', currentInputs)
+    console.log('doSend - newInputs:', newInputs)
     if(!showCurrentLabelRef.current) {
       delete currentInputs.dashboardId
       delete currentInputs.dashboardName
