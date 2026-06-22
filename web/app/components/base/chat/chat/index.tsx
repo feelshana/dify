@@ -151,8 +151,11 @@ const Chat: FC<ChatProps> = ({
       if (pendingSendMessageRef.current) {
         const { message } = pendingSendMessageRef.current
         pendingSendMessageRef.current = null
-        onsendWithScrollToBottomRef.current && onsendWithScrollToBottomRef.current(message, [])
-        console.log('已初始化完成，发送消息')
+        // 等待下一帧执行，确保所有组件的状态都已更新
+        requestAnimationFrame(() => {
+          onsendWithScrollToBottomRef.current && onsendWithScrollToBottomRef.current(message, [])
+          console.log('已初始化完成，发送消息')
+        })
       }
     }
   }, [inputs])
@@ -203,9 +206,11 @@ const Chat: FC<ChatProps> = ({
         pendingSendMessageRef.current = { message: event.data.value }
         return
       }
-      // 已经初始化完成，直接发送
-      console.log('接收到SEND_MESSAGE事件，已初始化完成，直接发送')
-      onsendWithScrollToBottomRef.current && onsendWithScrollToBottomRef.current(event.data.value, [])
+      // 已经初始化完成，等待下一帧再发送，确保状态同步
+      requestAnimationFrame(() => {
+        console.log('接收到SEND_MESSAGE事件，已初始化完成，直接发送')
+        onsendWithScrollToBottomRef.current && onsendWithScrollToBottomRef.current(event.data.value, [])
+      })
     }
   }, [handleNewConversation, emit])
   useEffect(() => {
