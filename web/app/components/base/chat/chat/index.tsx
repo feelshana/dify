@@ -152,6 +152,7 @@ const Chat: FC<ChatProps> = ({
         const { message } = pendingSendMessageRef.current
         pendingSendMessageRef.current = null
         onsendWithScrollToBottomRef.current && onsendWithScrollToBottomRef.current(message, [])
+        console.log('已初始化完成，发送消息')
       }
     }
   }, [inputs])
@@ -198,10 +199,12 @@ const Chat: FC<ChatProps> = ({
     if (event.data.type === 'SEND_MESSAGE') {
       // 如果还没有初始化完成，将消息暂存
       if (!isInitializedRef.current) {
+        console.log('接收到SEND_MESSAGE事件，但尚未初始化完成')
         pendingSendMessageRef.current = { message: event.data.value }
         return
       }
       // 已经初始化完成，直接发送
+      console.log('接收到SEND_MESSAGE事件，已初始化完成，直接发送')
       onsendWithScrollToBottomRef.current && onsendWithScrollToBottomRef.current(event.data.value, [])
     }
   }, [handleNewConversation, emit])
