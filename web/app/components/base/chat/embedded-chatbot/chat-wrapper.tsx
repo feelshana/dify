@@ -8,6 +8,7 @@ import type {
 } from '../types'
 import { useChat } from '../chat/hooks'
 import { getLastAnswer, isValidGeneratedAnswer } from '../utils'
+import { getRawInputsFromUrlParams } from '../utils'
 import { useEmbeddedChatbotContext } from './context'
 import { isDify } from './utils'
 import { InputVarType } from '@/app/components/workflow/types'
@@ -31,6 +32,16 @@ const ChatWrapper = () => {
   const [showChatNode, setShowChatNode] = useState(true)
   const [showCurrentLabel, setShowCurrentLabel] = useState(true)
   const showCurrentLabelRef = useRef(showCurrentLabel)
+
+  // Initialize autoInputs from URL params
+  useEffect(() => {
+    (async () => {
+      const urlParams = await getRawInputsFromUrlParams()
+      if (Object.keys(urlParams).length > 0)
+        setAutoInputs(urlParams)
+    })()
+  }, [])
+
   const handleAutoInputsChange = useCallback((value: object) => {
     setShowCurrentLabel(true)
     setAutoInputs(value)
