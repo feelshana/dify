@@ -209,8 +209,10 @@ const Chat: FC<ChatProps> = ({
       // 已经初始化完成，等待下一帧再发送，确保状态同步
       requestAnimationFrame(() => {
         console.log('接收到SEND_MESSAGE事件，已初始化完成，直接发送')
-        console.log('下一帧执行发送消息')
-        onsendWithScrollToBottomRef.current && onsendWithScrollToBottomRef.current(event.data.value, [])
+        setTimeout(() => {
+          console.log('延时处理')
+          onsendWithScrollToBottomRef.current && onsendWithScrollToBottomRef.current(event.data.value, [])
+        }, 500)
       })
     }
   }, [handleNewConversation, emit])
