@@ -226,7 +226,6 @@ const ChatInputArea = ({
                 )}
                 // placeholder={t('common.chat.inputPlaceholder', { botName }) || ''}
                 placeholder={placeholderFromURL || t('common.chat.inputPlaceholder1')}
-                autoFocus
                 minRows={1}
                 onResize={handleTextareaResize}
                 value={query}
