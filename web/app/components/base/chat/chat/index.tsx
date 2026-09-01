@@ -457,6 +457,7 @@ const Chat: FC<ChatProps> = ({
                   autoInputs={autoInputs}
                   showCurrentLabel={showCurrentLabel}
                   setShowCurrentLabel={setShowCurrentLabel}
+                  onTopicChange={onTopicChange}
                   onTopicDismiss={onTopicDismiss}
                 />
               )

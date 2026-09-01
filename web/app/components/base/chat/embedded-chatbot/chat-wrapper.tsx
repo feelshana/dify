@@ -47,6 +47,7 @@ const ChatWrapper = () => {
         delete next.topic
       return next
     })
+    window.parent.postMessage({ type: 'TOPIC_CHANGED', value: { topic } }, location.origin)
   }, [])
   const handleDismissTopic = useCallback(() => {
     setAutoInputs((prev) => {

@@ -46,6 +46,7 @@ const ChatWrapper = () => {
         delete next.topic
       return next
     })
+    window.parent.postMessage({ type: 'TOPIC_CHANGED', value: { topic } }, location.origin)
   }, [])
   // dify 侧输入框叉掉标签：清空 topic 并通知 p 侧恢复标签组
   const handleDismissTopic = useCallback(() => {

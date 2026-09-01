@@ -47,8 +47,10 @@ type ChatInputAreaProps = {
   autoInputs?: any
   showCurrentLabel?: any
   setShowCurrentLabel?: any
+  onTopicChange?: (topic: string) => void
   onTopicDismiss?: () => void
 }
+const TOPIC_OPTIONS = ['使用指南', '报表推荐', '数据口径', '智能问数', '数据分析']
 const ChatInputArea = ({
   botName,
   showFeatureBar,
@@ -66,6 +68,7 @@ const ChatInputArea = ({
   autoInputs,
   showCurrentLabel,
   setShowCurrentLabel,
+  onTopicChange,
   onTopicDismiss,
 }: ChatInputAreaProps) => {
   const [placeholderFromURL, setPlaceholderFromURL] = useState('')
@@ -209,17 +212,29 @@ const ChatInputArea = ({
           </div>
         }
         {
-          autoInputs?.topic && (
-            <div
-              className="relative z-50 m-1 inline-block inline-flex items-center rounded-lg border border-[#1664ff] bg-[#E7F0FF] px-2 text-[#1664ff]"
-            >
-              <div className="h-6 py-1 text-xs">{autoInputs.topic}</div>
+          autoInputs?.topic
+            ? (
               <div
-                className="ml-1 h-6 cursor-pointer py-1 text-xs opacity-60 hover:opacity-100"
-                onClick={() => { onTopicDismiss && onTopicDismiss() }}
-              >×</div>
-            </div>
-          )
+                className="relative z-50 m-1 inline-block inline-flex items-center rounded-lg border border-[#1664ff] bg-[#E7F0FF] px-2 text-[#1664ff]"
+              >
+                <div className="h-6 py-1 text-xs">{autoInputs.topic}</div>
+                <div
+                  className="ml-1 h-6 cursor-pointer py-1 text-xs opacity-60 hover:opacity-100"
+                  onClick={() => { onTopicDismiss && onTopicDismiss() }}
+                >×</div>
+              </div>
+            )
+            : (
+              <div className="relative z-50 m-1 flex flex-wrap items-center gap-1">
+                {TOPIC_OPTIONS.map(topic => (
+                  <div
+                    key={topic}
+                    className="cursor-pointer rounded-full border border-transparent bg-[#F4F6FA] px-2 py-1 text-xs text-[#555] hover:bg-[#EAF0FA]"
+                    onClick={() => { onTopicChange && onTopicChange(topic) }}
+                  >{topic}</div>
+                ))}
+              </div>
+            )
         }
         <div className='relative max-h-[158px] overflow-y-auto overflow-x-hidden px-[9px] pt-[9px]'>
           <FileListInChatInput fileConfig={visionConfig!} />
