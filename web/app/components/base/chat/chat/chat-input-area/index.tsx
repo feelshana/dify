@@ -47,6 +47,7 @@ type ChatInputAreaProps = {
   autoInputs?: any
   showCurrentLabel?: any
   setShowCurrentLabel?: any
+  onTopicDismiss?: () => void
 }
 const ChatInputArea = ({
   botName,
@@ -65,6 +66,7 @@ const ChatInputArea = ({
   autoInputs,
   showCurrentLabel,
   setShowCurrentLabel,
+  onTopicDismiss,
 }: ChatInputAreaProps) => {
   const [placeholderFromURL, setPlaceholderFromURL] = useState('')
   const searchParams = useSearchParams()
@@ -205,6 +207,19 @@ const ChatInputArea = ({
             <div className="h-6 py-1 text-xs">{`已选仪表盘【${autoInputs?.dashboardName || inputs?.dashboardName}】`}</div>
             <div className="h-6 cursor-pointer py-1 text-xs" onClick={() => { setShowCurrentLabel(false) }}>×</div>
           </div>
+        }
+        {
+          autoInputs?.topic && (
+            <div
+              className="relative z-50 m-1 inline-block inline-flex items-center rounded-lg border border-[#1664ff] bg-[#E7F0FF] px-2 text-[#1664ff]"
+            >
+              <div className="h-6 py-1 text-xs">{autoInputs.topic}</div>
+              <div
+                className="ml-1 h-6 cursor-pointer py-1 text-xs opacity-60 hover:opacity-100"
+                onClick={() => { onTopicDismiss && onTopicDismiss() }}
+              >×</div>
+            </div>
+          )
         }
         <div className='relative max-h-[158px] overflow-y-auto overflow-x-hidden px-[9px] pt-[9px]'>
           <FileListInChatInput fileConfig={visionConfig!} />

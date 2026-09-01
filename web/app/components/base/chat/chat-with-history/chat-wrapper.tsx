@@ -36,6 +36,26 @@ const ChatWrapper = () => {
   const setShowCurrentLabelFunc = (isShow: boolean) => {
     setShowCurrentLabel(isShow)
   }
+  // topic 作为 autoInputs 的单一数据源，由 p 侧通过 TOPIC 消息设置
+  const handleSetTopic = useCallback((topic: string) => {
+    setAutoInputs((prev) => {
+      const next = { ...prev }
+      if (topic)
+        next.topic = topic
+      else
+        delete next.topic
+      return next
+    })
+  }, [])
+  // dify 侧输入框叉掉标签：清空 topic 并通知 p 侧恢复标签组
+  const handleDismissTopic = useCallback(() => {
+    setAutoInputs((prev) => {
+      const next = { ...prev }
+      delete next.topic
+      return next
+    })
+    window.parent.postMessage({ type: 'TOPIC_CLEARED' }, location.origin)
+  }, [])
   useEffect(() => {
     showCurrentLabelRef.current = showCurrentLabel
   }, [showCurrentLabel])
@@ -336,6 +356,8 @@ const ChatWrapper = () => {
         autoInputs={autoInputs}
         showCurrentLabel={showCurrentLabel}
         setShowCurrentLabel={setShowCurrentLabelFunc}
+        onTopicChange={handleSetTopic}
+        onTopicDismiss={handleDismissTopic}
       />
     </div>
   )

@@ -38,6 +38,24 @@ const ChatWrapper = () => {
   const setShowCurrentLabelFunc = (isShow: boolean) => {
     setShowCurrentLabel(isShow)
   }
+  const handleSetTopic = useCallback((topic: string) => {
+    setAutoInputs((prev) => {
+      const next = { ...prev }
+      if (topic)
+        next.topic = topic
+      else
+        delete next.topic
+      return next
+    })
+  }, [])
+  const handleDismissTopic = useCallback(() => {
+    setAutoInputs((prev) => {
+      const next = { ...prev }
+      delete next.topic
+      return next
+    })
+    window.parent.postMessage({ type: 'TOPIC_CLEARED' }, location.origin)
+  }, [])
   useEffect(() => {
     showCurrentLabelRef.current = showCurrentLabel
   }, [showCurrentLabel])
@@ -317,6 +335,8 @@ const ChatWrapper = () => {
       autoInputs={autoInputs}
       showCurrentLabel={showCurrentLabel}
       setShowCurrentLabel={setShowCurrentLabelFunc}
+      onTopicChange={handleSetTopic}
+      onTopicDismiss={handleDismissTopic}
     />
   )
 }

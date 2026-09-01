@@ -80,6 +80,8 @@ export type ChatProps = {
   autoInputs?: any
   showCurrentLabel?: boolean
   setShowCurrentLabel?: any
+  onTopicChange?: (topic: string) => void
+  onTopicDismiss?: () => void
 }
 
 const Chat: FC<ChatProps> = ({
@@ -123,6 +125,8 @@ const Chat: FC<ChatProps> = ({
   autoInputs,
   showCurrentLabel,
   setShowCurrentLabel,
+  onTopicChange,
+  onTopicDismiss,
 }) => {
   const userScrolledRef = useRef(false)
   const { handleNewConversation } = useChatWithHistoryContext()
@@ -141,6 +145,10 @@ const Chat: FC<ChatProps> = ({
   useEffect(() => {
     onAutoInputsChangeRef.current = onAutoInputsChange
   }, [onAutoInputsChange])
+  const onTopicChangeRef = useRef<any>()
+  useEffect(() => {
+    onTopicChangeRef.current = onTopicChange
+  }, [onTopicChange])
   const autoInputsRef = useRef<any>(autoInputs)
 
   // 监听 inputs 变化，标记初始化完成（inputs 包含从 URL 读取的参数）
@@ -171,6 +179,11 @@ const Chat: FC<ChatProps> = ({
       const nextAutoInputs = { ...autoInputsRef.current, ...event.data.value }
       autoInputsRef.current = nextAutoInputs
       onAutoInputsChangeRef.current && onAutoInputsChangeRef.current(nextAutoInputs)
+    }
+    if (event.data.type === 'TOPIC') {
+      // p 侧选中/取消标签：将 topic 写入 autoInputs（单一数据源）
+      const topic = event.data.value?.topic || ''
+      onTopicChangeRef.current && onTopicChangeRef.current(topic)
     }
     if (event.data.type === 'INTELLIGENT_SUMMERY')
         onsendWithScrollToBottomRef.current && onsendWithScrollToBottomRef.current('请解读当前数据', [], false, null, { ...event.data.value })
@@ -444,6 +457,7 @@ const Chat: FC<ChatProps> = ({
                   autoInputs={autoInputs}
                   showCurrentLabel={showCurrentLabel}
                   setShowCurrentLabel={setShowCurrentLabel}
+                  onTopicDismiss={onTopicDismiss}
                 />
               )
             }
