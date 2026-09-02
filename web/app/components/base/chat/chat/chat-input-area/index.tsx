@@ -29,6 +29,11 @@ import FeatureBar from '@/app/components/base/features/new-feature-panel/feature
 import type { FileUpload } from '@/app/components/base/features/types'
 import { TransferMethod } from '@/types/app'
 import { useSearchParams } from 'next/navigation'
+import topicIcon1 from '@/assets/images/chatBI/card_ic_1.svg'
+import topicIcon2 from '@/assets/images/chatBI/card_ic_2.svg'
+import topicIcon3 from '@/assets/images/chatBI/card_ic_3.svg'
+import topicIcon4 from '@/assets/images/chatBI/card_ic_4.svg'
+import topicIcon5 from '@/assets/images/chatBI/card_ic_5.svg'
 
 type ChatInputAreaProps = {
   botName?: string
@@ -50,7 +55,13 @@ type ChatInputAreaProps = {
   onTopicChange?: (topic: string) => void
   onTopicDismiss?: () => void
 }
-const TOPIC_OPTIONS = ['使用指南', '报表推荐', '数据口径', '智能问数', '数据分析']
+const TOPIC_OPTIONS = [
+  { label: '使用指南', icon: topicIcon1 },
+  { label: '报表推荐', icon: topicIcon2 },
+  { label: '数据口径', icon: topicIcon3 },
+  { label: '智能问数', icon: topicIcon4 },
+  { label: '数据分析', icon: topicIcon5 },
+]
 const ChatInputArea = ({
   botName,
   showFeatureBar,
@@ -226,12 +237,15 @@ const ChatInputArea = ({
             )
             : (
               <div className="relative z-50 m-1 flex flex-wrap items-center gap-1">
-                {TOPIC_OPTIONS.map(topic => (
+                {TOPIC_OPTIONS.map(item => (
                   <div
-                    key={topic}
-                    className="cursor-pointer rounded-full border border-transparent bg-[#F4F6FA] px-2 py-1 text-xs text-[#555] hover:bg-[#EAF0FA]"
-                    onClick={() => { onTopicChange && onTopicChange(topic) }}
-                  >{topic}</div>
+                    key={item.label}
+                    className="flex cursor-pointer items-center rounded-full border border-transparent bg-[#F4F6FA] px-2 py-1 text-xs text-[#555] hover:bg-[#EAF0FA]"
+                    onClick={() => { onTopicChange && onTopicChange(item.label) }}
+                  >
+                    <img src={item.icon.src || item.icon} alt="" className="mr-1 h-3.5 w-3.5" />
+                    <span>{item.label}</span>
+                  </div>
                 ))}
               </div>
             )
