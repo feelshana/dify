@@ -224,17 +224,23 @@ const ChatInputArea = ({
         }
         {
           autoInputs?.topic
-            ? (
-              <div
-                className="relative z-50 m-1 inline-block inline-flex items-center rounded-lg border border-[#1664ff] bg-[#E7F0FF] px-2 text-[#1664ff]"
-              >
-                <div className="h-6 py-1 text-xs">{autoInputs.topic}</div>
-                <div
-                  className="ml-1 h-6 cursor-pointer py-1 text-xs opacity-60 hover:opacity-100"
-                  onClick={() => { onTopicDismiss && onTopicDismiss() }}
-                >×</div>
-              </div>
-            )
+            ? (() => {
+                const selected = TOPIC_OPTIONS.find(item => item.label === autoInputs.topic)
+                return (
+                  <div
+                    className="relative z-50 m-1 inline-flex items-center rounded-lg border border-[#1664ff] bg-[#E7F0FF] px-2 text-[#1664ff]"
+                  >
+                    {selected && (
+                      <img src={selected.icon.src || selected.icon} alt="" className="mr-1 h-3.5 w-3.5" />
+                    )}
+                    <div className="py-1 text-xs">{autoInputs.topic}</div>
+                    <div
+                      className="ml-1 h-6 cursor-pointer py-1 text-xs opacity-60 hover:opacity-100"
+                      onClick={() => { onTopicDismiss && onTopicDismiss() }}
+                    >×</div>
+                  </div>
+                )
+              })()
             : (
               <div className="relative z-50 m-1 flex flex-wrap items-center gap-1">
                 {TOPIC_OPTIONS.map(item => (
