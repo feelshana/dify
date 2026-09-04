@@ -29,6 +29,7 @@ import FeatureBar from '@/app/components/base/features/new-feature-panel/feature
 import type { FileUpload } from '@/app/components/base/features/types'
 import { TransferMethod } from '@/types/app'
 import { useSearchParams } from 'next/navigation'
+import Tooltip from '@/app/components/base/tooltip'
 import topicIcon1 from '@/assets/images/chatBI/card_ic_1.svg'
 import topicIcon2 from '@/assets/images/chatBI/card_ic_2.svg'
 import topicIcon3 from '@/assets/images/chatBI/card_ic_3.svg'
@@ -62,6 +63,14 @@ const TOPIC_OPTIONS = [
   { label: '智能问数', icon: topicIcon4 },
   { label: '数据分析', icon: topicIcon5 },
 ]
+// 选中标签后输入框的 placeholder
+const TOPIC_PLACEHOLDERS: Record<string, string> = {
+  使用指南: '请输入平台操作、权限开通、功能使用、常见问题等咨询内容',
+  报表推荐: '请输入业务场景或看数需求，AI为您匹配适配的报表或仪表盘',
+  数据口径: '请输入需要查询的指标口径，咨询指标口径、统计规则与计算逻辑',
+  智能问数: '请输入自然语言数据需求，快速查询各类经营、用户、收益数据',
+  数据分析: '请输入数据分析需求，AI自动完成趋势、异动、归因经营分析',
+}
 const ChatInputArea = ({
   botName,
   showFeatureBar,
@@ -234,10 +243,15 @@ const ChatInputArea = ({
                       <img src={selected.icon.src || selected.icon} alt="" className="mr-1 h-3.5 w-3.5" />
                     )}
                     <div className="py-1 text-xs">{autoInputs.topic}</div>
-                    <div
-                      className="ml-1 h-6 cursor-pointer py-1 text-xs opacity-60 hover:opacity-100"
-                      onClick={() => { onTopicDismiss && onTopicDismiss() }}
-                    >×</div>
+                    <Tooltip
+                      popupContent="不再围绕此能力提问"
+                      position="top"
+                    >
+                      <div
+                        className="ml-1 h-6 cursor-pointer py-1 text-xs opacity-60 hover:opacity-100"
+                        onClick={() => { onTopicDismiss && onTopicDismiss() }}
+                      >×</div>
+                    </Tooltip>
                   </div>
                 )
               })()
@@ -275,7 +289,7 @@ const ChatInputArea = ({
                   'body-lg-regular w-full resize-none bg-transparent p-1 leading-6 text-text-primary outline-none',
                 )}
                 // placeholder={t('common.chat.inputPlaceholder', { botName }) || ''}
-                placeholder={placeholderFromURL || t('common.chat.inputPlaceholder1')}
+                placeholder={placeholderFromURL || TOPIC_PLACEHOLDERS[autoInputs?.topic] || t('common.chat.inputPlaceholder1')}
                 minRows={1}
                 onResize={handleTextareaResize}
                 value={query}
