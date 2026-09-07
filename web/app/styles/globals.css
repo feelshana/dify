@@ -698,3 +698,43 @@ button:focus-within {
     scrollbar-width: none;
   }
 }
+
+/* chatBI 输入框边框流光效果（hover 淡入，旋转锥形渐变，mask 只保留外圈 2px 环） */
+@property --flow-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes flowLightRotate {
+  from {
+    --flow-angle: 0deg;
+  }
+  to {
+    --flow-angle: 360deg;
+  }
+}
+
+.chat-input-flow-light::before {
+  content: '';
+  position: absolute;
+  left: -2px;
+  top: -2px;
+  right: -2px;
+  bottom: -2px;
+  border-radius: 14px;
+  background: conic-gradient(from var(--flow-angle, 0deg), transparent 0deg 190deg, #a6c5ff 230deg, #2e58f7 290deg, #8a63fa 330deg, transparent 360deg);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  padding: 2px;
+  animation: flowLightRotate 4.5s linear infinite;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.chat-input-flow-light:hover::before {
+  opacity: 1;
+}
