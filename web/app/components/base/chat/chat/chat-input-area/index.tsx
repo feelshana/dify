@@ -215,9 +215,10 @@ const ChatInputArea = ({
           disabled && 'pointer-events-none border-components-panel-border opacity-50 shadow-none',
         )}
       >
+        <div className="relative z-50 m-1 flex flex-wrap items-center gap-1">
         {
           (showCurrentLabel && !autoInputs?.dashboardId && ((inputs && inputs.reportName) || (autoInputs && autoInputs.reportName))) && <div
-            className="relative z-50 m-1 inline-flex items-center rounded-lg border-[0.5px] border-[#CCDFED] px-2 text-[#8DAABE]"
+            className="inline-flex items-center rounded-lg border-[0.5px] border-[#CCDFED] px-2 text-[#8DAABE]"
           >
             <div className="h-6 py-1 text-xs">{`已选报表【${autoInputs?.reportName || inputs?.reportName}】`}</div>
             <div className="h-6 cursor-pointer py-1 text-xs" onClick={() => { setShowCurrentLabel(false) }}>×</div>
@@ -225,7 +226,7 @@ const ChatInputArea = ({
         }
         {
           (showCurrentLabel && !autoInputs?.reportId && ((inputs && inputs.dashboardName) || (autoInputs && autoInputs.dashboardName))) && <div
-            className="relative z-50 m-1 inline-flex items-center rounded-lg border-[0.5px] border-[#CCDFED] px-2 text-[#8DAABE]"
+            className="inline-flex items-center rounded-lg border-[0.5px] border-[#CCDFED] px-2 text-[#8DAABE]"
           >
             <div className="h-6 py-1 text-xs">{`已选仪表盘【${autoInputs?.dashboardName || inputs?.dashboardName}】`}</div>
             <div className="h-6 cursor-pointer py-1 text-xs" onClick={() => { setShowCurrentLabel(false) }}>×</div>
@@ -237,7 +238,7 @@ const ChatInputArea = ({
                 const selected = TOPIC_OPTIONS.find(item => item.label === autoInputs.topic)
                 return (
                   <div
-                    className="relative z-50 m-1 inline-flex items-center rounded-lg border border-[#1664ff] bg-[#E7F0FF] px-2 text-[#1664ff]"
+                    className="inline-flex items-center rounded-lg border border-[#1664ff] bg-[#E7F0FF] px-2 text-[#1664ff]"
                   >
                     {selected && (
                       <img src={selected.icon.src || selected.icon} alt="" className="mr-1 h-3.5 w-3.5" />
@@ -256,7 +257,7 @@ const ChatInputArea = ({
                 )
               })()
             : (
-              <div className="relative z-50 m-1 flex flex-wrap items-center gap-1">
+              <>
                 {TOPIC_OPTIONS.map(item => (
                   <div
                     key={item.label}
@@ -267,9 +268,10 @@ const ChatInputArea = ({
                     <span>{item.label}</span>
                   </div>
                 ))}
-              </div>
+              </>
             )
         }
+        </div>
         <div className='relative max-h-[158px] overflow-y-auto overflow-x-hidden px-[9px] pt-[9px]'>
           <FileListInChatInput fileConfig={visionConfig!} />
           <div
