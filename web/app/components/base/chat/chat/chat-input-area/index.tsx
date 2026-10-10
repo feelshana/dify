@@ -217,7 +217,7 @@ const ChatInputArea = ({
       >
         {
           (showCurrentLabel && !autoInputs?.dashboardId && ((inputs && inputs.reportName) || (autoInputs && autoInputs.reportName))) && <div
-            className="relative z-50 m-1 inline-block inline-flex rounded-lg border-[0.5px] border-[#CCDFED] px-2 text-[#8DAABE]"
+            className="relative z-50 m-1 inline-flex items-center rounded-lg border-[0.5px] border-[#CCDFED] px-2 text-[#8DAABE]"
           >
             <div className="h-6 py-1 text-xs">{`已选报表【${autoInputs?.reportName || inputs?.reportName}】`}</div>
             <div className="h-6 cursor-pointer py-1 text-xs" onClick={() => { setShowCurrentLabel(false) }}>×</div>
@@ -225,7 +225,7 @@ const ChatInputArea = ({
         }
         {
           (showCurrentLabel && !autoInputs?.reportId && ((inputs && inputs.dashboardName) || (autoInputs && autoInputs.dashboardName))) && <div
-            className="relative z-50 m-1 inline-block inline-flex rounded-lg border-[0.5px] border-[#CCDFED] px-2 text-[#8DAABE]"
+            className="relative z-50 m-1 inline-flex items-center rounded-lg border-[0.5px] border-[#CCDFED] px-2 text-[#8DAABE]"
           >
             <div className="h-6 py-1 text-xs">{`已选仪表盘【${autoInputs?.dashboardName || inputs?.dashboardName}】`}</div>
             <div className="h-6 cursor-pointer py-1 text-xs" onClick={() => { setShowCurrentLabel(false) }}>×</div>
